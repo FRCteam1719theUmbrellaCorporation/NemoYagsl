@@ -8,6 +8,7 @@ import com.ctre.phoenix6.CANBus;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalSource;
 import swervelib.math.Matter;
 
 /**
@@ -53,4 +54,22 @@ public final class Constants
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
   }
+
+
+
+
+  /*
+   * ROBOT COMPONENT IDS GO HERE. MAKE SURE TO ORDER THEM BY RELEVANCE
+   */
+  // TODO: CHANGE THIS HERE!
+  public static final int INTAKE_TURN_MOTOR_ID = 100;
+  public static final int INTAKE_ANGLE_MOTOR_ID = 0; 
+
+  public static final int INTAKE_ENCODER_ANGLE_MOTOR = 1000;
+
+  // MEGA TODO: TUNE AND ADD THESE PID VALUES
+  public static final double ARMANGLE_kP = 0;
+  public static final double ARMANGLE_kI = 0;
+  public static final double ARMANGLE_kD = 0;
+  public static final double DEFAULT_INTAKE_ANGLE = 0;
 }
