@@ -22,11 +22,13 @@ public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   private static SparkMax TURNMOTOR;
   private static SparkMax ANGLEMOTOR;
-    
+  
   // temp for now 
   private static DutyCycleEncoder ANGLE_ENCODER;
   private static PIDController ArmAngleManager;
   private static double SETPOINTANGLE;
+
+  private boolean intakingPipes;
 
     public IntakeSubsystem() {
       this.TURNMOTOR = new SparkMax(Constants.INTAKE_TURN_MOTOR_ID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
@@ -34,8 +36,9 @@ public class IntakeSubsystem extends SubsystemBase {
       this.ANGLE_ENCODER = new DutyCycleEncoder(Constants.INTAKE_ENCODER_ANGLE_MOTOR);
 
       this.ArmAngleManager = new PIDController(Constants.ARMANGLE_kP, Constants.ARMANGLE_kI, Constants.ARMANGLE_kD);
+      this.intakingPipes = true;  //TODO: maybe change
     }
-
+    
     public void turnIntakeWheels(double speed) {
       TURNMOTOR.set(speed);
     }
@@ -44,8 +47,24 @@ public class IntakeSubsystem extends SubsystemBase {
       TURNMOTOR.set(0);
     }
 
-    public void setArmPos(double angle) {
-      SETPOINTANGLE = angle;
+    public void setRotation(double angle) {
+      ANGLEMOTOR.set(angle);
+    }
+
+    public void stopRotation(double angle) {
+      ANGLEMOTOR.set(0);
+    }
+
+    public double doubleMeasurement() {
+      return this.ANGLE_ENCODER.get() * 360;
+    }
+
+    public boolean isIntaking() {
+      return intakingPipes;
+    }
+
+    public void toggleIntake() {
+      intakingPipes = !intakingPipes;
     }
 
   @Override

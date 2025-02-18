@@ -80,5 +80,8 @@ public final class Constants
   public static final double ARMANGLE_kI = 0;
   public static final double ARMANGLE_kD = 0;
   public static final double DEFAULT_INTAKE_ANGLE = 0;
-  
+
+  public static class IntakeDetails {
+    public static final double intakePos = 0; // TODO FIX This will be the position of intaking!
+  }
 }
