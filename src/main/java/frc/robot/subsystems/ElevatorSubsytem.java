@@ -50,18 +50,12 @@ public class ElevatorSubsytem extends SubsystemBase {
 
   /** Creates a new ElevatorSubsytem. */
   private final SparkMax ELEVATOR_MOTOR;
-  private final SparkMax OUTAKE_ROTATE_MOTOR;
-  private final DutyCycleEncoder OUTAKE_ROTATE_ENCODER;
 
   static double HEIGHT_SETPOINT = 0;
   private PIDController elevatorPIDController = new PIDController(0, 0, 0); // TODO ADD VALUES
-  private PIDController rotationPIDController = new PIDController(0, 0, 0); // TODO ADD CONSTANT VALUES
-
 
   public ElevatorSubsytem() {
     ELEVATOR_MOTOR = new SparkMax(Constants.ELEVATOR_PIN_ONE, MotorType.kBrushless);
-    OUTAKE_ROTATE_MOTOR = new SparkMax(Constants.ELEVATOR_PIN_TWO, MotorType.kBrushless); 
-    OUTAKE_ROTATE_ENCODER = new DutyCycleEncoder(Constants.ELEVATOR_ROTATE_ENCODER);
   }
 
   // sets the pos based off an enum value
