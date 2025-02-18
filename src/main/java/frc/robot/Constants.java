@@ -8,9 +8,12 @@ import com.ctre.phoenix6.CANBus;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.DutyCycle;
 import swervelib.math.Matter;
+import static edu.wpi.first.units.Units.*;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean constants. This
@@ -80,5 +83,32 @@ public final class Constants
   public static final double ARMANGLE_kI = 0;
   public static final double ARMANGLE_kD = 0;
   public static final double DEFAULT_INTAKE_ANGLE = 0;
+
+  public static class ElevatorConstants{
+    public static final double ElevatorkP = 5;
+    public static final double ElevatorkI = 5;
+    public static final double ElevatorkD = 5;
+    public static final double MaxVelocity = Meters.of(4).per(Second).in(MetersPerSecond);
+    public static final double MaxAcceleration = Meters.of(6).per(Second).per(Second).in(MetersPerSecondPerSecond);
+    public static final double ElevatorkS = 5;
+    public static final double ElevatorkG = 5;
+    public static final double ElevatorkV = 5;
+    public static final double ElevatorkA = 5;
+    public static final double RampRate = 5;
+    public static final double ElevatorGearing = 5;
+    public static final double ElevatorCarriageMass = 5;
+    public static final double DrumRadius = Units.inchesToMeters(2.0);
+    public static final double MinHeightMeters = 5;
+    public static final double MaxHeightMeters = 5;
+
+//idk what these are - IMB
+    public static final double Length = Inches.of(33).in(Meters);
+    public static final Distance StartingHeightSim = Meters.of(0.0);
+    public static final Angle StartingAngle = Degrees.of(-90);
+    public static final Distance LaserCANOffset  = Inches.of(3);
+    public static final double DefaultTolerance = Inches.of(1).in(Meters);
+
+
+  }
   
 }
