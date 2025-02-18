@@ -7,7 +7,7 @@
  * 
  * 
  */
-package frc.robot.subsystems;
+package frc.robot.subsystems.intake;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -18,7 +18,12 @@ import frc.robot.Constants;
 import com.revrobotics.spark.SparkMax;
 // import com.revrobotics.CANSparkLowLevel.MotorType;
 
-public class IntakeSubsystem extends SubsystemBase {
+public class AlgaeIntakeSubsystem extends SubsystemBase {
+
+  public static enum IntakePosition {
+    ALGAE, MAX, FREE_CONTROL
+  }
+
   /** Creates a new IntakeSubsystem. */
   private static SparkMax TURNMOTOR;
   private static SparkMax ANGLEMOTOR;
@@ -27,16 +32,17 @@ public class IntakeSubsystem extends SubsystemBase {
   private static DutyCycleEncoder ANGLE_ENCODER;
   private static PIDController ArmAngleManager;
   private static double SETPOINTANGLE;
+  // private boolean intakingPipes;
+  
+  private static IntakePosition intakeMode;
 
-  private boolean intakingPipes;
-
-    public IntakeSubsystem() {
+    public AlgaeIntakeSubsystem() {
       this.TURNMOTOR = new SparkMax(Constants.INTAKE_TURN_MOTOR_ID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
       this.ANGLEMOTOR = new SparkMax(Constants.INTAKE_ANGLE_MOTOR_ID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
       this.ANGLE_ENCODER = new DutyCycleEncoder(Constants.INTAKE_ENCODER_ANGLE_MOTOR);
 
       this.ArmAngleManager = new PIDController(Constants.ARMANGLE_kP, Constants.ARMANGLE_kI, Constants.ARMANGLE_kD);
-      this.intakingPipes = true;  //TODO: maybe change
+      this.intakeMode = IntakePosition.ALGAE; 
     }
     
     public void turnIntakeWheels(double speed) {
@@ -55,17 +61,24 @@ public class IntakeSubsystem extends SubsystemBase {
       ANGLEMOTOR.set(0);
     }
 
+    // returns the angle at which the things should move
     public double doubleMeasurement() {
       return this.ANGLE_ENCODER.get() * 360;
     }
 
+    // returns if this is intaking
     public boolean isIntaking() {
-      return intakingPipes;
+      return intakeMode == IntakePosition.ALGAE;
     }
 
-    public void toggleIntake() {
-      intakingPipes = !intakingPipes;
+    // returns the current mode
+    public IntakePosition currentMode() {
+      return intakeMode;
     }
+
+    // public void toggleIntake() {
+    //   intakingPipes = !intakingPipes;
+    // }
 
   @Override
   public void periodic() {

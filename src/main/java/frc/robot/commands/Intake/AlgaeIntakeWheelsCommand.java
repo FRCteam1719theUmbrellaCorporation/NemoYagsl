@@ -1,5 +1,5 @@
 package frc.robot.commands.Intake;
 
-public class IntakeWheelsCommand {
+public class AlgaeIntakeWheelsCommand {
     // TODO :)
 }
