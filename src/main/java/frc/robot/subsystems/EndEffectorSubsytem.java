@@ -11,11 +11,18 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.EndefectorConstants;
+
+
 public class EndEffectorSubsytem extends SubsystemBase {
 
   private final SparkMax OUTAKE_ROTATE_MOTOR;
   private final DutyCycleEncoder OUTAKE_ROTATE_ENCODER;
-  private PIDController rotationPIDController = new PIDController(0, 0, 0); // TODO ADD CONSTANT VALUES
+  private PIDController EndEffectorPIDController = new PIDController(EndefectorConstants.Endefector_kP, 
+                                                                    EndefectorConstants.Endefector_kI, 
+                                                                    EndefectorConstants.Endefector_kD); 
+                                                                    // TODO ADD CONSTANT VALUES
+
  
   /** Creates a new EndEffectorSubsytem. */
   public EndEffectorSubsytem() {

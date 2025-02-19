@@ -8,9 +8,12 @@ import com.ctre.phoenix6.CANBus;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.DutyCycle;
 import swervelib.math.Matter;
+import static edu.wpi.first.units.Units.*;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean constants. This
@@ -57,31 +60,129 @@ public final class Constants
   }
 
 
-
+  //MOST MEGA TODO
+  // PROPRELY NAME ALL VARIABLES TO BE SPECIFIC TO EACH PART OF THE ROBOT
+  //I.E. ENDEFECTOR_ROTATE_MOTOR_ID
+  //PART OF THE ROBOT, PURPOSE, MOTOR/ENCODER, ID(IF NECESSARY)
 
   /*
    * ROBOT COMPONENT IDS GO HERE. MAKE SURE TO ORDER THEM BY RELEVANCE
    */
   // TODO: CHANGE THIS HERE!
-  public static final int INTAKE_TURN_MOTOR_ID = 8;
-  public static final int INTAKE_ANGLE_MOTOR_ID = 7; 
+
+//ANGLE MOTORS ARE RESONSIBLE FOR CHANING THE ANGLE OF THE ARM
+//WHEEL SPIN IS RESPONSIBLE FOR THE INTAKE OUTAKE OF THE WHEELS 
+
+  //ALGAE
+  public static final int ALGAE_ARM_WHEEL_SPIN_ID = 8;
+  public static final int ALGAE_ARM_ANGLE_MOTOR_ID = 7; 
   
   public static final int INTAKE_ENCODER_ANGLE_MOTOR = 1000;
 
-  // ELEVATOR SUBSY
+  //CORAL
+  public static final int CORAL_ARM_WHEEL_SPIN_ID = 23;
+  public static final int CORAL_ARM_ANGLE_MOTOR_ID = 9; 
+
+  // ELEVATOR
   public static final int ELEVATOR_PIN_ONE = 5;
   public static final int ELEVATOR_PIN_TWO = 6;
   public static final int ELEVATOR_ROTATE_ENCODER = -1;
 
+  //ENDEFECTOR
+  public static final int ENDEFECTOR_ANGLE_MOTOR_ID = 24;
+
 
 
   // MEGA TODO: TUNE AND ADD THESE PID VALUES
+  //These PIDS were created by HBG prior to 2/19/25
   public static final double ARMANGLE_kP = 0;
   public static final double ARMANGLE_kI = 0;
   public static final double ARMANGLE_kD = 0;
   public static final double DEFAULT_INTAKE_ANGLE = 0;
 
+  
+
   public static class IntakeDetails {
     public static final double intakePos = 0; // TODO FIX This will be the position of intaking!
   }
+
+
+
+  public static class CoralArmConstants{
+    public static final double CoralArm_kP = 0;
+    public static final double CoralArm_kI = 0;
+    public static final double CoralArm_kD = 0;
+
+    //Imb- dont know if we need both of these
+    public static final double CoralArm_startPos = 0;
+    public static final double CoralArm_startAngle = 0;
+
+    public static final double CoralArmWheelMaxVelocity = Meters.of(0).per(Second).in(MetersPerSecond);
+    public static final double CoralArmWheelDefaultSpeed = Meters.of(0).per(Second).in(MetersPerSecond);
+
+    //Imb - dont know if these are necessary
+    public static final double CoralArmWheelRadius = Units.inchesToMeters(0);
+
+
+  }
+  public static class AlgaeArmConstants{
+    public static final double AlgaeArm_kP = 0;
+    public static final double AlgaeArm_kI = 0;
+    public static final double AlgaeArm_kD = 0;
+
+    //Imb- dont know if we need both of these
+    public static final double ALgaeArm_startPos = 0;
+    public static final double AlgaeArm_startAngle = 0;
+
+    public static final double AlgaeArmWheelMaxVelocity = Meters.of(0).per(Second).in(MetersPerSecond);
+    public static final double AlgaeArmWheelDefaultSpeed = Meters.of(0).per(Second).in(MetersPerSecond);
+
+
+    //Imb - dont know if these are necessary
+    public static final double AlgaeArmWheelRadius = Units.inchesToMeters(0);
+  } 
+
+
+  public static class EndefectorConstants{
+    public static final double Endefector_kP = 0;
+    public static final double Endefector_kI = 0;
+    public static final double Endefector_kD = 0;
+
+    //Imb- dont know if we need both of these
+    public static final double Endefector_startPos = 0;
+    public static final double Endefector_startAngle = 0;
+
+  }  
+
+
+
+  public static class ElevatorConstants{
+//These are all the un-tuned constants from what IMB did on 2/18/25
+//These changes should all be in the hbg/Subsystem branch in Nemo YAGSL
+
+   public static final double ElevatorkP = 5;
+    public static final double ElevatorkI = 5;
+    public static final double ElevatorkD = 5;
+   /* public static final double MaxVelocity = Meters.of(4).per(Second).in(MetersPerSecond);
+    public static final double MaxAcceleration = Meters.of(6).per(Second).per(Second).in(MetersPerSecondPerSecond);
+    public static final double ElevatorkS = 5;
+    public static final double ElevatorkG = 5;
+    public static final double ElevatorkV = 5;
+    public static final double ElevatorkA = 5;
+    public static final double RampRate = 5;
+    public static final double ElevatorGearing = 5;
+    public static final double ElevatorCarriageMass = 5;
+    public static final double DrumRadius = Units.inchesToMeters(2.0);
+    public static final double MinHeightMeters = 5;
+    public static final double MaxHeightMeters = 5;
+
+//idk what these are - IMB
+
+    public static final double Length = Inches.of(33).in(Meters);
+    public static final Distance StartingHeightSim = Meters.of(0.0);
+    public static final Angle StartingAngle = Degrees.of(-90);
+    public static final Distance LaserCANOffset  = Inches.of(3);
+    public static final double DefaultTolerance = Inches.of(1).in(Meters);
+    
+  */}
 }

@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.PerUnit;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ElevatorConstants;
 
 public class ElevatorSubsytem extends SubsystemBase {
 
@@ -52,7 +53,7 @@ public class ElevatorSubsytem extends SubsystemBase {
   private final SparkMax ELEVATOR_MOTOR;
 
   static double HEIGHT_SETPOINT = 0;
-  private PIDController elevatorPIDController = new PIDController(0, 0, 0); // TODO ADD VALUES
+  private PIDController elevatorPIDController = new PIDController(ElevatorConstants.ElevatorkP, ElevatorConstants.ElevatorkI, ElevatorConstants.ElevatorkD); // TODO ADD VALUES
 
   public ElevatorSubsytem() {
     ELEVATOR_MOTOR = new SparkMax(Constants.ELEVATOR_PIN_ONE, MotorType.kBrushless);
@@ -96,9 +97,13 @@ public class ElevatorSubsytem extends SubsystemBase {
     setHeightWithEnum(HeightLevels.ZERO);;
   }
 
+  public void stop()    {
+    ELEVATOR_MOTOR.set(0.0);
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
 }

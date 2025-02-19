@@ -37,8 +37,8 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   private static IntakePosition intakeMode;
 
     public AlgaeIntakeSubsystem() {
-      this.TURNMOTOR = new SparkMax(Constants.INTAKE_TURN_MOTOR_ID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-      this.ANGLEMOTOR = new SparkMax(Constants.INTAKE_ANGLE_MOTOR_ID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+      this.TURNMOTOR = new SparkMax(Constants.ALGAE_ARM_WHEEL_SPIN_ID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
+      this.ANGLEMOTOR = new SparkMax(Constants.ALGAE_ARM_ANGLE_MOTOR_ID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
       this.ANGLE_ENCODER = new DutyCycleEncoder(Constants.INTAKE_ENCODER_ANGLE_MOTOR);
 
       this.ArmAngleManager = new PIDController(Constants.ARMANGLE_kP, Constants.ARMANGLE_kI, Constants.ARMANGLE_kD);
