@@ -10,13 +10,16 @@
 package frc.robot.subsystems.intake;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.AlgaeArmConstants;
 
+import com.revrobotics.AbsoluteEncoder;
 // import com.revrobotics.CANSparkMax;
 import com.revrobotics.spark.SparkMax;
-// import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 public class AlgaeIntakeSubsystem extends SubsystemBase {
 
@@ -29,7 +32,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   private static SparkMax ANGLEMOTOR;
   
   // temp for now 
-  private static DutyCycleEncoder ANGLE_ENCODER;
+  private static AbsoluteEncoder ANGLE_ENCODER;
   private static PIDController ArmAngleManager;
   private static double SETPOINTANGLE;
   // private boolean intakingPipes;
@@ -37,12 +40,12 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   private static IntakePosition intakeMode;
 
     public AlgaeIntakeSubsystem() {
-      this.TURNMOTOR = new SparkMax(Constants.ALGAE_ARM_WHEEL_SPIN_ID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-      this.ANGLEMOTOR = new SparkMax(Constants.ALGAE_ARM_ANGLE_MOTOR_ID, com.revrobotics.spark.SparkLowLevel.MotorType.kBrushless);
-      this.ANGLE_ENCODER = new DutyCycleEncoder(Constants.INTAKE_ENCODER_ANGLE_MOTOR);
+      TURNMOTOR = new SparkMax(Constants.ALGAE_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
+      ANGLEMOTOR = new SparkMax(Constants.ALGAE_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
+      ANGLE_ENCODER = TURNMOTOR.getAbsoluteEncoder();
 
-      this.ArmAngleManager = new PIDController(Constants.ARMANGLE_kP, Constants.ARMANGLE_kI, Constants.ARMANGLE_kD);
-      this.intakeMode = IntakePosition.ALGAE; 
+      ArmAngleManager = new PIDController(AlgaeArmConstants.AlgaeArm_kP, AlgaeArmConstants.AlgaeArm_kI, AlgaeArmConstants.AlgaeArm_kD);
+      intakeMode = IntakePosition.ALGAE; 
     }
     
     public void turnIntakeWheels(double speed) {
@@ -63,8 +66,10 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
     // returns the angle at which the things should move
     public double doubleMeasurement() {
-      return this.ANGLE_ENCODER.get() * 360;
+      return ANGLE_ENCODER.getPosition() * 360;
     }
+
+    
 
     // returns if this is intaking
     public boolean isIntaking() {
@@ -83,6 +88,6 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    ANGLEMOTOR.set(ArmAngleManager.calculate(ANGLE_ENCODER.get(), SETPOINTANGLE));
+    ANGLEMOTOR.set(ArmAngleManager.calculate(ANGLEMOTOR.getAbsoluteEncoder().getPosition(), SETPOINTANGLE));
   }
 }

@@ -76,8 +76,7 @@ public final class Constants
   //ALGAE
   public static final int ALGAE_ARM_WHEEL_SPIN_ID = 8;
   public static final int ALGAE_ARM_ANGLE_MOTOR_ID = 7; 
-  
-  public static final int INTAKE_ENCODER_ANGLE_MOTOR = 1000;
+  public static final int ALGAE_ARM_INTAKE_ENCODER_ANGLE_MOTOR = 1000;
 
   //CORAL
   public static final int CORAL_ARM_WHEEL_SPIN_ID = 23;
@@ -95,10 +94,11 @@ public final class Constants
 
   // MEGA TODO: TUNE AND ADD THESE PID VALUES
   //These PIDS were created by HBG prior to 2/19/25
-  public static final double ARMANGLE_kP = 0;
-  public static final double ARMANGLE_kI = 0;
-  public static final double ARMANGLE_kD = 0;
-  public static final double DEFAULT_INTAKE_ANGLE = 0;
+ // public static final double ARMANGLE_kP = 0;
+  //public static final double ARMANGLE_kI = 0;
+  //public static final double ARMANGLE_kD = 0;
+
+  //public static final double DEFAULT_INTAKE_ANGLE = 0;
 
   
 

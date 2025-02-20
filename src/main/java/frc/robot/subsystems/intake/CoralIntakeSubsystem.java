@@ -9,6 +9,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import com.revrobotics.CANSparkMax;
 import com.revrobotics.spark.SparkMax;
+
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import com.revrobotics.AbsoluteEncoder;
@@ -20,31 +21,38 @@ public class CoralIntakeSubsystem extends SubsystemBase {
                                                                     CoralArmConstants.CoralArm_kI, 
                                                                     CoralArmConstants.CoralArm_kD); 
                                                                     // TODO ADD CONSTANT 
-  private final SparkMax CoralArm_Wheel_Motor;
-  private final SparkMax CoralArm_Angle_Motor;
+
+  private static SparkMax CORAL_ARM_TURNMOTOR;
+  private static SparkMax CORAL_ARM_ANGLEMOTOR;
+  private static AbsoluteEncoder CORAL_ARM_ENCODER;
 
   public CoralIntakeSubsystem() {
-    CoralArm_Wheel_Motor = new SparkMax(Constants.CORAL_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
-    CoralArm_Angle_Motor = new SparkMax(Constants.CORAL_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
+    CORAL_ARM_TURNMOTOR = new SparkMax(Constants.CORAL_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
+    CORAL_ARM_ANGLEMOTOR = new SparkMax(Constants.CORAL_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
+    CORAL_ARM_ENCODER = CORAL_ARM_ANGLEMOTOR.getAbsoluteEncoder();
 
   }
 
   public void intakeSpinWheels(double speed){
-    CoralArm_Wheel_Motor.set(speed);
+    CORAL_ARM_TURNMOTOR.set(speed);
   }
 
   public void turnOffIntakeWheel(){
-    CoralArm_Wheel_Motor.set(0);
+    CORAL_ARM_TURNMOTOR.set(0);
   }
 
-  /*public void intakeAngle(double angle){
-    CoralArm_Angle_Motor.getAbsoluteEncoder().getPosition();
+  public double doubleMeasurement() {
+    return CORAL_ARM_ENCODER.getPosition() * 360;
   }
 
-*/
+ /*  public void intakeAngle(double angle){
+    CORAL_ARM_ANGLEMOTOR.getAbsoluteEncoder().getPosition();
+  }
+
+
 /* 
   public void resetAngle(){
-    CoralArm_Angle_Motor.set(0);
+    CORAL_ARM_ANGLEMOTOR.set(0);
   }
 */
 

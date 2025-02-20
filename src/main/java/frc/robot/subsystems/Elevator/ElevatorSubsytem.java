@@ -2,18 +2,22 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.Elevator;
+
+import com.revrobotics.RelativeEncoder;
 
 // import java.security.PublicKey;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.Constants;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.PerUnit;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
+import static edu.wpi.first.units.Units.*;
 
 public class ElevatorSubsytem extends SubsystemBase {
 
@@ -50,13 +54,18 @@ public class ElevatorSubsytem extends SubsystemBase {
     }
 
   /** Creates a new ElevatorSubsytem. */
-  private final SparkMax ELEVATOR_MOTOR;
+  private final SparkMax ELEVATOR_MOTOR_ONE;
+  private final SparkMax ELEVATOR_MOTOR_TWO;
+  private final RelativeEncoder ELEVATOR_ENCODER;
+  //ENCODER
 
   static double HEIGHT_SETPOINT = 0;
   private PIDController elevatorPIDController = new PIDController(ElevatorConstants.ElevatorkP, ElevatorConstants.ElevatorkI, ElevatorConstants.ElevatorkD); // TODO ADD VALUES
 
   public ElevatorSubsytem() {
-    ELEVATOR_MOTOR = new SparkMax(Constants.ELEVATOR_PIN_ONE, MotorType.kBrushless);
+    ELEVATOR_MOTOR_ONE = new SparkMax(Constants.ELEVATOR_PIN_ONE, MotorType.kBrushless);
+    ELEVATOR_MOTOR_TWO = new SparkMax(Constants.ELEVATOR_PIN_TWO, MotorType.kBrushless);
+    ELEVATOR_ENCODER = //FIX
   }
 
   // sets the pos based off an enum value
@@ -98,8 +107,13 @@ public class ElevatorSubsytem extends SubsystemBase {
   }
 
   public void stop()    {
-    ELEVATOR_MOTOR.set(0.0);
+    ELEVATOR_MOTOR_ONE.set(0.0);
+    ELEVATOR_MOTOR_TWO.set(0.0);
   }
+
+  public void reachGoal(double goal){
+        
+    }
 
   @Override
   public void periodic() {
