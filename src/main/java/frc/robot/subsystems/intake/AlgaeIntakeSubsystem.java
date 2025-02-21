@@ -17,6 +17,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.AlgaeArmConstants;
 
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.RelativeEncoder;
 // import com.revrobotics.CANSparkMax;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -32,7 +33,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   private static SparkMax ANGLEMOTOR;
   
   // temp for now 
-  private static AbsoluteEncoder ANGLE_ENCODER;
+  private static RelativeEncoder ANGLE_ENCODER;
   private static PIDController ArmAngleManager;
   private static double SETPOINTANGLE;
   // private boolean intakingPipes;
@@ -42,7 +43,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     public AlgaeIntakeSubsystem() {
       TURNMOTOR = new SparkMax(Constants.ALGAE_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
       ANGLEMOTOR = new SparkMax(Constants.ALGAE_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
-      ANGLE_ENCODER = TURNMOTOR.getAbsoluteEncoder();
+      ANGLE_ENCODER = TURNMOTOR.getAlternateEncoder();
 
       ArmAngleManager = new PIDController(AlgaeArmConstants.AlgaeArm_kP, AlgaeArmConstants.AlgaeArm_kI, AlgaeArmConstants.AlgaeArm_kD);
       intakeMode = IntakePosition.ALGAE; 

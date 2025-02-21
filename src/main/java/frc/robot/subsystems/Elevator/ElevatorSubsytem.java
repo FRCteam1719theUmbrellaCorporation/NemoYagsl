@@ -65,7 +65,7 @@ public class ElevatorSubsytem extends SubsystemBase {
   public ElevatorSubsytem() {
     ELEVATOR_MOTOR_ONE = new SparkMax(Constants.ELEVATOR_PIN_ONE, MotorType.kBrushless);
     ELEVATOR_MOTOR_TWO = new SparkMax(Constants.ELEVATOR_PIN_TWO, MotorType.kBrushless);
-    ELEVATOR_ENCODER = //FIX
+    ELEVATOR_ENCODER = ELEVATOR_MOTOR_ONE.getAlternateEncoder();
   }
 
   // sets the pos based off an enum value
