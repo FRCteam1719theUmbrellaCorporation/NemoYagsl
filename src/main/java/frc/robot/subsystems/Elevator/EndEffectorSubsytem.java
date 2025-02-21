@@ -20,7 +20,7 @@ import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 public class EndEffectorSubsytem extends SubsystemBase {
 
   private final SparkMax ENDEFFECTOR_ROTATE_MOTOR;
-  private final RelativeEncoder ENDEFFECTOR_ENCODER;
+  private final AbsoluteEncoder ENDEFFECTOR_ENCODER;
   private PIDController EndEffectorPIDController = new PIDController(EndefectorConstants.Endefector_kP, 
                                                                     EndefectorConstants.Endefector_kI, 
                                                                     EndefectorConstants.Endefector_kD); 
@@ -30,7 +30,7 @@ public class EndEffectorSubsytem extends SubsystemBase {
   /** Creates a new EndEffectorSubsytem. */
   public EndEffectorSubsytem() {
     ENDEFFECTOR_ROTATE_MOTOR = new SparkMax(Constants.ELEVATOR_PIN_TWO, MotorType.kBrushless); 
-    ENDEFFECTOR_ENCODER = ENDEFFECTOR_ROTATE_MOTOR.getAlternateEncoder();
+    ENDEFFECTOR_ENCODER = ENDEFFECTOR_ROTATE_MOTOR.getAbsoluteEncoder();
   }
 
   public void stop() {

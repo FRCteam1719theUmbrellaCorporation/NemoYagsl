@@ -21,21 +21,20 @@ import frc.robot.subsystems.intake.AlgaeIntakeSubsystem;
 public class AlgaePivotPIDCommand extends Command {
     private final AlgaeIntakeSubsystem intake;
     private final PIDController m_ArmAngleManager;
-    private static DoubleSupplier SETPOINTANGLE;
+    public double SETPOINTANGLE;
     private final AbsoluteEncoder m_ANGLE_ENCODER;
 
-    public AlgaePivotPIDCommand(AlgaeIntakeSubsystem intake, PIDController m_ArmAngleManager, DoubleSupplier SETPOINTANGLE, AbsoluteEncoder m_ANGLE_ENCODER) {
+    public AlgaePivotPIDCommand(AlgaeIntakeSubsystem intake, PIDController m_ArmAngleManager, AbsoluteEncoder m_ANGLE_ENCODER) {
         addRequirements(intake);
         this.intake = intake;
         this.m_ArmAngleManager = m_ArmAngleManager;
-        this.SETPOINTANGLE = SETPOINTANGLE;
         this.m_ANGLE_ENCODER = m_ANGLE_ENCODER;
 
     }
     
     @Override
     public void initialize(){
-        m_ArmAngleManager.setSetpoint(SETPOINTANGLE.getAsDouble());
+        m_ArmAngleManager.setSetpoint(SETPOINTANGLE);
     }
 
     @Override
@@ -54,12 +53,13 @@ public class AlgaePivotPIDCommand extends Command {
         }
 
         // m_ArmAngleManager.setSetpoint(intake.isIntaking() ? Constants.IntakeDetails.intakePos : SETPOINTANGLE.getAsDouble());
-
+        
         intake.setRotation(m_ArmAngleManager.calculate(m_ArmAngleManager.calculate(m_ANGLE_ENCODER.getPosition())));
     }
     
     public void setAngle(double setpoint) {
         m_ArmAngleManager.setSetpoint(setpoint);
+        //intake.setRotation(1).until(intake.doubleMeasurement()==100);
       } 
     //TODO Set limits to angle it can reach
 

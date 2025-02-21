@@ -33,7 +33,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   private static SparkMax ANGLEMOTOR;
   
   // temp for now 
-  private static RelativeEncoder ANGLE_ENCODER;
+  private static AbsoluteEncoder ANGLE_ENCODER;
   private static PIDController ArmAngleManager;
   private static double SETPOINTANGLE;
   // private boolean intakingPipes;
@@ -43,7 +43,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     public AlgaeIntakeSubsystem() {
       TURNMOTOR = new SparkMax(Constants.ALGAE_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
       ANGLEMOTOR = new SparkMax(Constants.ALGAE_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
-      ANGLE_ENCODER = TURNMOTOR.getAlternateEncoder();
+      ANGLE_ENCODER = TURNMOTOR.getAbsoluteEncoder();
 
       ArmAngleManager = new PIDController(AlgaeArmConstants.AlgaeArm_kP, AlgaeArmConstants.AlgaeArm_kI, AlgaeArmConstants.AlgaeArm_kD);
       intakeMode = IntakePosition.ALGAE; 
@@ -69,8 +69,6 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     public double doubleMeasurement() {
       return ANGLE_ENCODER.getPosition() * 360;
     }
-
-    
 
     // returns if this is intaking
     public boolean isIntaking() {

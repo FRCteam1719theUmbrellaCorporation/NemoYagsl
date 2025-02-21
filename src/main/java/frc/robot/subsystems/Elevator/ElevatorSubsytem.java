@@ -12,9 +12,13 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.Constants;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.PerUnit;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import static edu.wpi.first.units.Units.*;
@@ -60,12 +64,14 @@ public class ElevatorSubsytem extends SubsystemBase {
   //ENCODER
 
   static double HEIGHT_SETPOINT = 0;
-  private PIDController elevatorPIDController = new PIDController(ElevatorConstants.ElevatorkP, ElevatorConstants.ElevatorkI, ElevatorConstants.ElevatorkD); // TODO ADD VALUES
+  private ProfiledPIDController elevatorPIDController = new ProfiledPIDController(ElevatorConstants.ElevatorkP, ElevatorConstants.ElevatorkI, ElevatorConstants.ElevatorkD, new Constraints(ElevatorConstants.MaxVelocity, ElevatorConstants.MaxAcceleration)); // TODO ADD VALUES
+
+  private final ElevatorFeedforward elevatorPIDfeed = new ElevatorFeedforward(ElevatorConstants.ElevatorkS, ElevatorConstants.ElevatorkG, ElevatorConstants.ElevatorkV, ElevatorConstants.ElevatorkA);
 
   public ElevatorSubsytem() {
     ELEVATOR_MOTOR_ONE = new SparkMax(Constants.ELEVATOR_PIN_ONE, MotorType.kBrushless);
     ELEVATOR_MOTOR_TWO = new SparkMax(Constants.ELEVATOR_PIN_TWO, MotorType.kBrushless);
-    ELEVATOR_ENCODER = ELEVATOR_MOTOR_ONE.getAlternateEncoder();
+    ELEVATOR_ENCODER = ELEVATOR_MOTOR_ONE.getEncoder();
   }
 
   // sets the pos based off an enum value
@@ -111,9 +117,27 @@ public class ElevatorSubsytem extends SubsystemBase {
     ELEVATOR_MOTOR_TWO.set(0.0);
   }
 
+  public double doubleMeasurement() {
+    return ELEVATOR_ENCODER.getPosition() * 360;
+  }
   public void reachGoal(double goal){
-        
-    }
+    double voltsOutput = MathUtil.clamp(
+      elevatorPIDfeed.calculateWithVelocities(ELEVATOR_ENCODER.getVelocity(), elevatorPIDController.getSetpoint().velocity) + elevatorPIDController.calculate(ELEVATOR_ENCODER.getPosition(), goal), -7,7);
+      ELEVATOR_MOTOR_ONE.setVoltage(voltsOutput);
+      ELEVATOR_MOTOR_TWO.setVoltage(voltsOutput);
+  }
+
+  public Command setGoal(double goal){
+    return run(() -> reachGoal(goal));
+  }
+
+  public Command setElevatorHeight(double height){
+    return setGoal(height).until(()->aroundHeight(height, ElevatorConstants.Tolerance));
+  }
+public boolean aroundHeight(double height, double tolerance){
+    return MathUtil.isNear(height,ELEVATOR_ENCODER.getPosition(),tolerance);
+}
+
 
   @Override
   public void periodic() {
