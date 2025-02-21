@@ -41,7 +41,14 @@ public class EndEffectorSubsytem extends SubsystemBase {
     return ENDEFFECTOR_ENCODER.getPosition() * 360;
   }
 
-  //
+  public void setRotation(double angle) {
+    ENDEFFECTOR_ROTATE_MOTOR.set(angle);
+  }
+
+  public void stopRotation(double angle) {
+    ENDEFFECTOR_ROTATE_MOTOR.set(0);
+  }
+
 
   @Override
   public void periodic() {
