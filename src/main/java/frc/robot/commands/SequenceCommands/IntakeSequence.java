@@ -1,5 +1,6 @@
 package frc.robot.commands.SequenceCommands;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -16,12 +17,6 @@ public class IntakeSequence extends Command{
     ElevatorSubsytem m_ElevatorSubsytem;
     EndEffectorSubsytem m_EndEffectorSubsytem;
 
-    public IntakeSequence(ElevatorSubsytem m_ElevatorSubsytem,EndEffectorSubsytem m_EndEffectorSubsytem) {
-        this.m_ElevatorSubsytem = m_ElevatorSubsytem;
-        this.m_EndEffectorSubsytem = m_EndEffectorSubsytem;
-
-        addCommands();
-    }
     public WaitCommand waitwait(double time) {
         return new WaitCommand(time);
     }
@@ -33,6 +28,10 @@ public class IntakeSequence extends Command{
     public InstantCommand endEffectorAngle(double angle) {
         return new InstantCommand(()->m_EndEffectorSubsytem.setRotation(angle));
     }
+
+    public IntakeSequence(ElevatorSubsytem m_ElevatorSubsytem,EndEffectorSubsytem m_EndEffectorSubsytem) {
+        this.m_ElevatorSubsytem = m_ElevatorSubsytem;
+        this.m_EndEffectorSubsytem = m_EndEffectorSubsytem;
 /*
  * 1 - turn on elevator motors to raise elevator to a specific height
  * 2 - wait some amount of time
@@ -43,4 +42,8 @@ public class IntakeSequence extends Command{
  * 7 - possible wait command
  * 8 - lower the elevator to resting position
  */
+        //addCommands(set_Height(1), waitwait(1),endEffectorAngle(180),waitwait(1.5),set_Height(.5),endEffectorAngle(0),set_Height(0));
+    }
+    
+
 }

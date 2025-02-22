@@ -49,6 +49,8 @@ public class EndEffectorSubsytem extends SubsystemBase {
     ENDEFFECTOR_ROTATE_MOTOR.set(0);
   }
 
+  //ADD PID STUFF
+
 
   @Override
   public void periodic() {

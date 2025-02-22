@@ -53,13 +53,12 @@ public class AlgaePivotPIDCommand extends Command {
         }
 
         // m_ArmAngleManager.setSetpoint(intake.isIntaking() ? Constants.IntakeDetails.intakePos : SETPOINTANGLE.getAsDouble());
-        
+
         intake.setRotation(m_ArmAngleManager.calculate(m_ArmAngleManager.calculate(m_ANGLE_ENCODER.getPosition())));
     }
     
     public void setAngle(double setpoint) {
-        m_ArmAngleManager.setSetpoint(setpoint);
-        //intake.setRotation(1).until(intake.doubleMeasurement()==100);
+        intake.setGoal(setpoint);
       } 
     //TODO Set limits to angle it can reach
 

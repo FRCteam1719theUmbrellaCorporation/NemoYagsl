@@ -64,9 +64,9 @@ public class ElevatorSubsytem extends SubsystemBase {
   //ENCODER
 
   static double HEIGHT_SETPOINT = 0;
-  private ProfiledPIDController elevatorPIDController = new ProfiledPIDController(ElevatorConstants.ElevatorkP, ElevatorConstants.ElevatorkI, ElevatorConstants.ElevatorkD, new Constraints(ElevatorConstants.MaxVelocity, ElevatorConstants.MaxAcceleration)); // TODO ADD VALUES
+  private static final ProfiledPIDController elevatorPIDController = new ProfiledPIDController(ElevatorConstants.ElevatorkP, ElevatorConstants.ElevatorkI, ElevatorConstants.ElevatorkD, new Constraints(ElevatorConstants.MaxVelocity, ElevatorConstants.MaxAcceleration)); // TODO ADD VALUES
 
-  private final ElevatorFeedforward elevatorPIDfeed = new ElevatorFeedforward(ElevatorConstants.ElevatorkS, ElevatorConstants.ElevatorkG, ElevatorConstants.ElevatorkV, ElevatorConstants.ElevatorkA);
+  private static final ElevatorFeedforward elevatorPIDfeed = new ElevatorFeedforward(ElevatorConstants.ElevatorkS, ElevatorConstants.ElevatorkG, ElevatorConstants.ElevatorkV, ElevatorConstants.ElevatorkA);
 
   public ElevatorSubsytem() {
     ELEVATOR_MOTOR_ONE = new SparkMax(Constants.ELEVATOR_PIN_ONE, MotorType.kBrushless);
@@ -137,7 +137,6 @@ public class ElevatorSubsytem extends SubsystemBase {
 public boolean aroundHeight(double height, double tolerance){
     return MathUtil.isNear(height,ELEVATOR_ENCODER.getPosition(),tolerance);
 }
-
 
   @Override
   public void periodic() {

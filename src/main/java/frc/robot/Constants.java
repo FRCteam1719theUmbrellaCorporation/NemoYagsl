@@ -27,8 +27,8 @@ public final class Constants
 {
 
   public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
-  public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
-  public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
+  public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
+  public static final double LOOP_TIME = 0.13; //s, 20ms + 110ms sprk max velocity lag
   public static final double SPEED_LIMITER = 1;
   public static final double MAX_SPEED  = Units.feetToMeters(14.5*SPEED_LIMITER);
   // Maximum speed of the robot in meters per second, used to limit acceleration.
@@ -136,10 +136,15 @@ public final class Constants
 
     public static final double AlgaeArmWheelMaxVelocity = Meters.of(0).per(Second).in(MetersPerSecond);
     public static final double AlgaeArmWheelDefaultSpeed = Meters.of(0).per(Second).in(MetersPerSecond);
+    public static final double AlgaeArmWheelMaxAcceleration = 0;
 
 
     //Imb - dont know if these are necessary
     public static final double AlgaeArmWheelRadius = Units.inchesToMeters(0);
+    public static final double AlgaeArm_kS = 0;
+    public static final double AlgaeArm_kG = 0;
+    public static final double AlgaeArm_kV = 0;
+    public static final double AlgaeArm_kA = 0;
   } 
 
 
@@ -165,10 +170,10 @@ public final class Constants
     public static final double ElevatorkD = 0;
     public static final double MaxVelocity = Meters.of(4).per(Second).in(MetersPerSecond);
     public static final double MaxAcceleration = Meters.of(6).per(Second).per(Second).in(MetersPerSecondPerSecond);
-    public static final double ElevatorkS = 5;
-    public static final double ElevatorkG = 5;
-    public static final double ElevatorkV = 5;
-    public static final double ElevatorkA = 5;
+    public static final double ElevatorkS = 0;
+    public static final double ElevatorkG = 0;
+    public static final double ElevatorkV = 0;
+    public static final double ElevatorkA = 0;
     public static final double Tolerance = 0; //CHANGE
   /* public static final double RampRate = 5;
     public static final double ElevatorGearing = 5;

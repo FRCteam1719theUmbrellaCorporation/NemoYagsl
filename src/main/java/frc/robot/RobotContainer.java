@@ -184,15 +184,15 @@ public class RobotContainer
     } else
     {
       //Uncomment when a second xbox controller is ded
-          /*
+          
       driverXbox2.a().onTrue(
-      new InstantCommand(()->
-        new AlgaeIntakeWheelsCommand().turnMotor(1) //Test
-      ));
-      driverXbox2.b().onTrue(
-      new InstantCommand(()->
+        new AlgaeIntakeWheelsCommand().turnMotor(1).withTimeout(1) //Test
+      );
+      
+      driverXbox2.a().onFalse(
         new AlgaeIntakeWheelsCommand().stopMotors() //Test
-      ));
+      );
+      /*
       driverXbox2.x().onTrue(
         new InstantCommand(()->
           new CoralIntakeWheelsCommand().turnMotor(1) //Test
