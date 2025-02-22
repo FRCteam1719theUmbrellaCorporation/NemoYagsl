@@ -22,12 +22,16 @@ import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
-import frc.robot.subsystems.*;
+//import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
-import frc.robot.commands.*;
+import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
+import frc.robot.subsystems.intake.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.intake.CoralIntakeSubsystem;
+//import frc.robot.commands.*;
 import frc.robot.commands.Elevator.ElevatorPIDMoveCommand;
 import frc.robot.commands.Intake.AlgaeIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralIntakeWheelsCommand;
+import frc.robot.commands.Intake.CoralPivotPIDCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -38,13 +42,26 @@ public class RobotContainer
 {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  final         CommandXboxController driverXbox = new CommandXboxController(0);
-  final         CommandXboxController driverXbox2 = new CommandXboxController(1);
+
+
+
+  
+  //Orinal port are driverXBox = 0, driverXBox2 = 1
+
+  final         CommandXboxController driverXbox = new CommandXboxController(1);
+
+  final         CommandXboxController driverXbox2 = new CommandXboxController(0);
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
   
   private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
+  private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
+  private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
+  private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
+
+
+
   // Applies deadbands and inverts controls because joysticks
   // are back-right positive while robot
   // controls are front-left positive
@@ -183,7 +200,7 @@ public class RobotContainer
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
-      //Uncomment when a second xbox controller is ded
+      //Uncomment when a second xbox controller is added
           
       driverXbox2.a().onTrue(
         new AlgaeIntakeWheelsCommand().turnMotor(1).withTimeout(1) //Test
@@ -192,16 +209,26 @@ public class RobotContainer
       driverXbox2.a().onFalse(
         new AlgaeIntakeWheelsCommand().stopMotors() //Test
       );
-      /*
-      driverXbox2.x().onTrue(
+      
+      driverXbox2.b().onTrue(
         new InstantCommand(()->
           new CoralIntakeWheelsCommand().turnMotor(1) //Test
       ));
-      driverXbox2.y().onTrue(
+      driverXbox2.b().onFalse(
         new InstantCommand(()->
           new CoralIntakeWheelsCommand().stopMotors()//Test
       ));
-      */
+
+      driverXbox2.x().onTrue(
+        new InstantCommand(()->
+          System.out.println(m_AlgaeIntakeSubsystem.doubleMeasurement())
+        )
+      );
+      driverXbox2.y().onTrue(
+        new InstantCommand(()->
+          System.out.println(m_CoralIntakeSubsystem.doubleMeasurement())
+        )
+      );
 
 
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
@@ -214,7 +241,6 @@ public class RobotContainer
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
     }
-
   }
 
   /**

@@ -120,11 +120,11 @@ public class ElevatorSubsytem extends SubsystemBase {
   public double doubleMeasurement() {
     return ELEVATOR_ENCODER.getPosition() * 360;
   }
+  
   public void reachGoal(double goal){
-    double voltsOutput = MathUtil.clamp(
-      elevatorPIDfeed.calculateWithVelocities(ELEVATOR_ENCODER.getVelocity(), elevatorPIDController.getSetpoint().velocity) + elevatorPIDController.calculate(ELEVATOR_ENCODER.getPosition(), goal), -7,7);
-      ELEVATOR_MOTOR_ONE.setVoltage(voltsOutput);
-      ELEVATOR_MOTOR_TWO.setVoltage(voltsOutput);
+    double voltsOutput = MathUtil.clamp(elevatorPIDfeed.calculateWithVelocities(ELEVATOR_ENCODER.getVelocity(), elevatorPIDController.getSetpoint().velocity) + elevatorPIDController.calculate(ELEVATOR_ENCODER.getPosition(), goal), -7,7);
+    ELEVATOR_MOTOR_ONE.setVoltage(voltsOutput);
+    ELEVATOR_MOTOR_TWO.setVoltage(voltsOutput);
   }
 
   public Command setGoal(double goal){
@@ -134,9 +134,10 @@ public class ElevatorSubsytem extends SubsystemBase {
   public Command setElevatorHeight(double height){
     return setGoal(height).until(()->aroundHeight(height, ElevatorConstants.Tolerance));
   }
-public boolean aroundHeight(double height, double tolerance){
+
+  public boolean aroundHeight(double height, double tolerance){
     return MathUtil.isNear(height,ELEVATOR_ENCODER.getPosition(),tolerance);
-}
+  }
 
   @Override
   public void periodic() {
