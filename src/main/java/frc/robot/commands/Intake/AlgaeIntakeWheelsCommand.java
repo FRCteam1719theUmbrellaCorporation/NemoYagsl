@@ -6,6 +6,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 public class AlgaeIntakeWheelsCommand {
     AlgaeIntakeSubsystem mAlgaeIntakeSubsystem;
 
+    public AlgaeIntakeWheelsCommand(AlgaeIntakeSubsystem input) {
+        mAlgaeIntakeSubsystem = input;
+    } 
+
     public InstantCommand turnMotor(int speed) {
         return new InstantCommand(()-> 
             mAlgaeIntakeSubsystem.turnIntakeWheels(speed)
