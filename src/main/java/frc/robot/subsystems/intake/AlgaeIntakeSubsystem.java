@@ -45,15 +45,16 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   
   private static IntakePosition intakeMode;
   
-  private ProfiledPIDController ArmAngleManager= new ProfiledPIDController(AlgaeArmConstants.AlgaeArm_kP, AlgaeArmConstants.AlgaeArm_kI, AlgaeArmConstants.AlgaeArm_kD, new Constraints(ElevatorConstants.MaxVelocity, ElevatorConstants.MaxAcceleration));
-  private final ElevatorFeedforward AlgaeAnglePIDfeed = new ElevatorFeedforward(AlgaeArmConstants.AlgaeArm_kS, AlgaeArmConstants.AlgaeArm_kG, AlgaeArmConstants.AlgaeArm_kV, AlgaeArmConstants.AlgaeArm_kA);
+  private PIDController ArmAngleManager= new PIDController(AlgaeArmConstants.AlgaeArm_kP, AlgaeArmConstants.AlgaeArm_kI, AlgaeArmConstants.AlgaeArm_kD);  
+  // private final ElevatorFeedforward AlgaeAnglePIDfeed = new ElevatorFeedforward(AlgaeArmConstants.AlgaeArm_kS, AlgaeArmConstants.AlgaeArm_kG, AlgaeArmConstants.AlgaeArm_kV, AlgaeArmConstants.AlgaeArm_kA);
 
 
     public AlgaeIntakeSubsystem() {
       TURNMOTOR = new SparkMax(Constants.ALGAE_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
       ANGLEMOTOR = new SparkMax(Constants.ALGAE_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
-      ANGLE_ENCODER = TURNMOTOR.getAbsoluteEncoder();
+      ANGLE_ENCODER = ANGLEMOTOR.getAbsoluteEncoder();
       intakeMode = IntakePosition.ALGAE; 
+      SETPOINTANGLE = 80;
     }
       
     public void turnIntakeWheels(double speed) {
@@ -74,20 +75,21 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
     // returns the angle at which the things should move
     public double doubleMeasurement() {
+      // System.out.println(ANGLE_ENCODER.getPosition());
       return ANGLE_ENCODER.getPosition() * 360;
     }
 
-    public void reachGoal(double goalDegrees) {
-      ANGLEMOTOR.setVoltage(AlgaeAnglePIDfeed.calculate(ArmAngleManager.getSetpoint().position, ArmAngleManager.getSetpoint().velocity) + ArmAngleManager.calculate(ANGLE_ENCODER.getPosition(), goalDegrees));
-    }
+    // public void reachGoal(double goalDegrees) {
+    //   ANGLEMOTOR.set(ArmAngleManager.calculate(ArmAngleManager.getSetpoint().position, ArmAngleManager.getSetpoint().velocity) + ArmAngleManager.calculate(ANGLE_ENCODER.getPosition(), goalDegrees));
+    // }
 
-    public Command setGoal(double goalDegrees) {
-        return run(() -> reachGoal(goalDegrees));
-    }
+    // public Command setGoal(double goalDegrees) {
+    //     return run(() -> reachGoal(goalDegrees));
+    // }
 
-    public Command setArmAngle(double goalDegrees) {
-        return setGoal(goalDegrees).until(() -> aroundAngle(goalDegrees));
-    }
+    // public Command setArmAngle(double goalDegrees) {
+    //     return setGoal(goalDegrees).until(() -> aroundAngle(goalDegrees));
+    // }
 
    public boolean aroundAngle(double degrees){
         return aroundAngle(degrees, 0.2);
@@ -107,13 +109,24 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
       return intakeMode;
     }
 
+    public AbsoluteEncoder getEncoder() {
+      return ANGLE_ENCODER;
+    }
+
+    public double getSetPoint() {
+      return SETPOINTANGLE;
+    }
+
+    public PIDController getPidController() {
+      return ArmAngleManager;
+    }
+
     // public void toggleIntake() {
     //   intakingPipes = !intakingPipes;
     // }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    ANGLEMOTOR.set(ArmAngleManager.calculate(ANGLEMOTOR.getAbsoluteEncoder().getPosition(), SETPOINTANGLE));
+
   }
 }

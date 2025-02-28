@@ -126,9 +126,9 @@ public final class Constants
 
   }
   public static class AlgaeArmConstants{
-    public static final double AlgaeArm_kP = 0;
+    public static final double AlgaeArm_kP = 0.001;
     public static final double AlgaeArm_kI = 0;
-    public static final double AlgaeArm_kD = 0;
+    public static final double AlgaeArm_kD =0;
 
     //Imb- dont know if we need both of these
     public static final double ALgaeArm_startPos = 0;
@@ -191,4 +191,6 @@ public final class Constants
     public static final double DefaultTolerance = Inches.of(1).in(Meters);
     
   */}
+
+  public static double CORALPIVITMAXAMOUNT = 235;
 }

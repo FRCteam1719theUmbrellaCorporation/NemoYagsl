@@ -32,7 +32,7 @@ import frc.robot.commands.Elevator.ElevatorPIDMoveCommand;
 import frc.robot.commands.Intake.AlgaeIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralPivotPIDCommand;
-
+import frc.robot.commands.Intake.AlgaePivotPIDCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -55,10 +55,10 @@ public class RobotContainer
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
   
-  private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
-  private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
+  // private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
+  // private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
   private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
-  private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
+  // private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
 
 
 
@@ -153,6 +153,7 @@ public class RobotContainer
 
   Command driveSetpointGenSim = drivebase.driveWithSetpointGeneratorFieldRelative(driveDirectAngleSim);
 
+  Command algaeAngleSetter = new AlgaePivotPIDCommand(m_AlgaeIntakeSubsystem);
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -178,10 +179,12 @@ public class RobotContainer
   private void configureBindings()
   {
     // (Condition) ? Return-On-True : Return-on-False
-    drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
-                                driveFieldOrientedAnglularVelocity :
-                                driveFieldOrientedAnglularVelocitySim);
+    // drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
+    //                             driveFieldOrientedAnglularVelocity :
+    //                             driveFieldOrientedAnglularVelocitySim);
 
+    m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
+    
     if (Robot.isSimulation())
     {
       driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
@@ -202,33 +205,41 @@ public class RobotContainer
     {
       //Uncomment when a second xbox controller is added
           
-      driverXbox2.a().onTrue(
-        new AlgaeIntakeWheelsCommand().turnMotor(1).withTimeout(1) //Test
-      );
+      // driverXbox2.a().onTrue(
+      //   new AlgaeIntakeWheelsCommand().turnMotor(1).withTimeout(1) //Test
+      // );
       
-      driverXbox2.a().onFalse(
-        new AlgaeIntakeWheelsCommand().stopMotors() //Test
-      );
+      // driverXbox2.a().onFalse(
+      //   new AlgaeIntakeWheelsCommand().stopMotors() //Test
+      // );
       
-      driverXbox2.b().onTrue(
-        new InstantCommand(()->
-          new CoralIntakeWheelsCommand().turnMotor(1) //Test
-      ));
-      driverXbox2.b().onFalse(
-        new InstantCommand(()->
-          new CoralIntakeWheelsCommand().stopMotors()//Test
-      ));
+      // driverXbox2.b().onTrue(
+      //   new InstantCommand(()->
+      //     new CoralIntakeWheelsCommand().turnMotor(1) //Test
+      // ));
+      // driverXbox2.b().onFalse(
+      //   new InstantCommand(()->
+      //     new CoralIntakeWheelsCommand().stopMotors()//Test
+      // ));
 
       driverXbox2.x().onTrue(
-        new InstantCommand(()->
-          System.out.println(m_AlgaeIntakeSubsystem.doubleMeasurement())
+        new InstantCommand(()->{
+          System.out.println(m_AlgaeIntakeSubsystem.doubleMeasurement());
+        }
         )
       );
-      driverXbox2.y().onTrue(
-        new InstantCommand(()->
-          System.out.println(m_CoralIntakeSubsystem.doubleMeasurement())
-        )
-      );
+      // driverXbox2.y().onTrue(
+      //   new InstantCommand(() -> {
+      //     m_AlgaeIntakeSubsystem.setArmAngle(50/360);
+      //   })
+      // );
+
+      // driverXbox2.y().onFalse(
+      //   new InstantCommand(()->
+      //   m_AlgaeIntakeSubsystem.setRotation(0)
+      //   )
+      // );
+
 
 
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));

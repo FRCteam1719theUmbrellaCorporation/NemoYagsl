@@ -13,6 +13,7 @@ import java.util.function.DoubleSupplier;
 import com.revrobotics.AbsoluteEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -24,42 +25,57 @@ public class AlgaePivotPIDCommand extends Command {
     public double SETPOINTANGLE;
     private final AbsoluteEncoder m_ANGLE_ENCODER;
 
-    public AlgaePivotPIDCommand(AlgaeIntakeSubsystem intake, PIDController m_ArmAngleManager, AbsoluteEncoder m_ANGLE_ENCODER) {
+    public AlgaePivotPIDCommand(AlgaeIntakeSubsystem intake) {
         addRequirements(intake);
         this.intake = intake;
-        this.m_ArmAngleManager = m_ArmAngleManager;
-        this.m_ANGLE_ENCODER = m_ANGLE_ENCODER;
-
+        this.m_ArmAngleManager = intake.getPidController();
+        this.m_ANGLE_ENCODER = intake.getEncoder();
+        SETPOINTANGLE = intake.getSetPoint();
+        m_ArmAngleManager.setTolerance(5,10);
+        System.out.println(SETPOINTANGLE);
     }
     
     @Override
     public void initialize(){
+        m_ArmAngleManager.reset();
         m_ArmAngleManager.setSetpoint(SETPOINTANGLE);
     }
 
     @Override
     public void execute() {
         // TODO: ADD AND FIND SETPOINTS HERE
-        switch (intake.currentMode()) {
 
-            case ALGAE:
-                break;
+        double output = m_ArmAngleManager.calculate(intake.doubleMeasurement());
+        intake.setRotation(output);
+
+        // switch (intake.currentMode()) {m_
+
+        //     case ALGAE:
+        //         break;
             
-            case MAX:
-                break;
+        //     case MAX:
+        //         break;
         
-            default:
-                break;
-        }
+        //     default:
+        //         if (this.SETPOINTANGLE > 120) {
+        //             SETPOINTANGLE = 120;
+        //         }
+        // }
 
-        // m_ArmAngleManager.setSetpoint(intake.isIntaking() ? Constants.IntakeDetails.intakePos : SETPOINTANGLE.getAsDouble());
+        // if (!intake.aroundAngle(SETPOINTANGLE)) {
+        //     intake.setArmAngle(SETPOINTANGLE).schedule();
+        // }
+        // // m_ArmAngleManager.setSetpoint(intake.isIntaking() ? Constants.IntakeDetails.intakePos : SETPOINTANGLE.getAsDouble());
+        // if (m_ArmAngleManager.atSetpoint()) {System.out.println(m_ArmAngleManager.atSetpoint());}
+        // System.out.println(m_ArmAngleManager.calculate(m_ArmAngleManager.atSetpoint() ? 0 : m_ArmAngleManager.calculate(intake.doubleMeasurement(), SETPOINTANGLE)));
 
-        intake.setRotation(m_ArmAngleManager.calculate(m_ArmAngleManager.calculate(m_ANGLE_ENCODER.getPosition())));
+        // intake.setRotation(m_ArmAngleManager.calculate(m_ArmAngleManager.atSetpoint() ? 0 : m_ArmAngleManager.calculate(intake.doubleMeasurement(), SETPOINTANGLE)));
+        // // intake.setArmAngle(SETPOINTANGLE);
     }
     
-    public void setAngle(double setpoint) {
-        intake.setGoal(setpoint);
-      } 
+    // public void setAngle(double setpoint) {
+    //     intake.setArmAngle(setpoint);
+    //   } 
     //TODO Set limits to angle it can reach
 
     @Override

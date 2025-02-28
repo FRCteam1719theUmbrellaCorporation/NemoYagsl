@@ -38,8 +38,6 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     CORAL_ARM_ENCODER = CORAL_ARM_ANGLEMOTOR.getAbsoluteEncoder();
 
     intakeMode = IntakePosition.CORAL; 
-
-
   }
 
   public void intakeSpinWheels(double speed){
@@ -49,7 +47,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   public void turnOffIntakeWheel(){
     CORAL_ARM_TURNMOTOR.set(0);
   }
-
+  
   public double doubleMeasurement() {
     return CORAL_ARM_ENCODER.getPosition() * 360;
   }
