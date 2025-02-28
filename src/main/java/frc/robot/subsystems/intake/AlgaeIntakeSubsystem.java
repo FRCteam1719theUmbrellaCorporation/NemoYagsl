@@ -54,7 +54,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
       ANGLEMOTOR = new SparkMax(Constants.ALGAE_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
       ANGLE_ENCODER = ANGLEMOTOR.getAbsoluteEncoder();
       intakeMode = IntakePosition.ALGAE; 
-      SETPOINTANGLE = 80;
+      SETPOINTANGLE = 0.2;
     }
       
     public void turnIntakeWheels(double speed) {
@@ -73,10 +73,15 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
       ANGLEMOTOR.set(0);
     }
 
+    public void setSetpoint(double point) {
+      SETPOINTANGLE = point;
+      ArmAngleManager.setSetpoint(point);
+    }
+
     // returns the angle at which the things should move
     public double doubleMeasurement() {
       // System.out.println(ANGLE_ENCODER.getPosition());
-      return ANGLE_ENCODER.getPosition() * 360;
+      return ANGLE_ENCODER.getPosition();
     }
 
     // public void reachGoal(double goalDegrees) {

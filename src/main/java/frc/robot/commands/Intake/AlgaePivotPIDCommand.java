@@ -37,15 +37,18 @@ public class AlgaePivotPIDCommand extends Command {
     
     @Override
     public void initialize(){
-        m_ArmAngleManager.reset();
+        // m_ArmAngleManager.reset();
         m_ArmAngleManager.setSetpoint(SETPOINTANGLE);
     }
 
     @Override
     public void execute() {
         // TODO: ADD AND FIND SETPOINTS HERE
-
-        double output = m_ArmAngleManager.calculate(intake.doubleMeasurement());
+        
+        double output = -m_ArmAngleManager.calculate(intake.doubleMeasurement());
+        System.out.println(output);
+        System.out.println( m_ANGLE_ENCODER.getPosition());
+        // intake.setRotation(-.25);
         intake.setRotation(output);
 
         // switch (intake.currentMode()) {m_
