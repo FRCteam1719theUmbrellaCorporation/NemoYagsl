@@ -160,7 +160,7 @@ public class ElevatorSubsytem extends SubsystemBase {
     double output;
     
     if (inBounds()) {
-      output = Math.clamp(elevatorPIDController.calculate(HEIGHT_SETPOINT), ElevatorConstants.MIN_SPEED, ElevatorConstants.MAX_SPEED);
+      output = MathUtil.clamp(elevatorPIDController.calculate(HEIGHT_SETPOINT), ElevatorConstants.MIN_SPEED, ElevatorConstants.MAX_SPEED);
       System.out.println(output);
       System.out.println(ELEVATOR_ENCODER.getPosition());
 

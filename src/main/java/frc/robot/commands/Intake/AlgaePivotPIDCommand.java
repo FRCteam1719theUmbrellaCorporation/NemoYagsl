@@ -12,6 +12,7 @@ import java.util.function.DoubleSupplier;
 
 import com.revrobotics.AbsoluteEncoder;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -45,7 +46,7 @@ public class AlgaePivotPIDCommand extends Command {
     public void execute() {
         // TODO: ADD AND FIND SETPOINTS HERE
         
-        double output = Math.clamp(-m_ArmAngleManager.calculate(intake.doubleMeasurement()), Constants.AlgaeArmConstants.MIN_SPEED, Constants.AlgaeArmConstants.MAX_SPEED);
+        double output = MathUtil.clamp(-m_ArmAngleManager.calculate(intake.doubleMeasurement()), Constants.AlgaeArmConstants.MIN_SPEED, Constants.AlgaeArmConstants.MAX_SPEED);
         intake.setRotation(output);
     }
     
