@@ -28,7 +28,7 @@ public class ElevatorSubsytem extends SubsystemBase {
 
     //TODO: Replace with encoder positions
     //Constant list of heights represented by english. YAY
-    enum HeightLevels {
+    public enum HeightLevels {
         ZERO(0), // Sets to the bottom
         REEFBASE(1),
         LOW(2), // Sets to the lowest 
@@ -64,16 +64,18 @@ public class ElevatorSubsytem extends SubsystemBase {
   //ENCODER
 
   static double HEIGHT_SETPOINT = 0;
-  private boolean temp = true;
+  // private boolean temp = true;
   private static final PIDController elevatorPIDController = new PIDController(ElevatorConstants.ElevatorkP, ElevatorConstants.ElevatorkI, ElevatorConstants.ElevatorkD); // TODO ADD VALUES
 
   // private static final ElevatorFeedforward elevatorPIDfeed = new ElevatorFeedforward(ElevatorConstants.ElevatorkS, ElevatorConstants.ElevatorkG, ElevatorConstants.ElevatorkV, ElevatorConstants.ElevatorkA);
 
   public ElevatorSubsytem() {
+    // temp = true;
     ELEVATOR_MOTOR_ONE = new SparkMax(Constants.ELEVATOR_PIN_ONE, MotorType.kBrushless);
     ELEVATOR_ENCODER = ELEVATOR_MOTOR_ONE.getEncoder();
 
     HEIGHT_SETPOINT = 20f;
+    elevatorPIDController.setSetpoint(HEIGHT_SETPOINT);
   }
 
   // sets the pos based off an enum value
@@ -152,7 +154,7 @@ public class ElevatorSubsytem extends SubsystemBase {
   }
 
   private boolean inBounds() {
-    return HEIGHT_SETPOINT <= this.doubleMeasurement() && ElevatorConstants.ELEVATOR_ROOM_MAX >= HEIGHT_SETPOINT;
+    return HEIGHT_SETPOINT > 0 && ElevatorConstants.ELEVATOR_ROOM_MAX >= HEIGHT_SETPOINT;
   }
 
   @Override
@@ -160,19 +162,24 @@ public class ElevatorSubsytem extends SubsystemBase {
     double output;
     
     if (inBounds()) {
-      output = MathUtil.clamp(elevatorPIDController.calculate(HEIGHT_SETPOINT), ElevatorConstants.MIN_SPEED, ElevatorConstants.MAX_SPEED);
-      System.out.println(output);
-      System.out.println(ELEVATOR_ENCODER.getPosition());
+      output = MathUtil.clamp(elevatorPIDController.calculate(doubleMeasurement()), ElevatorConstants.MIN_SPEED, ElevatorConstants.MAX_SPEED);
+      System.out.println("iOutput" + output);
+      // System.out.println(ELEVATOR_ENCODER.getPosition());
 
     } else {
       output = 0;
     }
 
-    if (this.doubleMeasurement() > HEIGHT_SETPOINT + 10 && temp) {
-      ELEVATOR_MOTOR_ONE.set(.1);
-    }
+    // if (this.doubleMeasurement() < HEIGHT_SETPOINT + 30 && temp) {
+    //   ELEVATOR_MOTOR_ONE.set(.3);
+    //   System.out.println("output " + ELEVATOR_MOTOR_ONE.getAppliedOutput());
+    // } else {
+    //   temp = false;
+    //   ELEVATOR_MOTOR_ONE.set(0);
 
-    // ELEVATOR_MOTOR_ONE.set(output);
+    // }
+    System.out.println("fOutput" + output);
+    ELEVATOR_MOTOR_ONE.set(output);
   }
 
 }
