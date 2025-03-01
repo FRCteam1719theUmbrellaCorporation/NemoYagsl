@@ -109,7 +109,7 @@ public final class Constants
 
 
   public static class CoralArmConstants{
-    public static final double CoralArm_kP = 0;
+    public static final double CoralArm_kP = 2;
     public static final double CoralArm_kI = 0;
     public static final double CoralArm_kD = 0;
 
@@ -123,6 +123,7 @@ public final class Constants
     //Imb - dont know if these are necessary
     public static final double CoralArmWheelRadius = Units.inchesToMeters(0);
     public static final double MAXROTATE = .265f;
+    public static final double ARM_OUTAKE_POS_ANGLE = 0.030;
 
   }
   public static class AlgaeArmConstants{
