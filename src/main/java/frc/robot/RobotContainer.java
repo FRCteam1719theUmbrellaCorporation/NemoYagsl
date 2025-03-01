@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -11,6 +12,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -253,13 +255,17 @@ public class RobotContainer
       );
 
 
-      driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+       driverXbox.a().onTrue(new InstantCommand(()->{
+        AutoBuilder.buildAuto("2meterauto").schedule();
+      }));
+      driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+
       driverXbox.b().onTrue(new InstantCommand(() -> {
         try {
           drivebase.allignTagWithOffset(LimeLightExtra.backCam,0, 0).schedule();
 
         } catch (Exception e) {
-          System.out.println("April tag not seen sorry brochacho");
+          System.out.println(e.getStackTrace());
         }}));
       driverXbox.start().whileTrue(Commands.none());
       

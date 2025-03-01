@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.LimeLightExtra;
 
 //import frc.robot.subsystems.swervedrive.Vision.Cameras;
@@ -55,6 +56,7 @@ import org.json.simple.parser.ParseException;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
+import swervelib.imu.SwerveIMU;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
@@ -152,6 +154,10 @@ public class SwerveSubsystem extends SubsystemBase
       swerveDrive.updateOdometry();
 //      vision.updatePoseEstimation(swerveDrive);
     }
+    //System.out.println(LimelightHelpers.getTV(LimeLightExtra.backCam));
+    LimelightHelpers.SetRobotOrientation(LimeLightExtra.backCam, swerveDrive.getYaw().getDegrees(), 0, 0, 0, 0, 0);
+
+
   }
 
   @Override
@@ -414,10 +420,11 @@ public class SwerveSubsystem extends SubsystemBase
 
 
     //THIS IS VERY IMPORTANT THIS IS THE TAG ID
-    int tagID = 6;
-
+    //int tagID = 8;
+    
     try {
       double[] tagPose = LimeLightExtra.requestTagPos(limelightName).get();
+      System.out.println(tagPose.length);
       if (tagPose == null) {
         throw new NoSuchElementException();
       }
@@ -435,19 +442,18 @@ public class SwerveSubsystem extends SubsystemBase
   }
   public Command OnTheFlyPathPlan(double xx, double yy, double angle)
   {
+    System.out.println("HI");
     Pose2d currentPos = getPose();
     final double posx = currentPos.getX();
     final double posy = currentPos.getY();
       // Create a list of waypoints from poses. Each pose represents one waypoint.
   // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
-  List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+  List<Waypoint> waypoints = null;
+  try{
+  waypoints = PathPlannerPath.waypointsFromPoses(
     currentPos,
-    new Pose2d(posx+xx, posy+yy, Rotation2d.fromDegrees(0))
-    //new Pose2d(posx-1, posy, Rotation2d.fromDegrees(0)),
-    //new Pose2d(posx, posy+1, Rotation2d.fromDegrees(0)),
-);
-
-PathConstraints constraints = new PathConstraints(3.0, 1.0, 2*Math.PI, 2*Math.PI); // The constraints for this path.
+    new Pose2d(posx+xx, posy+yy, Rotation2d.fromDegrees(0)));
+    PathConstraints constraints = new PathConstraints(3.0, 1.0, 2*Math.PI, 2*Math.PI); // The constraints for this path.
 // PathConstraints constraints = PathConstraints.unlimitedConstraints(12.0); // You can also use unlimited constraints, only limited by motor torque and nominal battery voltage
 
 // Create the path using the waypoints created above
@@ -458,7 +464,8 @@ PathPlannerPath path = new PathPlannerPath(
     new GoalEndState(0.0, Rotation2d.fromDegrees(angle)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect. 
 );
   return AutoBuilder.followPath(path);
-  }
+  } catch(Exception e){return null;}
+  };
   /**
    * Command to drive the robot using translative values and heading as angular velocity.
    *
@@ -788,4 +795,5 @@ PathPlannerPath path = new PathPlannerPath(
   {
     return swerveDrive;
   }
+
 }
