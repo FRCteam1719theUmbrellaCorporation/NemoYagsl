@@ -83,8 +83,7 @@ public final class Constants
   public static final int CORAL_ARM_ANGLE_MOTOR_ID = 9; 
 
   // ELEVATOR
-  public static final int ELEVATOR_PIN_ONE = 5;
-  public static final int ELEVATOR_PIN_TWO = 6;
+  public static final int ELEVATOR_PIN_ONE = 6;
   public static final int ELEVATOR_ROTATE_ENCODER = 4;
 
   //ENDEFECTOR
@@ -170,7 +169,7 @@ public final class Constants
 //These are all the un-tuned constants from what IMB did on 2/18/25
 //These changes should all be in the hbg/Subsystem branch in Nemo YAGSL
 
-   public static final double ElevatorkP = 0;
+   public static final double ElevatorkP = 0.01;
     public static final double ElevatorkI = 0;
     public static final double ElevatorkD = 0;
     public static final double MaxVelocity = Meters.of(4).per(Second).in(MetersPerSecond);
@@ -197,7 +196,11 @@ public final class Constants
     public static final Distance LaserCANOffset  = Inches.of(3);
     public static final double DefaultTolerance = Inches.of(1).in(Meters);
     
-  */}
+  */
+    public static final double MIN_SPEED = -.5f;
+    public static final double MAX_SPEED = .5f;
+  }
+
 
   public static double CORALPIVITMAXAMOUNT = 235;
 }
