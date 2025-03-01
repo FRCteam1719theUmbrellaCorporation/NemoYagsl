@@ -21,6 +21,7 @@ public class EndEffectorSubsytem extends SubsystemBase {
 
   private final SparkMax ENDEFFECTOR_ROTATE_MOTOR;
   private final AbsoluteEncoder ENDEFFECTOR_ENCODER;
+  private double setPoint;
   private PIDController EndEffectorPIDController = new PIDController(EndefectorConstants.Endefector_kP, 
                                                                     EndefectorConstants.Endefector_kI, 
                                                                     EndefectorConstants.Endefector_kD); 
@@ -29,8 +30,9 @@ public class EndEffectorSubsytem extends SubsystemBase {
  
   /** Creates a new EndEffectorSubsytem. */
   public EndEffectorSubsytem() {
-    ENDEFFECTOR_ROTATE_MOTOR = new SparkMax(Constants.ELEVATOR_PIN_TWO, MotorType.kBrushless); 
+    ENDEFFECTOR_ROTATE_MOTOR = new SparkMax(Constants.ENDEFECTOR_ANGLE_MOTOR_ID, MotorType.kBrushless); 
     ENDEFFECTOR_ENCODER = ENDEFFECTOR_ROTATE_MOTOR.getAbsoluteEncoder();
+    setPoint = 0;
   }
 
   public void stop() {
@@ -38,7 +40,7 @@ public class EndEffectorSubsytem extends SubsystemBase {
   }
 
   public double doubleMeasurement() {
-    return ENDEFFECTOR_ENCODER.getPosition() * 360;
+    return ENDEFFECTOR_ENCODER.getPosition();
   }
 
   public void setRotation(double angle) {

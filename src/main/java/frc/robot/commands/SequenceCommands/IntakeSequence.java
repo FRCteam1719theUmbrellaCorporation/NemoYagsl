@@ -6,6 +6,7 @@ import frc.robot.*;
 //import frc.robot.commands.*;
 //import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
+import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
 import frc.robot.subsystems.intake.AlgaeIntakeSubsystem;
@@ -25,8 +26,12 @@ public class IntakeSequence extends Command{
         return new WaitCommand(time);
     }
 
-    public InstantCommand set_Height(double height) {
-        return new InstantCommand(()-> m_ElevatorSubsytem.setGoal(height));
+    public InstantCommand set_Height(HeightLevels height) {
+        return new InstantCommand(()-> m_ElevatorSubsytem.setHeightWithEnum(height));
+    }
+
+    public Command incrementHeight(int incrementBy) {
+        return new InstantCommand(() -> m_ElevatorSubsytem.incrementByStage(incrementBy));
     }
 
     public InstantCommand endEffectorAngle(double angle) {
