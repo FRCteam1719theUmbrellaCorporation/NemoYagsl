@@ -105,6 +105,12 @@ public class ElevatorSubsytem extends SubsystemBase {
 
   // controls height with double; not highly recommended
   public void controlWithDouble(double setpoint) {
+    if (setpoint < 0) {
+      setpoint = 0;
+    } else if (setpoint > Constants.ElevatorConstants.ELEVATOR_ROOM_MAX) {
+      setpoint = Constants.ElevatorConstants.ELEVATOR_ROOM_MAX;
+    }
+
     HEIGHT_SETPOINT = setpoint;
   }
 
@@ -118,7 +124,7 @@ public class ElevatorSubsytem extends SubsystemBase {
   }
 
   public double doubleMeasurement() {
-    return ELEVATOR_ENCODER.getPosition() * 360;
+    return ELEVATOR_ENCODER.getPosition();
   }
   
   public void reachGoal(double goal){
