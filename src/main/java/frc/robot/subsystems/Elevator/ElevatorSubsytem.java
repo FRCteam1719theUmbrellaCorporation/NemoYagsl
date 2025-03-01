@@ -14,14 +14,15 @@ import frc.robot.Constants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.units.PerUnit;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
-import static edu.wpi.first.units.Units.*;
+// import edu.wpi.first.math.controller.ProfiledPIDController;
+// import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+// import edu.wpi.first.units.PerUnit;
+// import edu.wpi.first.wpilibj.DutyCycleEncoder;
+// import edu.wpi.first.wpilibj2.command.Command;
+
+// import static edu.wpi.first.units.Units.*;
 
 public class ElevatorSubsytem extends SubsystemBase {
 
@@ -59,24 +60,25 @@ public class ElevatorSubsytem extends SubsystemBase {
 
   /** Creates a new ElevatorSubsytem. */
   private final SparkMax ELEVATOR_MOTOR_ONE;
-  private final SparkMax ELEVATOR_MOTOR_TWO;
   private final RelativeEncoder ELEVATOR_ENCODER;
   //ENCODER
 
   static double HEIGHT_SETPOINT = 0;
-  private static final ProfiledPIDController elevatorPIDController = new ProfiledPIDController(ElevatorConstants.ElevatorkP, ElevatorConstants.ElevatorkI, ElevatorConstants.ElevatorkD, new Constraints(ElevatorConstants.MaxVelocity, ElevatorConstants.MaxAcceleration)); // TODO ADD VALUES
+  private boolean temp = true;
+  private static final PIDController elevatorPIDController = new PIDController(ElevatorConstants.ElevatorkP, ElevatorConstants.ElevatorkI, ElevatorConstants.ElevatorkD); // TODO ADD VALUES
 
-  private static final ElevatorFeedforward elevatorPIDfeed = new ElevatorFeedforward(ElevatorConstants.ElevatorkS, ElevatorConstants.ElevatorkG, ElevatorConstants.ElevatorkV, ElevatorConstants.ElevatorkA);
+  // private static final ElevatorFeedforward elevatorPIDfeed = new ElevatorFeedforward(ElevatorConstants.ElevatorkS, ElevatorConstants.ElevatorkG, ElevatorConstants.ElevatorkV, ElevatorConstants.ElevatorkA);
 
   public ElevatorSubsytem() {
     ELEVATOR_MOTOR_ONE = new SparkMax(Constants.ELEVATOR_PIN_ONE, MotorType.kBrushless);
-    ELEVATOR_MOTOR_TWO = new SparkMax(Constants.ELEVATOR_PIN_TWO, MotorType.kBrushless);
     ELEVATOR_ENCODER = ELEVATOR_MOTOR_ONE.getEncoder();
+
+    HEIGHT_SETPOINT = 20f;
   }
 
   // sets the pos based off an enum value
   public void setHeightWithEnum(HeightLevels pos) {
-    HEIGHT_SETPOINT = pos.numVal();
+    setSetpoint(pos.numVal());
   }
 
   // returns the height double as an enum. easier to read
@@ -93,7 +95,7 @@ public class ElevatorSubsytem extends SubsystemBase {
     for (int i = 0; i < vals.length; i++) {
         if (vals[i].numVal() == HEIGHT_SETPOINT) {
             try {
-                HEIGHT_SETPOINT = vals[i + change].numVal();
+                setSetpoint(vals[i + change].numVal());
                 return;
             } catch (Exception e) {
                 throw new IndexOutOfBoundsException();
@@ -107,11 +109,16 @@ public class ElevatorSubsytem extends SubsystemBase {
   public void controlWithDouble(double setpoint) {
     if (setpoint < 0) {
       setpoint = 0;
-    } else if (setpoint > Constants.ElevatorConstants.ELEVATOR_ROOM_MAX) {
-      setpoint = Constants.ElevatorConstants.ELEVATOR_ROOM_MAX;
+    } else if (setpoint > ElevatorConstants.ELEVATOR_ROOM_MAX) {
+      setpoint = ElevatorConstants.ELEVATOR_ROOM_MAX;
     }
 
-    HEIGHT_SETPOINT = setpoint;
+    setSetpoint(setpoint);
+  }
+
+  public void setSetpoint(double setSetpoint) {
+    HEIGHT_SETPOINT = setSetpoint;
+    elevatorPIDController.setSetpoint(setSetpoint);
   }
 
   public void zeroElevator() {
@@ -120,34 +127,52 @@ public class ElevatorSubsytem extends SubsystemBase {
 
   public void stop()    {
     ELEVATOR_MOTOR_ONE.set(0.0);
-    ELEVATOR_MOTOR_TWO.set(0.0);
   }
 
   public double doubleMeasurement() {
     return ELEVATOR_ENCODER.getPosition();
   }
+
   
-  public void reachGoal(double goal){
-    double voltsOutput = MathUtil.clamp(elevatorPIDfeed.calculateWithVelocities(ELEVATOR_ENCODER.getVelocity(), elevatorPIDController.getSetpoint().velocity) + elevatorPIDController.calculate(ELEVATOR_ENCODER.getPosition(), goal), -7,7);
-    ELEVATOR_MOTOR_ONE.setVoltage(voltsOutput);
-    ELEVATOR_MOTOR_TWO.setVoltage(voltsOutput);
-  }
+  // public void reachGoal(double goal){
+  //   double voltsOutput = MathUtil.clamp(elevatorPIDfeed.calculateWithVelocities(ELEVATOR_ENCODER.getVelocity(), elevatorPIDController.getSetpoint().velocity) + elevatorPIDController.calculate(ELEVATOR_ENCODER.getPosition(), goal), -7,7);
+  //   ELEVATOR_MOTOR_ONE.setVoltage(voltsOutput);
+  // }
 
-  public Command setGoal(double goal){
-    return run(() -> reachGoal(goal));
-  }
+  // public Command setGoal(double goal){
+  //   return run(() -> reachGoal(goal));
+  // }
 
-  public Command setElevatorHeight(double height){
-    return setGoal(height).until(()->aroundHeight(height, ElevatorConstants.Tolerance));
-  }
+  // public Command setElevatorHeight(double height){
+  //   setSetpoint(height);
+  // }
 
   public boolean aroundHeight(double height, double tolerance){
     return MathUtil.isNear(height,ELEVATOR_ENCODER.getPosition(),tolerance);
   }
 
+  private boolean inBounds() {
+    return HEIGHT_SETPOINT <= this.doubleMeasurement() && ElevatorConstants.ELEVATOR_ROOM_MAX >= HEIGHT_SETPOINT;
+  }
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    double output;
+    
+    if (inBounds()) {
+      output = Math.clamp(elevatorPIDController.calculate(HEIGHT_SETPOINT), ElevatorConstants.MIN_SPEED, ElevatorConstants.MAX_SPEED);
+      System.out.println(output);
+      System.out.println(ELEVATOR_ENCODER.getPosition());
+
+    } else {
+      output = 0;
+    }
+
+    if (this.doubleMeasurement() > HEIGHT_SETPOINT + 10 && temp) {
+      ELEVATOR_MOTOR_ONE.set(.1);
+    }
+
+    // ELEVATOR_MOTOR_ONE.set(output);
   }
 
 }
