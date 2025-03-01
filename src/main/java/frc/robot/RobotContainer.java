@@ -24,11 +24,11 @@ import java.io.File;
 import swervelib.SwerveInputStream;
 //import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
-import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
+// import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
 import frc.robot.subsystems.intake.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
 //import frc.robot.commands.*;
-import frc.robot.commands.Elevator.ElevatorPIDMoveCommand;
+// import frc.robot.commands.Elevator.ElevatorPIDMoveCommand;
 import frc.robot.commands.Intake.AlgaeIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralPivotPIDCommand;
@@ -55,7 +55,7 @@ public class RobotContainer
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
   
-  // private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
+  private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
   private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
   private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   // private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
