@@ -55,7 +55,7 @@ public class CoralPivotPIDCommand extends Command {
             default:
                 break;
         }
-        double output = -m_ArmAngleManager.calculate(m_ANGLE_ENCODER.getPosition());
+        double output = Math.clamp(-m_ArmAngleManager.calculate(m_ANGLE_ENCODER.getPosition()), CoralArmConstants.MIN_SPEED, CoralArmConstants.MAX_SPEED);
 
         System.out.println(output);
         System.out.println(m_ANGLE_ENCODER.getPosition());

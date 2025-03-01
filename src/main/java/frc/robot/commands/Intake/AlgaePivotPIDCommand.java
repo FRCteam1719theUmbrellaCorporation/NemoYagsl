@@ -45,7 +45,7 @@ public class AlgaePivotPIDCommand extends Command {
     public void execute() {
         // TODO: ADD AND FIND SETPOINTS HERE
         
-        double output = -m_ArmAngleManager.calculate(intake.doubleMeasurement());
+        double output = Math.clamp(-m_ArmAngleManager.calculate(intake.doubleMeasurement()), Constants.AlgaeArmConstants.MIN_SPEED, Constants.AlgaeArmConstants.MAX_SPEED);
         intake.setRotation(output);
     }
     
