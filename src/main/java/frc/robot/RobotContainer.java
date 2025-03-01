@@ -154,6 +154,7 @@ public class RobotContainer
   Command driveSetpointGenSim = drivebase.driveWithSetpointGeneratorFieldRelative(driveDirectAngleSim);
 
   Command algaeAngleSetter = new AlgaePivotPIDCommand(m_AlgaeIntakeSubsystem);
+  Command algaeWheels = new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem);
   Command coralAngleSetter = new CoralPivotPIDCommand(m_CoralIntakeSubsystem);
   Command coralWheels = new CoralIntakeWheelsCommand(m_CoralIntakeSubsystem);
   /**
@@ -185,8 +186,10 @@ public class RobotContainer
     //                             driveFieldOrientedAnglularVelocity :
     //                             driveFieldOrientedAnglularVelocitySim);
 
+
+
     m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
-    // m_CoralIntakeSubsystem.setDefaultCommand(coralAngleSetter);
+    m_CoralIntakeSubsystem.setDefaultCommand(coralAngleSetter);
 
     if (Robot.isSimulation())
     {
@@ -206,9 +209,8 @@ public class RobotContainer
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
-      //Uncomment when a second xbox controller is added
 
-          
+      //Algae intake wheels to spin
       driverXbox2.a().onTrue(
         new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem).turnMotor(1).withTimeout(1) //Test
       );
@@ -216,25 +218,20 @@ public class RobotContainer
       driverXbox2.a().onFalse(
         new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem).stopMotors() //Test
       );
-      
-      driverXbox2.b().onTrue(
-        new InstantCommand(()->
-          m_CoralIntakeSubsystem.intakeSpinWheels(-.5f)
-      ));
-      driverXbox2.b().onFalse(
-        new InstantCommand(()->
-        m_CoralIntakeSubsystem.intakeSpinWheels(0f)
-      ));
 
-      // driverXbox2.x().onTrue(
-      //   new InstantCommand(()->{
-      //     System.out.println(m_AlgaeIntakeSubsystem.doubleMeasurement());
-      //   }
-      //   )
-      // );
+      //Coral intake wheels to spin
+      driverXbox2.b().onTrue(
+        new CoralIntakeWheelsCommand(m_CoralIntakeSubsystem).turnMotor(-.5f)
+      );
+
+      driverXbox2.b().onFalse(
+        new CoralIntakeWheelsCommand(m_CoralIntakeSubsystem).stopMotors()
+      );
+
+      //Algae move to setpoint
       driverXbox2.y().onTrue(
         new InstantCommand(() -> {
-          m_AlgaeIntakeSubsystem.setSetpoint(.1);
+         m_AlgaeIntakeSubsystem.setSetpoint(.1);
         })
       );
 
@@ -243,7 +240,18 @@ public class RobotContainer
         m_AlgaeIntakeSubsystem.setSetpoint(.12)
         )
       );
+      //Coral move to setpoint
+       driverXbox2.x().onTrue(
+        new InstantCommand(() -> {
+        m_CoralIntakeSubsystem.setSetpoint(.1);
+        })
+      );
 
+      driverXbox2.x().onFalse(
+        new InstantCommand(()->
+        m_CoralIntakeSubsystem.setSetpoint(.2)
+        )
+      );
 
 
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));

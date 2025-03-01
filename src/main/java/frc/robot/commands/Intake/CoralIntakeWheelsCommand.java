@@ -10,7 +10,7 @@ public class CoralIntakeWheelsCommand extends Command {
     public CoralIntakeWheelsCommand(CoralIntakeSubsystem input) {
         mCoralIntakeSubsystem = input;
     }
-    public InstantCommand turnMotor(int speed) {
+    public InstantCommand turnMotor(double speed) {
         return new InstantCommand(()-> 
             mCoralIntakeSubsystem.intakeSpinWheels(speed)
         );
