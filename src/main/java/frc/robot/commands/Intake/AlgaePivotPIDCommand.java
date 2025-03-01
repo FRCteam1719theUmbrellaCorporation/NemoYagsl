@@ -32,7 +32,7 @@ public class AlgaePivotPIDCommand extends Command {
         this.m_ANGLE_ENCODER = intake.getEncoder();
         SETPOINTANGLE = intake.getSetPoint();
         m_ArmAngleManager.setTolerance(5,10);
-        System.out.println(SETPOINTANGLE);
+        // System.out.println(SETPOINTANGLE);
     }
     
     @Override
@@ -46,34 +46,7 @@ public class AlgaePivotPIDCommand extends Command {
         // TODO: ADD AND FIND SETPOINTS HERE
         
         double output = -m_ArmAngleManager.calculate(intake.doubleMeasurement());
-        System.out.println(output);
-        System.out.println( m_ANGLE_ENCODER.getPosition());
-        // intake.setRotation(-.25);
         intake.setRotation(output);
-
-        // switch (intake.currentMode()) {m_
-
-        //     case ALGAE:
-        //         break;
-            
-        //     case MAX:
-        //         break;
-        
-        //     default:
-        //         if (this.SETPOINTANGLE > 120) {
-        //             SETPOINTANGLE = 120;
-        //         }
-        // }
-
-        // if (!intake.aroundAngle(SETPOINTANGLE)) {
-        //     intake.setArmAngle(SETPOINTANGLE).schedule();
-        // }
-        // // m_ArmAngleManager.setSetpoint(intake.isIntaking() ? Constants.IntakeDetails.intakePos : SETPOINTANGLE.getAsDouble());
-        // if (m_ArmAngleManager.atSetpoint()) {System.out.println(m_ArmAngleManager.atSetpoint());}
-        // System.out.println(m_ArmAngleManager.calculate(m_ArmAngleManager.atSetpoint() ? 0 : m_ArmAngleManager.calculate(intake.doubleMeasurement(), SETPOINTANGLE)));
-
-        // intake.setRotation(m_ArmAngleManager.calculate(m_ArmAngleManager.atSetpoint() ? 0 : m_ArmAngleManager.calculate(intake.doubleMeasurement(), SETPOINTANGLE)));
-        // // intake.setArmAngle(SETPOINTANGLE);
     }
     
     // public void setAngle(double setpoint) {
