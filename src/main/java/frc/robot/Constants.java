@@ -169,7 +169,7 @@ public final class Constants
 //These are all the un-tuned constants from what IMB did on 2/18/25
 //These changes should all be in the hbg/Subsystem branch in Nemo YAGSL
 
-   public static final double ElevatorkP = 0.01;
+   public static final double ElevatorkP = 2;
     public static final double ElevatorkI = 0;
     public static final double ElevatorkD = 0;
     public static final double MaxVelocity = Meters.of(4).per(Second).in(MetersPerSecond);
@@ -197,8 +197,8 @@ public final class Constants
     public static final double DefaultTolerance = Inches.of(1).in(Meters);
     
   */
-    public static final double MIN_SPEED = -.5f;
-    public static final double MAX_SPEED = .5f;
+    public static final double MIN_SPEED = -.3f;
+    public static final double MAX_SPEED = .3f;
   }
 
 
