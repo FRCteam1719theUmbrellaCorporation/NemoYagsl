@@ -36,7 +36,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     CORAL_ARM_TURNMOTOR = new SparkMax(Constants.CORAL_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
     CORAL_ARM_ANGLEMOTOR = new SparkMax(Constants.CORAL_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
     CORAL_ARM_ENCODER = CORAL_ARM_ANGLEMOTOR.getAbsoluteEncoder();
-
+    SETPOINTANGLE = .1f;
     intakeMode = IntakePosition.CORAL; 
   }
 
@@ -49,9 +49,8 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   }
   
   public double doubleMeasurement() {
-    return CORAL_ARM_ENCODER.getPosition() * 360;
+    return CORAL_ARM_ENCODER.getPosition();
   }
-
 
   public void setRotation(double angle) {
     CORAL_ARM_ANGLEMOTOR.set(angle);
@@ -69,6 +68,28 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   public IntakePosition currentMode() {
     return intakeMode;
   }
+
+  public AbsoluteEncoder getEncoder() {
+    return CORAL_ARM_ENCODER;
+  }
+
+  public double getSetpoint() {
+    return SETPOINTANGLE;
+  }
+
+  public PIDController getPID() {
+    return coralArmPIDController;
+  }  
+
+  public void setSetpoint(double point) {
+    if (point > Constants.CoralArmConstants.MAXROTATE) {
+      point = Constants.CoralArmConstants.MAXROTATE;
+    }
+
+    SETPOINTANGLE = point;
+    coralArmPIDController.setSetpoint(point);
+  }
+
  /*  public void intakeAngle(double angle){
     CORAL_ARM_ANGLEMOTOR.getAbsoluteEncoder().getPosition();
   }
@@ -89,7 +110,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   @ Override
   public void periodic() {
     // This method will be called once per scheduler run
-    CORAL_ARM_ANGLEMOTOR.set(coralArmPIDController.calculate(CORAL_ARM_ANGLEMOTOR.getAbsoluteEncoder().getPosition(), SETPOINTANGLE));
+    // CORAL_ARM_ANGLEMOTOR.set(coralArmPIDController.calculate(CORAL_ARM_ANGLEMOTOR.getAbsoluteEncoder().getPosition(), SETPOINTANGLE));
 
   }
 }
