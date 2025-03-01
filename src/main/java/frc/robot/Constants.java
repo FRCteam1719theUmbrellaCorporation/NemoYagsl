@@ -27,13 +27,8 @@ public final class Constants
 {
 
   public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
-<<<<<<< HEAD
-  public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
-  public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
-=======
   public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
   public static final double LOOP_TIME = 0.13; //s, 20ms + 110ms sprk max velocity lag
->>>>>>> hbg/IntakeWithCommands
   public static final double SPEED_LIMITER = 0.25;
   public static final double MAX_SPEED  = Units.feetToMeters(14.5*SPEED_LIMITER);
   // Maximum speed of the robot in meters per second, used to limit acceleration.
@@ -181,6 +176,8 @@ public final class Constants
     public static final double ElevatorkV = 0;
     public static final double ElevatorkA = 0;
     public static final double Tolerance = 0; //CHANGE
+
+    public static final double ELEVATOR_ROOM_MAX = 84;
   /* public static final double RampRate = 5;
     public static final double ElevatorGearing = 5;
     public static final double ElevatorCarriageMass = 5;
