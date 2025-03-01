@@ -12,8 +12,10 @@ import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
@@ -36,10 +38,14 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.subsystems.LimeLightExtra;
+
 //import frc.robot.subsystems.swervedrive.Vision.Cameras;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
@@ -402,7 +408,54 @@ public class SwerveSubsystem extends SubsystemBase
   {
     swerveDrive.replaceSwerveModuleFeedforward(new SimpleMotorFeedforward(kS, kV, kA));
   }
+  public Command allignTagWithOffset(String limelightName, double x, double z, double angleOffset) throws NoSuchElementException {
+    LimeLightExtra.updatePoseEstimation(swerveDrive);
+    //temp until side stuff is finished
+    int tagID = 1;
 
+    try {
+      double[] tagPose = LimeLightExtra.requestTagPos(limelightName).get();
+      if (tagPose == null) {
+        throw new NoSuchElementException();
+      }
+
+      return OnTheFlyPathPlan(tagPose[2] + x, tagPose[0] + z, tagPose[4] + angleOffset);
+
+    } catch (NoSuchElementException e) {
+      throw e;
+    }
+  }
+
+  //Overload without angle adjustment
+  public Command allignTagWithOffset(String limelightName, double x, double z) {
+    return allignTagWithOffset(limelightName, x, z, 0);
+  }
+  public Command OnTheFlyPathPlan(double xx, double yy, double angle)
+  {
+    Pose2d currentPos = getPose();
+    final double posx = currentPos.getX();
+    final double posy = currentPos.getY();
+      // Create a list of waypoints from poses. Each pose represents one waypoint.
+  // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
+  List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+    currentPos,
+    new Pose2d(posx+xx, posy+yy, Rotation2d.fromDegrees(0))
+    //new Pose2d(posx-1, posy, Rotation2d.fromDegrees(0)),
+    //new Pose2d(posx, posy+1, Rotation2d.fromDegrees(0)),
+);
+
+PathConstraints constraints = new PathConstraints(3.0, 1.0, 2*Math.PI, 2*Math.PI); // The constraints for this path.
+// PathConstraints constraints = PathConstraints.unlimitedConstraints(12.0); // You can also use unlimited constraints, only limited by motor torque and nominal battery voltage
+
+// Create the path using the waypoints created above
+PathPlannerPath path = new PathPlannerPath(
+    waypoints,
+    constraints,
+    null, // The ideal starting state, this is only relevant for pre-planned paths, so can be null for on-the-fly paths.
+    new GoalEndState(0.0, Rotation2d.fromDegrees(angle)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect. 
+);
+  return AutoBuilder.followPath(path);
+  }
   /**
    * Command to drive the robot using translative values and heading as angular velocity.
    *

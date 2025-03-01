@@ -5,6 +5,8 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,6 +24,7 @@ import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
+import frc.robot.subsystems.LimeLightExtra;
 //import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
 import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
@@ -255,11 +258,15 @@ public class RobotContainer
 
 
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverXbox.b().whileTrue(
-          drivebase.driveToPose(
-              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              );
+      driverXbox.b().onTrue(new InstantCommand(() -> {
+        try {
+          drivebase.allignTagWithOffset(LimeLightExtra.backCam,0, 0).schedule();
+
+        } catch (Exception e) {
+          System.out.println("Limelight not seen sorry brochacho");
+        }}));
       driverXbox.start().whileTrue(Commands.none());
+      
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
@@ -271,10 +278,18 @@ public class RobotContainer
    *
    * @return the command to run in autonomous
    */
+  // public Command getAutonomousCommand()
+  // {
+  //   // An example command will be run in autonomous
+  //   return drivebase.getAutonomousCommand("New Auto");
+  // }
   public Command getAutonomousCommand()
   {
-    // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    // drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+    // "swerve"));
+
+    return new PathPlannerAuto("2meterauto");
+    
   }
 
   public void setMotorBrake(boolean brake)
