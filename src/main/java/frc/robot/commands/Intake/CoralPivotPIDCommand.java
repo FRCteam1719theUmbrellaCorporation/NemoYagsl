@@ -12,6 +12,7 @@
 
 import com.revrobotics.AbsoluteEncoder;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -55,10 +56,10 @@ public class CoralPivotPIDCommand extends Command {
             default:
                 break;
         }
-        double output = Math.clamp(-m_ArmAngleManager.calculate(m_ANGLE_ENCODER.getPosition()), CoralArmConstants.MIN_SPEED, CoralArmConstants.MAX_SPEED);
+        double output = MathUtil.clamp(-m_ArmAngleManager.calculate(m_ANGLE_ENCODER.getPosition()), CoralArmConstants.MIN_SPEED, CoralArmConstants.MAX_SPEED);
 
-        System.out.println(output);
-        System.out.println(m_ANGLE_ENCODER.getPosition());
+        // System.out.println(output);
+        // System.out.println(m_ANGLE_ENCODER.getPosition());
         intake.setRotation(output);
 
         // // m_ArmAngleManager.setSetpoint(intake.isIntaking() ? Constants.IntakeDetails.intakePos : SETPOINTANGLE.getAsDouble());
