@@ -12,8 +12,8 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 
 public class LimeLightExtra {
 
-    public final static String backCam = "limelight-back";
-    public final static String frontCam = "limelight-front";
+    public final static String backCam = null;
+    //public final static String frontCam = "limelight-front";
 
     private static SwerveSubsystem SWERVE;
 

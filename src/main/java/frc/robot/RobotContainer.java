@@ -51,9 +51,9 @@ public class RobotContainer
   
   //Orinal port are driverXBox = 0, driverXBox2 = 1
 
-  final         CommandXboxController driverXbox = new CommandXboxController(1);
+  final         CommandXboxController driverXbox = new CommandXboxController(0);
 
-  final         CommandXboxController driverXbox2 = new CommandXboxController(0);
+  final         CommandXboxController driverXbox2 = new CommandXboxController(1);
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
@@ -163,10 +163,6 @@ public class RobotContainer
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-
-  
-  
-
   public RobotContainer()
   {
     // Configure the trigger bindings
@@ -184,15 +180,15 @@ public class RobotContainer
    */
   private void configureBindings()
   {
-    // (Condition) ? Return-On-True : Return-on-False
-    // drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
-    //                             driveFieldOrientedAnglularVelocity :
-    //                             driveFieldOrientedAnglularVelocitySim);
+   // (Condition) ? Return-On-True : Return-on-False
+    drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
+                                driveFieldOrientedAnglularVelocity :
+                                driveFieldOrientedAnglularVelocitySim);
 
 
 
-    m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
-    m_CoralIntakeSubsystem.setDefaultCommand(coralAngleSetter);
+   // m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
+  //m_CoralIntakeSubsystem.setDefaultCommand(coralAngleSetter);
 
     if (Robot.isSimulation())
     {
@@ -263,7 +259,7 @@ public class RobotContainer
           drivebase.allignTagWithOffset(LimeLightExtra.backCam,0, 0).schedule();
 
         } catch (Exception e) {
-          System.out.println("Limelight not seen sorry brochacho");
+          System.out.println("April tag not seen sorry brochacho");
         }}));
       driverXbox.start().whileTrue(Commands.none());
       
