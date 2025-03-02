@@ -27,13 +27,8 @@ public final class Constants
 {
 
   public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
-<<<<<<< HEAD
   public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
   public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
-=======
-  public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
-  public static final double LOOP_TIME = 0.13; //s, 20ms + 110ms sprk max velocity lag
->>>>>>> hbg/IntakeWithCommands
   public static final double SPEED_LIMITER = 0.25;
   public static final double MAX_SPEED  = Units.feetToMeters(14.5*SPEED_LIMITER);
   // Maximum speed of the robot in meters per second, used to limit acceleration.
@@ -114,7 +109,7 @@ public final class Constants
 
 
   public static class CoralArmConstants{
-    public static final double CoralArm_kP = 2;
+    public static final double CoralArm_kP = 1.5;
     public static final double CoralArm_kI = 0;
     public static final double CoralArm_kD = 0;
 
@@ -127,8 +122,23 @@ public final class Constants
 
     //Imb - dont know if these are necessary
     public static final double CoralArmWheelRadius = Units.inchesToMeters(0);
-    public static final double MAXROTATE = .265f;
+
+
+    public static final double MAXROTATE = .385;
+    public static final double MINROTATE = 0.09;
+
+
     public static final double ARM_OUTAKE_POS_ANGLE = 0.030;
+
+    public static final double coral_floorintake_pos = 0.36;
+    public static final double coral_armdriving_pos = 0.12;
+    public static final double coral_humanstatione_pos = 0.12;
+    public static final double coral_reef_l1 = 0.2;
+
+    public static final double coral_intake_floor_speed = 0.45f;
+    public static final double coral_intake_humanStation_speed = 0.1f;
+    public static final double coral_outtake_reef_speed = -0.2f;
+
 
   }
   public static class AlgaeArmConstants{
