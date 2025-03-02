@@ -265,7 +265,7 @@ public class RobotContainer
           drivebase.allignTagWithOffset(LimeLightExtra.backCam,0, 0).schedule();
 
         } catch (Exception e) {
-          System.out.println(e.getStackTrace());
+          System.out.println("limelight not seen");
         }}));
       driverXbox.start().whileTrue(Commands.none());
       
