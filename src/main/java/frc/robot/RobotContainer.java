@@ -252,7 +252,7 @@ public class RobotContainer
           new InstantCommand(()->
           m_CoralIntakeSubsystem.setPosition(IntakePosition.HUMAN_STATION)
           ),
-          new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_humanstatione_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
+          //new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_humanstatione_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
           coralWheels.turnMotor(CoralArmConstants.coral_intake_humanStation_speed)
         )
       );
@@ -285,7 +285,7 @@ public class RobotContainer
       );
 
       driverXbox2.b().whileTrue(
-        coralWheels.turnMotor(-1)
+        coralWheels.turnMotor(-0.5)
       );
 
       driverXbox2.b().onFalse(
