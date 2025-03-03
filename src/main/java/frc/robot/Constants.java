@@ -8,12 +8,12 @@ import com.ctre.phoenix6.CANBus;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj.DigitalSource;
-import edu.wpi.first.wpilibj.DutyCycle;
 import swervelib.math.Matter;
 import static edu.wpi.first.units.Units.*;
+// import edu.wpi.first.units.measure.Angle;
+// import edu.wpi.first.units.measure.Distance;
+// import edu.wpi.first.wpilibj.DigitalSource;
+// import edu.wpi.first.wpilibj.DutyCycle;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean constants. This
@@ -160,6 +160,8 @@ public final class Constants
     //Imb- dont know if we need both of these
     public static final double Endefector_startPos = 0;
     public static final double Endefector_startAngle = 0;
+    public static final double MIN_SPEED = -.5f;
+    public static final double MAX_SPEED = .5f;
 
   }  
 

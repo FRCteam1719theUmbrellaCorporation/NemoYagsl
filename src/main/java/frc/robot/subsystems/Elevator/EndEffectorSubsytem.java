@@ -9,6 +9,7 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,6 +34,7 @@ public class EndEffectorSubsytem extends SubsystemBase {
     ENDEFFECTOR_ROTATE_MOTOR = new SparkMax(Constants.ENDEFECTOR_ANGLE_MOTOR_ID, MotorType.kBrushless); 
     ENDEFFECTOR_ENCODER = ENDEFFECTOR_ROTATE_MOTOR.getAbsoluteEncoder();
     setPoint = 0;
+    EndEffectorPIDController.setSetpoint(setPoint);
   }
 
   public void stop() {
@@ -51,11 +53,12 @@ public class EndEffectorSubsytem extends SubsystemBase {
     ENDEFFECTOR_ROTATE_MOTOR.set(0);
   }
 
-  //ADD PID STUFF
-
 
   @Override
   public void periodic() {
+    double output = MathUtil.clamp(EndEffectorPIDController.calculate(doubleMeasurement()),EndefectorConstants.MIN_SPEED, EndefectorConstants.MAX_SPEED);
+    System.out.println("ENDEFFECTOR DISABLED. TUNE PIDS PLEASE!");
+    // setRotation(output);
     // This method will be called once per scheduler run
   }
 }
