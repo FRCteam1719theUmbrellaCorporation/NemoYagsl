@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
 import frc.robot.Constants.CoralArmConstants;
+import edu.wpi.first.math.MathUtil;
 
 public class CoralPivotPIDCommand extends Command {
     private final CoralIntakeSubsystem intake;
@@ -55,7 +56,7 @@ public class CoralPivotPIDCommand extends Command {
             default:
                 break;
         }
-        double output = -m_ArmAngleManager.calculate(m_ANGLE_ENCODER.getPosition());
+        double output = MathUtil.clamp(-m_ArmAngleManager.calculate(m_ANGLE_ENCODER.getPosition()), CoralArmConstants.MIN_SPEED, CoralArmConstants.MAX_SPEED);
 
         System.out.println(output);
         System.out.println(m_ANGLE_ENCODER.getPosition());
