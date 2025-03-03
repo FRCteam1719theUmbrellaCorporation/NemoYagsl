@@ -29,12 +29,13 @@ public class ElevatorSubsytem extends SubsystemBase {
     //TODO: Replace with encoder positions
     //Constant list of heights represented by english. YAY
     public enum HeightLevels {
-        ZERO(0), // Sets to the bottom
+        ZERO(0.1), // Sets to the bottom
+        INTAKE(30),
         REEFBASE(1),
         LOW(2), // Sets to the lowest 
         MIDDLE(3), // 
         HIGH(4),
-        MAX(5); // If our elevator goes higher than the third stalk, this would allow us control. maybe we shouldnt use it 
+        MAX(ElevatorConstants.ELEVATOR_ROOM_MAX); // If our elevator goes higher than the third stalk, this would allow us control. maybe we shouldnt use it 
 
         private final double value; // value held by each enum val
 
@@ -61,6 +62,7 @@ public class ElevatorSubsytem extends SubsystemBase {
   /** Creates a new ElevatorSubsytem. */
   private final SparkMax ELEVATOR_MOTOR_ONE;
   private final RelativeEncoder ELEVATOR_ENCODER;
+  private HeightLevels currentPosEnum;
   //ENCODER
 
   static double HEIGHT_SETPOINT = 0;
@@ -74,7 +76,8 @@ public class ElevatorSubsytem extends SubsystemBase {
     ELEVATOR_MOTOR_ONE = new SparkMax(Constants.ELEVATOR_PIN_ONE, MotorType.kBrushless);
     ELEVATOR_ENCODER = ELEVATOR_MOTOR_ONE.getEncoder();
 
-    HEIGHT_SETPOINT = 20f;
+    currentPosEnum = HeightLevels.ZERO;
+    HEIGHT_SETPOINT = currentPosEnum.value;
     elevatorPIDController.setSetpoint(HEIGHT_SETPOINT);
   }
 
@@ -84,8 +87,8 @@ public class ElevatorSubsytem extends SubsystemBase {
   }
 
   // returns the height double as an enum. easier to read
-  public HeightLevels getHeightAsEnum() {
-    return HeightLevels.doubleToEnum(HEIGHT_SETPOINT);
+  public static HeightLevels doubleAsEnum(double height) {
+    return HeightLevels.doubleToEnum(height);
   }
 
   // increments up stages. this will probably be used 
@@ -104,7 +107,6 @@ public class ElevatorSubsytem extends SubsystemBase {
             }
         }
     }
-    
   }
 
   // controls height with double; not highly recommended
@@ -133,6 +135,10 @@ public class ElevatorSubsytem extends SubsystemBase {
 
   public double doubleMeasurement() {
     return ELEVATOR_ENCODER.getPosition();
+  }
+
+  public HeightLevels currentPos() {
+    return this.currentPosEnum;
   }
 
   
