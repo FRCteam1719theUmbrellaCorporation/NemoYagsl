@@ -26,6 +26,7 @@ import java.io.File;
 
 import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
+import frc.robot.subsystems.LimeLightExtra;
 //import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
 import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
@@ -171,6 +172,8 @@ public class RobotContainer
   public RobotContainer()
   {
     Pigeon2 m_gyro = new Pigeon2(2);
+    new LimeLightExtra(drivebase, m_gyro);
+
     Rotation3d sd = drivebase.getSwerveDrive().imuReadingCache.getValue();
     LimelightHelpers.SetRobotOrientation(null, m_gyro.getYaw().getValueAsDouble(), m_gyro.getRate(), m_gyro.getPitch().getValueAsDouble(), 0, m_gyro.getRoll().getValueAsDouble(), 0);
     LimelightHelpers.SetIMUMode(null, 1);
