@@ -90,19 +90,6 @@ public class RobotContainer
                                                                  driverXbox.getHID()::getXButtonPressed,
                                                                  driverXbox.getHID()::getBButtonPressed);
 
-
-
-    AbsoluteDriveAdv closedAbsoluteDriveAdv2 = new AbsoluteDriveAdv(drivebase,
-                                                                () -> -MathUtil.applyDeadband(driverXbox2.getLeftY(),
-                                                                                              OperatorConstants.LEFT_Y_DEADBAND),
-                                                                () -> -MathUtil.applyDeadband(driverXbox2.getLeftX(),
-                                                                                              OperatorConstants.DEADBAND),
-                                                                () -> -MathUtil.applyDeadband(driverXbox2.getRightX(),
-                                                                                              OperatorConstants.RIGHT_X_DEADBAND),
-                                                                driverXbox2.getHID()::getYButtonPressed,
-                                                                driverXbox2.getHID()::getAButtonPressed,
-                                                                driverXbox2.getHID()::getXButtonPressed,
-                                                                driverXbox2.getHID()::getBButtonPressed);
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -179,6 +166,7 @@ public class RobotContainer
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+    NamedCommands.registerCommand("center", drivebase.centerModulesCommand().withTimeout(0.5));
   }
 
   /**
@@ -188,13 +176,13 @@ public class RobotContainer
    * {@link CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
    * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
    */
+
   private void configureBindings()
   {
     //(Condition) ? Return-On-True : Return-on-False
     drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
-                                driveFieldOrientedAnglularVelocity :
+                                closedAbsoluteDriveAdv:
                                 driveFieldOrientedAnglularVelocitySim);
-
     
     m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
     m_CoralIntakeSubsystem.setDefaultCommand(coralAngleSetter);
@@ -303,9 +291,10 @@ public class RobotContainer
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       
       driverXbox.rightBumper().onTrue(
-        new InstantCommand(()-> {
-          AutoBuilder.buildAuto("uto").schedule();
-        }
+        new SequentialCommandGroup(
+          new InstantCommand(()-> {
+            AutoBuilder.buildAuto("uto").schedule();
+          })
         )
       );
     }
