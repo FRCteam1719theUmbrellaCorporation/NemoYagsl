@@ -196,8 +196,10 @@ public class ElevatorSubsytem extends SubsystemBase {
     //   ELEVATOR_MOTOR_ONE.set(0);
 
     // }
-    System.out.println("output " + output);
-    ELEVATOR_MOTOR_ONE.set(output);
+    // System.out.println("output " + output);
+
+    System.out.println("ELEVATOR DISABLED. FIX THAT, OR COMMENT OUT THE ELEVATOR");
+    // ELEVATOR_MOTOR_ONE.set(output);
   }
 
 }
