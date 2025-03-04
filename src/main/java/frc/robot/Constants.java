@@ -76,11 +76,12 @@ public final class Constants
   //ALGAE
   public static final int ALGAE_ARM_WHEEL_SPIN_ID = 8;
   public static final int ALGAE_ARM_ANGLE_MOTOR_ID = 7; 
-  public static final int ALGAE_ARM_INTAKE_ENCODER_ANGLE_MOTOR = 1000;
+  // public static final int ALGAE_ARM_INTAKE_ENCODER_ANGLE_MOTOR = 1000;
 
   //CORAL
   public static final int CORAL_ARM_WHEEL_SPIN_ID = 23;
   public static final int CORAL_ARM_ANGLE_MOTOR_ID = 9; 
+  public static final int CORAL_ARM_RANGE_SENSOR = 0;
 
   // ELEVATOR
   public static final int ELEVATOR_PIN_ONE = 5;

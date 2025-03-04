@@ -15,6 +15,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix6.hardware.CANrange;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 
@@ -51,7 +52,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   private static AbsoluteEncoder CORAL_ARM_ENCODER;
   private static double SETPOINTANGLE;
   private static IntakePosition intakeMode;
-
+  private static CANrange m_rangeSensor;
 
   public CoralIntakeSubsystem() {
     CORAL_ARM_TURNMOTOR = new SparkMax(Constants.CORAL_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
@@ -59,6 +60,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     CORAL_ARM_ENCODER = CORAL_ARM_ANGLEMOTOR.getAbsoluteEncoder();
     SETPOINTANGLE = CoralArmConstants.coral_armdriving_pos;
     intakeMode = IntakePosition.DRIVING; 
+    m_rangeSensor = new CANrange(Constants.CORAL_ARM_RANGE_SENSOR);
 
     coralArmPIDController.setTolerance(5,10);
   }
@@ -119,6 +121,10 @@ public class CoralIntakeSubsystem extends SubsystemBase {
 
   public boolean aroundAngle(double degrees, double tolerance){
       return MathUtil.isNear(degrees, doubleMeasurement(), tolerance);
+  }
+
+  public boolean hasCoral() {
+    return m_rangeSensor.getDistance().getValueAsDouble() > 20;
   }
 
  /*  public void intakeAngle(double angle){
