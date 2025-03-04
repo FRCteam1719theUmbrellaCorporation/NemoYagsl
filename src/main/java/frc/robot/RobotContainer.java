@@ -4,11 +4,13 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -27,9 +29,11 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
-// import java.util.function.BooleanSupplier;
-
+import swervelib.SwerveDrive;
+import java.util.function.BooleanSupplier;
+import javax.print.attribute.standard.MediaSize.NA;
 import swervelib.SwerveInputStream;
+import frc.robot.subsystems.LimeLightExtra;
 //import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
@@ -91,19 +95,6 @@ public class RobotContainer
                                                                  driverXbox.getHID()::getXButtonPressed,
                                                                  driverXbox.getHID()::getBButtonPressed);
 
-
-
-    AbsoluteDriveAdv closedAbsoluteDriveAdv2 = new AbsoluteDriveAdv(drivebase,
-                                                                () -> -MathUtil.applyDeadband(driverXbox2.getLeftY(),
-                                                                                              OperatorConstants.LEFT_Y_DEADBAND),
-                                                                () -> -MathUtil.applyDeadband(driverXbox2.getLeftX(),
-                                                                                              OperatorConstants.DEADBAND),
-                                                                () -> -MathUtil.applyDeadband(driverXbox2.getRightX(),
-                                                                                              OperatorConstants.RIGHT_X_DEADBAND),
-                                                                driverXbox2.getHID()::getYButtonPressed,
-                                                                driverXbox2.getHID()::getAButtonPressed,
-                                                                driverXbox2.getHID()::getXButtonPressed,
-                                                                driverXbox2.getHID()::getBButtonPressed);
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -167,6 +158,25 @@ public class RobotContainer
   Command algaeWheels = new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem);
   Command coralAngleSetter = new CoralPivotPIDCommand(m_CoralIntakeSubsystem);
   CoralIntakeWheelsCommand coralWheels = new CoralIntakeWheelsCommand(m_CoralIntakeSubsystem);
+
+  Command CoralDrive = new ParallelCommandGroup(
+    new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.DRIVING)),
+    coralWheels.stopMotors());
+
+  Command CoralFloor = new SequentialCommandGroup(
+    new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.FLOOR)),
+    new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_floorintake_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
+    coralWheels.turnMotor(CoralArmConstants.coral_intake_floor_speed));
+
+  Command CoralHumanPlayer =  new SequentialCommandGroup(
+    new InstantCommand(()->m_CoralIntakeSubsystem.setPosition(IntakePosition.HUMAN_STATION)),
+    //new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_humanstatione_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
+    coralWheels.turnMotor(CoralArmConstants.coral_intake_humanStation_speed));
+  
+  Command L1 = new SequentialCommandGroup(
+    new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.REEF)),
+    new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
+    coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed));
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -176,10 +186,22 @@ public class RobotContainer
 
   public RobotContainer()
   {
+    Pigeon2 m_gyro = new Pigeon2(2);
+    new LimeLightExtra(drivebase, m_gyro);
+
+    Rotation3d sd = drivebase.getSwerveDrive().imuReadingCache.getValue();
+    LimelightHelpers.SetRobotOrientation(null, m_gyro.getYaw().getValueAsDouble(), m_gyro.getRate(), m_gyro.getPitch().getValueAsDouble(), 0, m_gyro.getRoll().getValueAsDouble(), 0);
+    LimelightHelpers.SetIMUMode(null, 1);
     // Configure the trigger bindings
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+    NamedCommands.registerCommand("center", drivebase.centerModulesCommand().withTimeout(0.5));
+    NamedCommands.registerCommand("CoralDrive", CoralDrive);
+    NamedCommands.registerCommand("CoralFloor", CoralFloor);
+    NamedCommands.registerCommand("CoralHumanPlayer", CoralHumanPlayer);
+    NamedCommands.registerCommand("CoralL1", L1);
+
   }
 
   /**
@@ -189,14 +211,15 @@ public class RobotContainer
    * {@link CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
    * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
    */
+
   private void configureBindings()
   {
-    //(Condition) ? Return-On-True : Return-on-False
-    drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
-                                driveFieldOrientedAnglularVelocity :
-                                driveFieldOrientedAnglularVelocitySim);
 
-    
+   
+    drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
+                                driveFieldOrientedAnglularVelocity:
+                                driveFieldOrientedAnglularVelocitySim);
+   
     m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
     m_CoralIntakeSubsystem.setDefaultCommand(coralAngleSetter);
 
@@ -230,21 +253,10 @@ public class RobotContainer
 */
       //Coral intake wheels to spin
       driverXbox2.a().whileTrue(
-      new SequentialCommandGroup(
-        new InstantCommand(()->
-        m_CoralIntakeSubsystem.setPosition(IntakePosition.FLOOR)
-        ),
-        new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_floorintake_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
-        coralWheels.turnMotor(CoralArmConstants.coral_intake_floor_speed)
-      )
+        CoralFloor
       );
-
       driverXbox2.a().onFalse(
-        new ParallelCommandGroup(
-          new InstantCommand(()->
-          m_CoralIntakeSubsystem.setPosition(IntakePosition.DRIVING)),
-          coralWheels.stopMotors()
-        )
+        CoralDrive
       );
 
       //Algae move to setpoint
@@ -293,22 +305,31 @@ public class RobotContainer
         new InstantCommand(() -> {
         m_CoralIntakeSubsystem.setSetpoint(.1);
         })
+       );
+      driverXbox2.x().whileTrue(
+        CoralHumanPlayer
       );
-
       driverXbox2.x().onFalse(
-        new ParallelCommandGroup(
-          new InstantCommand(()->
-          m_CoralIntakeSubsystem.setPosition(IntakePosition.DRIVING)),
-          coralWheels.stopMotors()
-        )
+        CoralDrive
+      );
+      
+      //Coral move to reef l1
+      driverXbox2.b().onTrue(
+        L1
+      );
+      driverXbox2.b().onFalse(
+        CoralDrive
       );
 
       driverXbox2.b().whileTrue(
-        coralWheels.turnMotor(-1)
+        new InstantCommand(() -> {
+          m_AlgaeIntakeSubsystem.setSetpoint(0.2);
+        })
       );
-
       driverXbox2.b().onFalse(
-        coralWheels.stopMotors()
+        new InstantCommand(() -> {
+          m_AlgaeIntakeSubsystem.setSetpoint(0.1);
+        })
       );
 
 
@@ -322,13 +343,11 @@ public class RobotContainer
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       
       driverXbox.rightBumper().onTrue(
-        new InstantCommand(()-> {
-          AutoBuilder.buildAuto("uto").schedule();
-        }
-        )
-      );
-    }
-  }
+        new SequentialCommandGroup(
+          new InstantCommand(()-> {
+            AutoBuilder.buildAuto("uto").schedule();
+          })));
+    }}
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -337,8 +356,10 @@ public class RobotContainer
    */
   public Command getAutonomousCommand()
   {
+    LimelightHelpers.SetIMUMode(null, 2);
+
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    return drivebase.getAutonomousCommand("uto");
   }
 
   public void setMotorBrake(boolean brake)

@@ -134,7 +134,7 @@ public final class Constants
 
     public static final double coral_floorintake_pos = 0.36;
     public static final double coral_armdriving_pos = 0.12;
-    public static final double coral_humanstatione_pos = 0.12;
+    public static final double coral_humanstatione_pos = 0.10;
     public static final double coral_reef_l1 = 0.2;
 
     public static final double coral_intake_floor_speed = 0.45f;
