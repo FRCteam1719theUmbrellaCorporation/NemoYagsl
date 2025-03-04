@@ -183,14 +183,14 @@ public class RobotContainer
   private void configureBindings()
   {
     // (Condition) ? Return-On-True : Return-on-False
-    // drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
-    //                             driveFieldOrientedAnglularVelocity :
-    //                             driveFieldOrientedAnglularVelocitySim);
+    drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
+                                driveFieldOrientedAnglularVelocity :
+                                driveFieldOrientedAnglularVelocitySim);
 
 
 
-    m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
-    m_CoralIntakeSubsystem.setDefaultCommand(coralAngleSetter);
+    // m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
+    // m_CoralIntakeSubsystem.setDefaultCommand(coralAngleSetter);
 
     if (Robot.isSimulation())
     {
@@ -232,17 +232,18 @@ public class RobotContainer
       //Algae move to setpoint
       driverXbox2.y().onTrue(
         new InstantCommand(() -> {
-         m_AlgaeIntakeSubsystem.setSetpoint(.1);
+          m_ElevatorSubsytem.setSetpoint(30);
+
         })
       );
 
       driverXbox2.y().onFalse(
         new InstantCommand(()->
-        m_AlgaeIntakeSubsystem.setSetpoint(.12)
+        m_ElevatorSubsytem.setSetpoint(80)
         )
       );
       //Coral move to setpoint
-       driverXbox2.x().onTrue(
+       driverXbox2.x().whileTrue(
         new InstantCommand(() -> {
         m_CoralIntakeSubsystem.setSetpoint(.1);
         })

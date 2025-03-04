@@ -65,7 +65,7 @@ public class ElevatorSubsytem extends SubsystemBase {
   private HeightLevels currentPosEnum;
   //ENCODER
 
-  static double HEIGHT_SETPOINT = 0;
+  static double HEIGHT_SETPOINT = 30;
   // private boolean temp = true;
   private static final PIDController elevatorPIDController = new PIDController(ElevatorConstants.ElevatorkP, ElevatorConstants.ElevatorkI, ElevatorConstants.ElevatorkD); // TODO ADD VALUES
 
@@ -77,8 +77,10 @@ public class ElevatorSubsytem extends SubsystemBase {
     ELEVATOR_ENCODER = ELEVATOR_MOTOR_ONE.getEncoder();
 
     currentPosEnum = HeightLevels.ZERO;
-    HEIGHT_SETPOINT = currentPosEnum.value;
+    HEIGHT_SETPOINT = 80;
     elevatorPIDController.setSetpoint(HEIGHT_SETPOINT);
+
+    elevatorPIDController.setTolerance(.5);
   }
 
   // sets the pos based off an enum value
@@ -168,9 +170,13 @@ public class ElevatorSubsytem extends SubsystemBase {
     double output;
     
     if (inBounds()) {
+   
       output = MathUtil.clamp(elevatorPIDController.calculate(doubleMeasurement()), ElevatorConstants.MIN_SPEED, ElevatorConstants.MAX_SPEED);
-      System.out.println("iOutput" + output);
-      // System.out.println(ELEVATOR_ENCODER.getPosition());
+      // if (doubleMeasurement() < 10) {
+      //   output = output > 0 ? 1 : output;
+      // }
+      // System.out.println("iOutput" + output);
+      System.out.println(ELEVATOR_ENCODER.getPosition());
 
     } else {
       output = 0;
@@ -184,7 +190,7 @@ public class ElevatorSubsytem extends SubsystemBase {
     //   ELEVATOR_MOTOR_ONE.set(0);
 
     // }
-    System.out.println("fOutput" + output);
+    System.out.println(output);
     ELEVATOR_MOTOR_ONE.set(output);
   }
 
