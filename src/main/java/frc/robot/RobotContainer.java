@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+// import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -27,17 +27,18 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
-import java.util.function.BooleanSupplier;
+// import java.util.function.BooleanSupplier;
 
 import swervelib.SwerveInputStream;
 //import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
+import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
 import frc.robot.subsystems.intake.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem.IntakePosition;
 //import frc.robot.commands.*;
-import frc.robot.commands.Elevator.ElevatorPIDMoveCommand;
+// import frc.robot.commands.Elevator.ElevatorPIDMoveCommand;
 import frc.robot.commands.Intake.AlgaeIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralPivotPIDCommand;
@@ -64,7 +65,7 @@ public class RobotContainer
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
   
-  // private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
+  private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
   private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
   private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   // private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
@@ -247,33 +248,51 @@ public class RobotContainer
       );
 
       //Algae move to setpoint
-      driverXbox2.y().whileTrue(
-        new SequentialCommandGroup(
-          new InstantCommand(()->
-          m_CoralIntakeSubsystem.setPosition(IntakePosition.HUMAN_STATION)
-          ),
-          new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_humanstatione_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
-          coralWheels.turnMotor(CoralArmConstants.coral_intake_humanStation_speed)
-        )
+      // driverXbox2.y().whileTrue(
+      //   new SequentialCommandGroup(
+      //     new InstantCommand(()->
+      //     m_CoralIntakeSubsystem.setPosition(IntakePosition.HUMAN_STATION)
+      //     ),
+      //     new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_humanstatione_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
+      //     coralWheels.turnMotor(CoralArmConstants.coral_intake_humanStation_speed)
+      //   )
+      // );
+
+      // driverXbox2.y().onFalse(
+      //   new ParallelCommandGroup(
+      //     new InstantCommand(()->
+      //     m_CoralIntakeSubsystem.setPosition(IntakePosition.DRIVING)),
+      //     coralWheels.stopMotors()
+      //   )
+      // );
+      
+      // //Coral move to reef l1
+      // driverXbox2.x().onTrue(
+      //   new SequentialCommandGroup(
+      //     new InstantCommand(()->
+      //     m_CoralIntakeSubsystem.setPosition(IntakePosition.REEF)
+      //     ),
+      //     new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
+      //     coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed)
+      //   )
+      // );
+      driverXbox2.y().onTrue(
+        new InstantCommand(() -> {
+          m_ElevatorSubsytem.setSetpoint(20);
+
+        })
       );
 
       driverXbox2.y().onFalse(
-        new ParallelCommandGroup(
-          new InstantCommand(()->
-          m_CoralIntakeSubsystem.setPosition(IntakePosition.DRIVING)),
-          coralWheels.stopMotors()
+        new InstantCommand(()->
+        m_ElevatorSubsytem.setSetpoint(50)
         )
       );
-      
-      //Coral move to reef l1
-      driverXbox2.x().onTrue(
-        new SequentialCommandGroup(
-          new InstantCommand(()->
-          m_CoralIntakeSubsystem.setPosition(IntakePosition.REEF)
-          ),
-          new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
-          coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed)
-        )
+      //Coral move to setpoint
+       driverXbox2.x().whileTrue(
+        new InstantCommand(() -> {
+        m_CoralIntakeSubsystem.setSetpoint(.1);
+        })
       );
 
       driverXbox2.x().onFalse(

@@ -8,12 +8,12 @@ import com.ctre.phoenix6.CANBus;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj.DigitalSource;
-import edu.wpi.first.wpilibj.DutyCycle;
 import swervelib.math.Matter;
 import static edu.wpi.first.units.Units.*;
+// import edu.wpi.first.units.measure.Angle;
+// import edu.wpi.first.units.measure.Distance;
+// import edu.wpi.first.wpilibj.DigitalSource;
+// import edu.wpi.first.wpilibj.DutyCycle;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean constants. This
@@ -83,8 +83,7 @@ public final class Constants
   public static final int CORAL_ARM_ANGLE_MOTOR_ID = 9; 
 
   // ELEVATOR
-  public static final int ELEVATOR_PIN_ONE = 5;
-  public static final int ELEVATOR_PIN_TWO = 6;
+  public static final int ELEVATOR_PIN_ONE = 6;
   public static final int ELEVATOR_ROTATE_ENCODER = 4;
 
   //ENDEFECTOR
@@ -166,7 +165,6 @@ public final class Constants
 
     public static final double MIN_SPEED = -.5f;
     public static final double MAX_SPEED = .5f;
-
   } 
 
 
@@ -178,6 +176,8 @@ public final class Constants
     //Imb- dont know if we need both of these
     public static final double Endefector_startPos = 0;
     public static final double Endefector_startAngle = 0;
+    public static final double MIN_SPEED = -.5f;
+    public static final double MAX_SPEED = .5f;
 
   }  
 
@@ -187,9 +187,9 @@ public final class Constants
 //These are all the un-tuned constants from what IMB did on 2/18/25
 //These changes should all be in the hbg/Subsystem branch in Nemo YAGSL
 
-   public static final double ElevatorkP = 0;
+   public static final double ElevatorkP = 0.2;
     public static final double ElevatorkI = 0;
-    public static final double ElevatorkD = 0;
+    public static final double ElevatorkD = 0.008;
     public static final double MaxVelocity = Meters.of(4).per(Second).in(MetersPerSecond);
     public static final double MaxAcceleration = Meters.of(6).per(Second).per(Second).in(MetersPerSecondPerSecond);
     public static final double ElevatorkS = 0;
@@ -197,6 +197,8 @@ public final class Constants
     public static final double ElevatorkV = 0;
     public static final double ElevatorkA = 0;
     public static final double Tolerance = 0; //CHANGE
+
+    public static final double ELEVATOR_ROOM_MAX = 84;
   /* public static final double RampRate = 5;
     public static final double ElevatorGearing = 5;
     public static final double ElevatorCarriageMass = 5;
@@ -212,7 +214,11 @@ public final class Constants
     public static final Distance LaserCANOffset  = Inches.of(3);
     public static final double DefaultTolerance = Inches.of(1).in(Meters);
     
-  */}
+  */
+    public static final double MIN_SPEED = -.7f;
+    public static final double MAX_SPEED = .7f;
+  }
+
 
   public static double CORALPIVITMAXAMOUNT = 235;
 }
