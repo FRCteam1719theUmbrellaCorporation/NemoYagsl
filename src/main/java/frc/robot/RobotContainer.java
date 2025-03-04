@@ -4,11 +4,13 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -27,11 +29,11 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
+import swervelib.SwerveDrive;
 import java.util.function.BooleanSupplier;
-
 import javax.print.attribute.standard.MediaSize.NA;
-
 import swervelib.SwerveInputStream;
+import frc.robot.subsystems.LimeLightExtra;
 //import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
 import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
@@ -183,6 +185,12 @@ public class RobotContainer
 
   public RobotContainer()
   {
+    Pigeon2 m_gyro = new Pigeon2(2);
+    new LimeLightExtra(drivebase, m_gyro);
+
+    Rotation3d sd = drivebase.getSwerveDrive().imuReadingCache.getValue();
+    LimelightHelpers.SetRobotOrientation(null, m_gyro.getYaw().getValueAsDouble(), m_gyro.getRate(), m_gyro.getPitch().getValueAsDouble(), 0, m_gyro.getRoll().getValueAsDouble(), 0);
+    LimelightHelpers.SetIMUMode(null, 1);
     // Configure the trigger bindings
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
@@ -205,11 +213,12 @@ public class RobotContainer
 
   private void configureBindings()
   {
-    //(Condition) ? Return-On-True : Return-on-False
+
+   
     drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
                                 driveFieldOrientedAnglularVelocity:
                                 driveFieldOrientedAnglularVelocitySim);
-    
+   
     m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
     m_CoralIntakeSubsystem.setDefaultCommand(coralAngleSetter);
 
@@ -300,6 +309,8 @@ public class RobotContainer
    */
   public Command getAutonomousCommand()
   {
+    LimelightHelpers.SetIMUMode(null, 2);
+
     // An example command will be run in autonomous
     return drivebase.getAutonomousCommand("uto");
   }
