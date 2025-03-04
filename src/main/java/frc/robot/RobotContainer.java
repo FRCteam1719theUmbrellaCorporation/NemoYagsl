@@ -265,12 +265,16 @@ public class RobotContainer
         CoralDrive
       );
 
-      // driverXbox2.b().whileTrue(
-      //   coralWheels.turnMotor(-0.5)
-      // );
-      // driverXbox2.b().onFalse(
-      //   coralWheels.stopMotors()
-      // );
+      driverXbox2.b().whileTrue(
+        new InstantCommand(() -> {
+          m_AlgaeIntakeSubsystem.setSetpoint(0.2);
+        })
+      );
+      driverXbox2.b().onFalse(
+        new InstantCommand(() -> {
+          m_AlgaeIntakeSubsystem.setSetpoint(0.1);
+        })
+      );
 
 
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
