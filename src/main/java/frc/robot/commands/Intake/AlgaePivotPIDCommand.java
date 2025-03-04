@@ -17,6 +17,9 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.AlgaeArmConstants;
+import edu.wpi.first.math.MathUtil;
+
 import frc.robot.subsystems.intake.AlgaeIntakeSubsystem;
 
 public class AlgaePivotPIDCommand extends Command {
@@ -45,7 +48,7 @@ public class AlgaePivotPIDCommand extends Command {
     public void execute() {
         // TODO: ADD AND FIND SETPOINTS HERE
         
-        double output = -m_ArmAngleManager.calculate(intake.doubleMeasurement());
+        double output = MathUtil.clamp(-m_ArmAngleManager.calculate(intake.doubleMeasurement()), AlgaeArmConstants.MIN_SPEED, AlgaeArmConstants.MAX_SPEED);
         intake.setRotation(output);
     }
     

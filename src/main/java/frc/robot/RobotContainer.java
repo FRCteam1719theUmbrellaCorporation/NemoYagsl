@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,14 +18,20 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.CoralArmConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
-
 import swervelib.SwerveDrive;
+import java.util.function.BooleanSupplier;
+import javax.print.attribute.standard.MediaSize.NA;
 import swervelib.SwerveInputStream;
 import frc.robot.subsystems.LimeLightExtra;
 //import frc.robot.subsystems.*;
@@ -32,6 +39,7 @@ import frc.robot.subsystems.Elevator.ElevatorSubsytem;
 import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
 import frc.robot.subsystems.intake.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
+import frc.robot.subsystems.intake.CoralIntakeSubsystem.IntakePosition;
 //import frc.robot.commands.*;
 import frc.robot.commands.Elevator.ElevatorPIDMoveCommand;
 import frc.robot.commands.Intake.AlgaeIntakeWheelsCommand;
@@ -51,11 +59,11 @@ public class RobotContainer
 
 
   
-  //Orinal port are driverXBox = 0, driverXBox2 = 1
+  //Orinal port are driverXBox = 1, driverXBox2 = 0
 
-  final         CommandXboxController driverXbox = new CommandXboxController(1);
+  final CommandXboxController driverXbox = new CommandXboxController(0);
 
-  final         CommandXboxController driverXbox2 = new CommandXboxController(0);
+  final CommandXboxController driverXbox2 = new CommandXboxController(1);
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
@@ -86,19 +94,6 @@ public class RobotContainer
                                                                  driverXbox.getHID()::getXButtonPressed,
                                                                  driverXbox.getHID()::getBButtonPressed);
 
-
-
-    AbsoluteDriveAdv closedAbsoluteDriveAdv2 = new AbsoluteDriveAdv(drivebase,
-                                                                () -> -MathUtil.applyDeadband(driverXbox2.getLeftY(),
-                                                                                              OperatorConstants.LEFT_Y_DEADBAND),
-                                                                () -> -MathUtil.applyDeadband(driverXbox2.getLeftX(),
-                                                                                              OperatorConstants.DEADBAND),
-                                                                () -> -MathUtil.applyDeadband(driverXbox2.getRightX(),
-                                                                                              OperatorConstants.RIGHT_X_DEADBAND),
-                                                                driverXbox2.getHID()::getYButtonPressed,
-                                                                driverXbox2.getHID()::getAButtonPressed,
-                                                                driverXbox2.getHID()::getXButtonPressed,
-                                                                driverXbox2.getHID()::getBButtonPressed);
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -161,11 +156,30 @@ public class RobotContainer
   Command algaeAngleSetter = new AlgaePivotPIDCommand(m_AlgaeIntakeSubsystem);
   Command algaeWheels = new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem);
   Command coralAngleSetter = new CoralPivotPIDCommand(m_CoralIntakeSubsystem);
-  Command coralWheels = new CoralIntakeWheelsCommand(m_CoralIntakeSubsystem);
+  CoralIntakeWheelsCommand coralWheels = new CoralIntakeWheelsCommand(m_CoralIntakeSubsystem);
+
+  Command CoralDrive = new ParallelCommandGroup(
+    new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.DRIVING)),
+    coralWheels.stopMotors());
+
+  Command CoralFloor = new SequentialCommandGroup(
+    new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.FLOOR)),
+    new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_floorintake_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
+    coralWheels.turnMotor(CoralArmConstants.coral_intake_floor_speed));
+
+  Command CoralHumanPlayer =  new SequentialCommandGroup(
+    new InstantCommand(()->m_CoralIntakeSubsystem.setPosition(IntakePosition.HUMAN_STATION)),
+    //new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_humanstatione_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
+    coralWheels.turnMotor(CoralArmConstants.coral_intake_humanStation_speed));
+  
+  Command L1 = new SequentialCommandGroup(
+    new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.REEF)),
+    new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
+    coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed));
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-
+  int i = 0;
   
   
 
@@ -181,6 +195,12 @@ public class RobotContainer
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+    NamedCommands.registerCommand("center", drivebase.centerModulesCommand().withTimeout(0.5));
+    NamedCommands.registerCommand("CoralDrive", CoralDrive);
+    NamedCommands.registerCommand("CoralFloor", CoralFloor);
+    NamedCommands.registerCommand("CoralHumanPlayer", CoralHumanPlayer);
+    NamedCommands.registerCommand("CoralL1", L1);
+
   }
 
   /**
@@ -190,15 +210,15 @@ public class RobotContainer
    * {@link CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
    * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
    */
+
   private void configureBindings()
   {
-    // (Condition) ? Return-On-True : Return-on-False
+
+   
     drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
-                                driveFieldOrientedAnglularVelocity :
+                                driveFieldOrientedAnglularVelocity:
                                 driveFieldOrientedAnglularVelocitySim);
-
-
-
+   
     m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
     m_CoralIntakeSubsystem.setDefaultCommand(coralAngleSetter);
 
@@ -221,7 +241,7 @@ public class RobotContainer
     } else
     {
 
-      //Algae intake wheels to spin
+     /* //Algae intake wheels to spin
       driverXbox2.a().onTrue(
         new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem).turnMotor(1).withTimeout(1) //Test
       );
@@ -229,39 +249,40 @@ public class RobotContainer
       driverXbox2.a().onFalse(
         new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem).stopMotors() //Test
       );
-
+*/
       //Coral intake wheels to spin
-      driverXbox2.b().onTrue(
-        new CoralIntakeWheelsCommand(m_CoralIntakeSubsystem).turnMotor(-.5f)
+      driverXbox2.a().whileTrue(
+        CoralFloor
       );
-
-      driverXbox2.b().onFalse(
-        new CoralIntakeWheelsCommand(m_CoralIntakeSubsystem).stopMotors()
+      driverXbox2.a().onFalse(
+        CoralDrive
       );
 
       //Algae move to setpoint
-      driverXbox2.y().onTrue(
-        new InstantCommand(() -> {
-         m_AlgaeIntakeSubsystem.setSetpoint(.1);
-        })
+      driverXbox2.x().whileTrue(
+        CoralHumanPlayer
       );
-
-      driverXbox2.y().onFalse(
-        new InstantCommand(()->
-        m_AlgaeIntakeSubsystem.setSetpoint(.12)
-        )
-      );
-      //Coral move to setpoint
-       driverXbox2.x().onTrue(
-        new InstantCommand(() -> {
-        m_CoralIntakeSubsystem.setSetpoint(.1);
-        })
-      );
-
       driverXbox2.x().onFalse(
-        new InstantCommand(()->
-        m_CoralIntakeSubsystem.setSetpoint(.2)
-        )
+        CoralDrive
+      );
+      
+      //Coral move to reef l1
+      driverXbox2.b().onTrue(
+        L1
+      );
+      driverXbox2.b().onFalse(
+        CoralDrive
+      );
+
+      driverXbox2.b().whileTrue(
+        new InstantCommand(() -> {
+          m_AlgaeIntakeSubsystem.setSetpoint(0.2);
+        })
+      );
+      driverXbox2.b().onFalse(
+        new InstantCommand(() -> {
+          m_AlgaeIntakeSubsystem.setSetpoint(0.1);
+        })
       );
 
 
@@ -273,9 +294,13 @@ public class RobotContainer
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driverXbox.rightBumper().onTrue(Commands.none());
-    }
-  }
+      
+      driverXbox.rightBumper().onTrue(
+        new SequentialCommandGroup(
+          new InstantCommand(()-> {
+            AutoBuilder.buildAuto("uto").schedule();
+          })));
+    }}
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -287,7 +312,7 @@ public class RobotContainer
     LimelightHelpers.SetIMUMode(null, 2);
 
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    return drivebase.getAutonomousCommand("uto");
   }
 
   public void setMotorBrake(boolean brake)

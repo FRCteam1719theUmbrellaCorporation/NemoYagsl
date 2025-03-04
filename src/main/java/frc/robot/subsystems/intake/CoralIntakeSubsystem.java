@@ -5,6 +5,7 @@
 package frc.robot.subsystems.intake;
 import frc.robot.Constants;
 import frc.robot.Constants.CoralArmConstants;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import com.revrobotics.CANSparkMax;
@@ -12,13 +13,33 @@ import com.revrobotics.spark.SparkMax;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 
 public class CoralIntakeSubsystem extends SubsystemBase {
   /** Creates a new CoralIntakeSubsystem. */
   public static enum IntakePosition {
-    CORAL, MAX, FREE_CONTROL
+    FLOOR(CoralArmConstants.coral_floorintake_pos, CoralArmConstants.coral_intake_floor_speed), 
+    DRIVING(CoralArmConstants.coral_floorintake_pos), 
+    REEF(CoralArmConstants.coral_reef_l1, CoralArmConstants.coral_outtake_reef_speed), 
+    HUMAN_STATION(CoralArmConstants.coral_floorintake_pos,CoralArmConstants.coral_intake_humanStation_speed);
+
+    double angle;
+    double speed;
+    int button;
+
+    IntakePosition(double angle, double speed) {
+      this.angle = angle;
+      this.speed = speed;
+    }
+
+    IntakePosition(double angle) {
+      this.angle = angle;
+      speed = 0;
+    }
+
   }
   private PIDController coralArmPIDController = new PIDController(CoralArmConstants.CoralArm_kP, 
                                                                     CoralArmConstants.CoralArm_kI, 
@@ -36,8 +57,10 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     CORAL_ARM_TURNMOTOR = new SparkMax(Constants.CORAL_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
     CORAL_ARM_ANGLEMOTOR = new SparkMax(Constants.CORAL_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
     CORAL_ARM_ENCODER = CORAL_ARM_ANGLEMOTOR.getAbsoluteEncoder();
-    SETPOINTANGLE = .1f;
-    intakeMode = IntakePosition.CORAL; 
+    SETPOINTANGLE = CoralArmConstants.coral_armdriving_pos;
+    intakeMode = IntakePosition.DRIVING; 
+
+    coralArmPIDController.setTolerance(5,10);
   }
 
   public void intakeSpinWheels(double speed){
@@ -61,7 +84,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   }
 
   public boolean isIntaking() {
-    return intakeMode == IntakePosition.CORAL;
+    return intakeMode == IntakePosition.FLOOR;
   }
 
   // returns the current mode
@@ -82,12 +105,20 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   }  
 
   public void setSetpoint(double point) {
-    if (point > Constants.CoralArmConstants.MAXROTATE) {
-      point = Constants.CoralArmConstants.MAXROTATE;
-    }
-
-    SETPOINTANGLE = point;
+    SETPOINTANGLE = MathUtil.clamp(point, CoralArmConstants.MINROTATE, CoralArmConstants.MAXROTATE);
     coralArmPIDController.setSetpoint(point);
+  }
+
+  public void setPosition(IntakePosition pos) {
+    this.intakeMode = pos;
+  }
+
+  public boolean aroundAngle(double degrees){
+    return aroundAngle(degrees, 0.2);
+  }
+
+  public boolean aroundAngle(double degrees, double tolerance){
+      return MathUtil.isNear(degrees, doubleMeasurement(), tolerance);
   }
 
  /*  public void intakeAngle(double angle){
