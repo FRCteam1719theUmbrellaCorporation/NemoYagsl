@@ -63,6 +63,7 @@ public class ElevatorSubsytem extends SubsystemBase {
   private final SparkMax ELEVATOR_MOTOR_ONE;
   private final RelativeEncoder ELEVATOR_ENCODER;
   private HeightLevels currentPosEnum;
+  // private int elevatorExtraPowerTimer;
   //ENCODER
 
   static double HEIGHT_SETPOINT = 30;
@@ -77,10 +78,11 @@ public class ElevatorSubsytem extends SubsystemBase {
     ELEVATOR_ENCODER = ELEVATOR_MOTOR_ONE.getEncoder();
 
     currentPosEnum = HeightLevels.ZERO;
-    HEIGHT_SETPOINT = 80;
+    HEIGHT_SETPOINT = 30;
     elevatorPIDController.setSetpoint(HEIGHT_SETPOINT);
 
     elevatorPIDController.setTolerance(.5);
+    // elevatorExtraPowerTimer = 0;
   }
 
   // sets the pos based off an enum value
@@ -123,6 +125,9 @@ public class ElevatorSubsytem extends SubsystemBase {
   }
 
   public void setSetpoint(double setSetpoint) {
+    // if (setSetpoint > HEIGHT_SETPOINT) {
+    //   elevatorExtraPowerTimer = 10;
+    // }
     HEIGHT_SETPOINT = setSetpoint;
     elevatorPIDController.setSetpoint(setSetpoint);
   }
@@ -170,15 +175,16 @@ public class ElevatorSubsytem extends SubsystemBase {
     double output;
     
     if (inBounds()) {
-   
       output = MathUtil.clamp(elevatorPIDController.calculate(doubleMeasurement()), ElevatorConstants.MIN_SPEED, ElevatorConstants.MAX_SPEED);
-      // if (doubleMeasurement() < 10) {
-      //   output = output > 0 ? 1 : output;
+      // if (elevatorExtraPowerTimer > 0) {
+      //   output = 0.9f;
+      //   --elevatorExtraPowerTimer;
+      //   System.out.println("iOutput" + output);
       // }
-      // System.out.println("iOutput" + output);
-      System.out.println(ELEVATOR_ENCODER.getPosition());
+      System.out.println(elevatorPIDController.getSetpoint());
 
     } else {
+      System.out.println("erm its out of bounds");
       output = 0;
     }
 
@@ -190,7 +196,7 @@ public class ElevatorSubsytem extends SubsystemBase {
     //   ELEVATOR_MOTOR_ONE.set(0);
 
     // }
-    System.out.println(output);
+    System.out.println("output " + output);
     ELEVATOR_MOTOR_ONE.set(output);
   }
 

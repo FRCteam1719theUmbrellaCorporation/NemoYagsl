@@ -232,14 +232,14 @@ public class RobotContainer
       //Algae move to setpoint
       driverXbox2.y().onTrue(
         new InstantCommand(() -> {
-          m_ElevatorSubsytem.setSetpoint(30);
+          m_ElevatorSubsytem.setSetpoint(20);
 
         })
       );
 
       driverXbox2.y().onFalse(
         new InstantCommand(()->
-        m_ElevatorSubsytem.setSetpoint(80)
+        m_ElevatorSubsytem.setSetpoint(50)
         )
       );
       //Coral move to setpoint
