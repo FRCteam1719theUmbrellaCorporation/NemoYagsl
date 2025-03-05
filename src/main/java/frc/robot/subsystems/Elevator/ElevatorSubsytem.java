@@ -29,23 +29,30 @@ public class ElevatorSubsytem extends SubsystemBase {
     //TODO: Replace with encoder positions
     //Constant list of heights represented by english. YAY
     public enum HeightLevels {
-        ZERO(0.1), // Sets to the bottom
-        INTAKE(30),
-        REEFBASE(1),
-        LOW(2), // Sets to the lowest 
-        MIDDLE(3), // 
-        HIGH(4),
-        MAX(ElevatorConstants.ELEVATOR_ROOM_MAX); // If our elevator goes higher than the third stalk, this would allow us control. maybe we shouldnt use it 
+        ZERO(0.1, 0), // Sets to the bottom
+        INTAKE(30, 0),
+        REEFBASE(1, 0),
+        LOW(2, 0), // Sets to the lowest 
+        MIDDLE(3, 0), // 
+        HIGH(4, 0),
+        MAX(ElevatorConstants.ELEVATOR_ROOM_MAX, 0); // If our elevator goes higher than the third stalk, this would allow us control. maybe we shouldnt use it 
 
         private final double value; // value held by each enum val
+        private final double armSetpoints; // value held by each enum val
 
-        HeightLevels(double value) {
+        HeightLevels(double value, double arm) {
             this.value = value;
+            this.armSetpoints = arm;
         }
 
         // returns num val
         public double numVal() {
             return value;
+        }
+
+        // returns num val
+        public double armVal() {
+          return armSetpoints;
         }
 
         // returns an enum based off an associated input
@@ -146,6 +153,10 @@ public class ElevatorSubsytem extends SubsystemBase {
 
   public HeightLevels currentPos() {
     return this.currentPosEnum;
+  }
+
+  public double getSetPoint() {
+    return HEIGHT_SETPOINT;
   }
 
   

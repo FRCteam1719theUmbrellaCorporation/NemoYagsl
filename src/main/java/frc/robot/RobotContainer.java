@@ -69,10 +69,10 @@ public class RobotContainer
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
   
-  private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
+  // private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
   private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
   private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
-  // private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
+  private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
 
 
 
@@ -288,18 +288,18 @@ public class RobotContainer
       //     coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed)
       //   )
       // );
-      driverXbox2.y().onTrue(
-        new InstantCommand(() -> {
-          m_ElevatorSubsytem.setSetpoint(20);
+      // driverXbox2.y().onTrue(
+      //   new InstantCommand(() -> {
+      //     m_ElevatorSubsytem.setSetpoint(20);
 
-        })
-      );
+      //   })
+      // );
 
-      driverXbox2.y().onFalse(
-        new InstantCommand(()->
-        m_ElevatorSubsytem.setSetpoint(50)
-        )
-      );
+      // driverXbox2.y().onFalse(
+      //   new InstantCommand(()->
+      //   m_ElevatorSubsytem.setSetpoint(50)
+      //   )
+      // );
       //Coral move to setpoint
        driverXbox2.x().whileTrue(
         new InstantCommand(() -> {
