@@ -30,7 +30,7 @@ public class ElevatorSubsytem extends SubsystemBase {
     //Constant list of heights represented by english. YAY
     public enum HeightLevels {
         ZERO(0.1, 0), // Sets to the bottom
-        INTAKE(30, 0),
+        INTAKE(30, 1),
         REEFBASE(1, 0),
         LOW(2, 0), // Sets to the lowest 
         MIDDLE(3, 0), // 
