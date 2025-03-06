@@ -30,12 +30,12 @@ public class ElevatorSubsytem extends SubsystemBase {
     //Constant list of heights represented by english. YAY
     public enum HeightLevels {
         ZERO(0.5, 0), // Sets to the bottom
-        INTAKE(Constants.EndefectorConstants.INTAKE_POS_ELEVATORPOS_MAX, .5), //TODO: fix :(
+        INTAKE(20.75, .5), //TODO: fix :(
         INTAKE_UP(Constants.EndefectorConstants.INTAKE_POS_ELEVATORPOS_MAX, 0),
-        REEFBASE(1, 0),
-        LOW(2, 0), // Sets to the lowest 
-        MIDDLE(3, 0), // 
-        HIGH(4, 0),
+        // REEFBASE(1, 0),
+        LOW(9, .2), // Sets to the lowest 
+        MIDDLE(27.75, 0.2), // 
+        HIGH(Constants.EndefectorConstants.INTAKE_POS_ELEVATORPOS_MAX, 0),
         MAX(ElevatorConstants.ELEVATOR_ROOM_MAX, 0); // If our elevator goes higher than the third stalk, this would allow us control. maybe we shouldnt use it 
 
         private final double value; // value held by each enum val
