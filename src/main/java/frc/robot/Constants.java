@@ -133,7 +133,7 @@ public final class Constants
     public static final double MAX_SPEED = .5f;
 
     public static final double coral_floorintake_pos = 0.36;
-    public static final double coral_armdriving_pos = 0.12;
+    public static final double coral_armdriving_pos = 0.25;
     public static final double coral_humanstatione_pos = 0.10;
     public static final double coral_reef_l1 = 0.2;
 
@@ -169,15 +169,18 @@ public final class Constants
 
 
   public static class EndefectorConstants{
-    public static final double Endefector_kP = 0;
+    public static final double Endefector_kP = 8;
     public static final double Endefector_kI = 0;
-    public static final double Endefector_kD = 0;
+    public static final double Endefector_kD = 1.5;
 
     //Imb- dont know if we need both of these
     public static final double Endefector_startPos = 0;
     public static final double Endefector_startAngle = 0;
-    public static final double MIN_SPEED = -.5f;
-    public static final double MAX_SPEED = .5f;
+    public static final double MIN_SPEED = -.75f;
+    public static final double MAX_SPEED = .75f;
+
+    // if the height is LESS than 48, the arm should NOT move to / from it's intake position
+    public static final double INTAKE_POS_ELEVATORPOS_MAX = 48.f;
 
   }  
 
