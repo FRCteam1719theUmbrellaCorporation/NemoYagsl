@@ -119,9 +119,9 @@ public class LimeLightExtra {
         if(!doRejectUpdate)
         {
             // SWERVE.getSwerveDrive().setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-            SWERVE.getSwerveDrive().addVisionMeasurement(
-              mt2.pose,
-              mt2.timestampSeconds);
+            // SWERVE.getSwerveDrive().addVisionMeasurement(
+            //   mt2.pose,
+            //   mt2.timestampSeconds);
         }
     }
 

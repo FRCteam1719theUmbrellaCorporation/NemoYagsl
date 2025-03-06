@@ -181,10 +181,10 @@ public class ElevatorSubsytem extends SubsystemBase {
       //   --elevatorExtraPowerTimer;
       //   System.out.println("iOutput" + output);
       // }
-      System.out.println(elevatorPIDController.getSetpoint());
+      // System.out.println(elevatorPIDController.getSetpoint());
 
     } else {
-      System.out.println("erm its out of bounds");
+      // System.out.println("erm its out of bounds");
       output = 0;
     }
 
@@ -198,7 +198,7 @@ public class ElevatorSubsytem extends SubsystemBase {
     // }
     // System.out.println("output " + output);
 
-    System.out.println("ELEVATOR DISABLED. FIX THAT, OR COMMENT OUT THE ELEVATOR");
+    // System.out.println("ELEVATOR DISABLED. FIX THAT, OR COMMENT OUT THE ELEVATOR");
     // ELEVATOR_MOTOR_ONE.set(output);
   }
 

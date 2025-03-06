@@ -6,6 +6,7 @@ package frc.robot.subsystems.swervedrive;
 
 import static edu.wpi.first.units.Units.Meter;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
@@ -61,6 +62,9 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 public class SwerveSubsystem extends SubsystemBase
 {
 
+      // private final Pigeon2 m_gyro = new Pigeon2(2);
+
+
   /**
    * Swerve drive object.
    */
@@ -101,8 +105,8 @@ public class SwerveSubsystem extends SubsystemBase
     }
     swerveDrive.setHeadingCorrection(true); // Heading correction should only be used while controlling the robot via angle.
     swerveDrive.setCosineCompensator(false);//!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
-    swerveDrive.setAngularVelocityCompensation(true,
-                                               true,
+    swerveDrive.setAngularVelocityCompensation(false,
+                                               false,
                                                0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
     swerveDrive.setModuleEncoderAutoSynchronize(false,
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
@@ -143,8 +147,9 @@ public class SwerveSubsystem extends SubsystemBase
   public void periodic()
   {
     // When vision is enabled we must manually update odometry in SwerveDrive
-    swerveDrive.updateOdometry();
-    LimeLightExtra.updatePoseEstimation();
+    // swerveDrive.updateOdometry(); // TODO: UNCOMMENT AFTER TESTING. MUST BE UPDATED FOR POSE ESTIMATION
+    // LimeLightExtra.updatePoseEstimation();
+    System.out.println();
   }
 
   @Override
@@ -417,7 +422,7 @@ public class SwerveSubsystem extends SubsystemBase
       swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
                             translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
                             translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()), 0.8),
-                        Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumChassisAngularVelocity(),
+                        angularRotationX.getAsDouble() * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);
     });
@@ -445,7 +450,7 @@ public class SwerveSubsystem extends SubsystemBase
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(scaledInputs.getX(), scaledInputs.getY(),
                                                                       headingX.getAsDouble(),
                                                                       headingY.getAsDouble(),
-                                                                      swerveDrive.getOdometryHeading().getRadians(),
+                                                                      swerveDrive.getOdometryHeading().getDegrees(),
                                                                       swerveDrive.getMaximumChassisVelocity()));
     });
   }
@@ -490,6 +495,7 @@ public class SwerveSubsystem extends SubsystemBase
   public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity)
   {
     return run(() -> {
+      System.out.println(getHeading());
       swerveDrive.driveFieldOriented(velocity.get());
     });
   }

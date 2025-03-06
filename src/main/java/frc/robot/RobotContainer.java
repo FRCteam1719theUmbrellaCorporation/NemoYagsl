@@ -67,7 +67,7 @@ public class RobotContainer
   final CommandXboxController driverXbox2 = new CommandXboxController(1);
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-                                                                                "swerve/nemov2"));
+                                                                                "swerve/nemo"));
   
   private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
   private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
@@ -119,8 +119,12 @@ public class RobotContainer
   // controls are front-left positive
   // left stick controls translation
   // right stick controls the desired angle NOT angular rotation
-  Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
-
+  // Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
+  Command driveFieldOrientedDirectAngle = drivebase.driveCommand(
+    () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+    () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.RIGHT_X_DEADBAND),
+    () -> driverXbox.getRightX(),
+    () -> driverXbox.getRightY());
   // Applies deadbands and inverts controls because joysticks
   // are back-right positive while robot
   // controls are front-left positive
@@ -187,6 +191,7 @@ public class RobotContainer
   public RobotContainer()
   {
     Pigeon2 m_gyro = new Pigeon2(2);
+    
     new LimeLightExtra(drivebase, m_gyro);
 
     Rotation3d sd = drivebase.getSwerveDrive().imuReadingCache.getValue();
@@ -217,7 +222,7 @@ public class RobotContainer
 
    
     drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
-                                driveFieldOrientedAnglularVelocity:
+    driveFieldOrientedAnglularVelocity:
                                 driveFieldOrientedAnglularVelocitySim);
    
     m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
@@ -334,12 +339,10 @@ public class RobotContainer
 
 
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverXbox.b().whileTrue(
-          drivebase.driveToPose(
-              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              );
-      driverXbox.start().whileTrue(Commands.none());
-      driverXbox.back().whileTrue(Commands.none());
+      // driverXbox.b().whileTrue(
+      //     drivebase.driveToPose(
+      //         new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
+      //                         );
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       
       driverXbox.rightBumper().onTrue(
