@@ -38,17 +38,17 @@ import frc.robot.subsystems.LimeLightExtra;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
-import frc.robot.subsystems.intake.AlgaeIntakeSubsystem;
+//import frc.robot.subsystems.intake.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem.IntakePosition;
 //import frc.robot.commands.*;
 // import frc.robot.commands.Elevator.ElevatorPIDMoveCommand;
-import frc.robot.commands.Intake.AlgaeIntakeWheelsCommand;
+//import frc.robot.commands.Intake.AlgaeIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralPivotPIDCommand;
 import frc.robot.commands.outake.EndEffectorPIDCommand;
 import frc.robot.commands.outake.IntakeCoralEndeffector;
-import frc.robot.commands.Intake.AlgaePivotPIDCommand;
+//import frc.robot.commands.Intake.AlgaePivotPIDCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -73,7 +73,7 @@ public class RobotContainer
   
   private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
   private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
-  private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
+  //private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
 
 
@@ -156,8 +156,8 @@ public class RobotContainer
 
   Command driveSetpointGenSim = drivebase.driveWithSetpointGeneratorFieldRelative(driveDirectAngleSim);
 
-  Command algaeAngleSetter = new AlgaePivotPIDCommand(m_AlgaeIntakeSubsystem);
-  Command algaeWheels = new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem);
+  // Command algaeAngleSetter = new AlgaePivotPIDCommand(m_AlgaeIntakeSubsystem);
+  // Command algaeWheels = new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem);
   Command coralAngleSetter = new CoralPivotPIDCommand(m_CoralIntakeSubsystem);
   EndEffectorPIDCommand endEffDefaultCmd = new EndEffectorPIDCommand(m_EndEffectorSubsytem, m_ElevatorSubsytem);
   // Command intakeCoral = new IntakeCoralEndeffector(endEffDefaultCmd);
@@ -327,16 +327,16 @@ public class RobotContainer
         CoralDrive
       );
 
-      driverXbox2.b().whileTrue(
-        new InstantCommand(() -> {
-          m_AlgaeIntakeSubsystem.setSetpoint(0.2);
-        })
-      );
-      driverXbox2.b().onFalse(
-        new InstantCommand(() -> {
-          m_AlgaeIntakeSubsystem.setSetpoint(0.1);
-        })
-      );
+      // driverXbox2.b().whileTrue(
+      //   new InstantCommand(() -> {
+      //     m_AlgaeIntakeSubsystem.setSetpoint(0.2);
+      //   })
+      // );
+      // driverXbox2.b().onFalse(
+      //   new InstantCommand(() -> {
+      //     m_AlgaeIntakeSubsystem.setSetpoint(0.1);
+      //   })
+      // );
 
 
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
