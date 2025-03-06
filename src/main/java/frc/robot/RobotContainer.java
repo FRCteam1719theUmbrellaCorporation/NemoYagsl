@@ -46,6 +46,8 @@ import frc.robot.subsystems.intake.CoralIntakeSubsystem.IntakePosition;
 import frc.robot.commands.Intake.AlgaeIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralPivotPIDCommand;
+import frc.robot.commands.outake.EndEffectorPIDCommand;
+import frc.robot.commands.outake.IntakeCoralEndeffector;
 import frc.robot.commands.Intake.AlgaePivotPIDCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -69,7 +71,7 @@ public class RobotContainer
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
   
-  // private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
+  private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
   private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
   private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
@@ -157,6 +159,9 @@ public class RobotContainer
   Command algaeAngleSetter = new AlgaePivotPIDCommand(m_AlgaeIntakeSubsystem);
   Command algaeWheels = new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem);
   Command coralAngleSetter = new CoralPivotPIDCommand(m_CoralIntakeSubsystem);
+  EndEffectorPIDCommand endEffDefaultCmd = new EndEffectorPIDCommand(m_EndEffectorSubsytem, m_ElevatorSubsytem);
+  Command intakeCoral = new IntakeCoralEndeffector(endEffDefaultCmd);
+
   CoralIntakeWheelsCommand coralWheels = new CoralIntakeWheelsCommand(m_CoralIntakeSubsystem);
 
   Command CoralDrive = new ParallelCommandGroup(
@@ -220,9 +225,10 @@ public class RobotContainer
                                 driveFieldOrientedAnglularVelocity:
                                 driveFieldOrientedAnglularVelocitySim);
    
-    m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
+    //m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
     m_CoralIntakeSubsystem.setDefaultCommand(coralAngleSetter);
-
+    m_EndEffectorSubsytem.setDefaultCommand(endEffDefaultCmd);
+    
     if (Robot.isSimulation())
     {
       driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
@@ -343,10 +349,13 @@ public class RobotContainer
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       
       driverXbox.rightBumper().onTrue(
-        new SequentialCommandGroup(
-          new InstantCommand(()-> {
-            AutoBuilder.buildAuto("uto").schedule();
-          })));
+        
+        intakeCoral
+        // new SequentialCommandGroup(
+          // new InstantCommand(()-> {
+          //   AutoBuilder.buildAuto("uto").schedule();
+          // }))
+          );
     }}
 
   /**

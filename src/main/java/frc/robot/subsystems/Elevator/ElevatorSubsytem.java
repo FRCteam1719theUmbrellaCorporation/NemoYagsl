@@ -29,8 +29,9 @@ public class ElevatorSubsytem extends SubsystemBase {
     //TODO: Replace with encoder positions
     //Constant list of heights represented by english. YAY
     public enum HeightLevels {
-        ZERO(0.1, 0), // Sets to the bottom
-        INTAKE(30, 1),
+        ZERO(0.5, 0), // Sets to the bottom
+        INTAKE(Constants.ElevatorConstants.ELEVATOR_ROOM_MAX, .5), //TODO: fix :(
+        INTAKE_UP(Constants.ElevatorConstants.ELEVATOR_ROOM_MAX, 0),
         REEFBASE(1, 0),
         LOW(2, 0), // Sets to the lowest 
         MIDDLE(3, 0), // 
@@ -85,7 +86,7 @@ public class ElevatorSubsytem extends SubsystemBase {
     ELEVATOR_ENCODER = ELEVATOR_MOTOR_ONE.getEncoder();
 
     currentPosEnum = HeightLevels.ZERO;
-    HEIGHT_SETPOINT = 30;
+    HEIGHT_SETPOINT = 0;
     elevatorPIDController.setSetpoint(HEIGHT_SETPOINT);
 
     elevatorPIDController.setTolerance(.5);
@@ -192,10 +193,10 @@ public class ElevatorSubsytem extends SubsystemBase {
       //   --elevatorExtraPowerTimer;
       //   System.out.println("iOutput" + output);
       // }
-      System.out.println(elevatorPIDController.getSetpoint());
+      System.out.println(doubleMeasurement());
 
     } else {
-      System.out.println("erm its out of bounds");
+      System.out.println("erm its out of bounds " + HEIGHT_SETPOINT);
       output = 0;
     }
 
@@ -209,8 +210,8 @@ public class ElevatorSubsytem extends SubsystemBase {
     // }
     // System.out.println("output " + output);
 
-    System.out.println("ELEVATOR DISABLED. FIX THAT, OR COMMENT OUT THE ELEVATOR");
-    // ELEVATOR_MOTOR_ONE.set(output);
+    // System.out.println("ELEVATOR DISABLED. FIX THAT, OR COMMENT OUT THE ELEVATOR");
+    ELEVATOR_MOTOR_ONE.set(output);
   }
 
 }
