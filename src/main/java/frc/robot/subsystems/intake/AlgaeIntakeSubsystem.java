@@ -52,6 +52,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     public AlgaeIntakeSubsystem() {
       TURNMOTOR = new SparkMax(Constants.ALGAE_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
       ANGLEMOTOR = new SparkMax(Constants.ALGAE_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
+      ArmAngleManager.enableContinuousInput(0,1);
       ANGLE_ENCODER = ANGLEMOTOR.getAbsoluteEncoder();
       intakeMode = IntakePosition.ALGAE; 
       SETPOINTANGLE = Constants.CoralArmConstants.ARM_OUTAKE_POS_ANGLE;
