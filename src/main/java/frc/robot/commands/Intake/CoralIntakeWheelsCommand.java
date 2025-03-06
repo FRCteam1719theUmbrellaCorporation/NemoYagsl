@@ -12,22 +12,6 @@ public class CoralIntakeWheelsCommand extends Command {
         m_CoralIntakeSubsystem = input;
     }
     public InstantCommand turnMotor(double speed) {
-        // double speed;
-        // switch (m_CoralIntakeSubsystem.currentMode()) {
-        //     case FLOOR:
-        //         speed = Constants.CoralArmConstants.coral_intake_floor_speed;
-        //         break;
-
-        //     case HUMAN_STATION:
-        //         speed = Constants.CoralArmConstants.coral_intake_humanStation_speed;
-        //         break;
-
-        //     case REEF:
-        //         speed = Constants.CoralArmConstants.coral_reef_l1;
-        //         break;
-        //     default:
-        //         speed = 0;
-        // }
         return new InstantCommand(()-> 
             m_CoralIntakeSubsystem.intakeSpinWheels(speed)
         );

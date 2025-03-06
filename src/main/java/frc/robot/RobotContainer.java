@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.hardware.Pigeon2;
+// import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
@@ -160,7 +160,7 @@ public class RobotContainer
   Command algaeWheels = new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem);
   Command coralAngleSetter = new CoralPivotPIDCommand(m_CoralIntakeSubsystem);
   EndEffectorPIDCommand endEffDefaultCmd = new EndEffectorPIDCommand(m_EndEffectorSubsytem, m_ElevatorSubsytem);
-  Command intakeCoral = new IntakeCoralEndeffector(endEffDefaultCmd);
+  // Command intakeCoral = new IntakeCoralEndeffector(endEffDefaultCmd);
 
   CoralIntakeWheelsCommand coralWheels = new CoralIntakeWheelsCommand(m_CoralIntakeSubsystem);
 
@@ -191,11 +191,11 @@ public class RobotContainer
 
   public RobotContainer()
   {
-    Pigeon2 m_gyro = new Pigeon2(2);
-    new LimeLightExtra(drivebase, m_gyro);
+    // Pigeon2 m_gyro = new Pigeon2(2);
+    // new LimeLightExtra(drivebase, m_gyro);
 
     Rotation3d sd = drivebase.getSwerveDrive().imuReadingCache.getValue();
-    LimelightHelpers.SetRobotOrientation(null, m_gyro.getYaw().getValueAsDouble(), m_gyro.getRate(), m_gyro.getPitch().getValueAsDouble(), 0, m_gyro.getRoll().getValueAsDouble(), 0);
+    // LimelightHelpers.SetRobotOrientation(null, m_gyro.getYaw().getValueAsDouble(), m_gyro.getRate(), m_gyro.getPitch().getValueAsDouble(), 0, m_gyro.getRoll().getValueAsDouble(), 0);
     LimelightHelpers.SetIMUMode(null, 1);
     // Configure the trigger bindings
     configureBindings();
@@ -340,17 +340,16 @@ public class RobotContainer
 
 
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverXbox.b().whileTrue(
-          drivebase.driveToPose(
-              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              );
-      driverXbox.start().whileTrue(Commands.none());
+      // driverXbox.b().whileTrue(
+      //     drivebase.driveToPose(
+      //         new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
+      //                         );
+      // driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       
-      driverXbox.rightBumper().onTrue(
-        
-        intakeCoral
+      driverXbox2.start().onTrue(
+        IntakeCoralEndeffector.intake(endEffDefaultCmd)
         // new SequentialCommandGroup(
           // new InstantCommand(()-> {
           //   AutoBuilder.buildAuto("uto").schedule();
