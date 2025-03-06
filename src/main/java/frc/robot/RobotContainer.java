@@ -293,24 +293,24 @@ public class RobotContainer
       //     coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed)
       //   )
       // );
-      driverXbox2.y().onTrue(
-        new InstantCommand(() -> {
-          m_ElevatorSubsytem.setSetpoint(20);
+      // driverXbox2.y().onTrue(
+      //   new InstantCommand(() -> {
+      //     m_ElevatorSubsytem.setSetpoint(20);
 
-        })
-      );
+      //   })
+      // );
 
-      driverXbox2.y().onFalse(
-        new InstantCommand(()->
-        m_ElevatorSubsytem.setSetpoint(50)
-        )
-      );
-      //Coral move to setpoint
-       driverXbox2.x().whileTrue(
-        new InstantCommand(() -> {
-        m_CoralIntakeSubsystem.setSetpoint(.1);
-        })
-       );
+      // driverXbox2.y().onFalse(
+      //   new InstantCommand(()->
+      //   m_ElevatorSubsytem.setSetpoint(50)
+      //   )
+      // );
+      // //Coral move to setpoint
+      //  driverXbox2.x().whileTrue(
+      //   new InstantCommand(() -> {
+      //   m_CoralIntakeSubsystem.setSetpoint(.1);
+      //   })
+      //  );
       driverXbox2.x().whileTrue(
         CoralHumanPlayer
       );
@@ -345,12 +345,12 @@ public class RobotContainer
       //                         );
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       
-      driverXbox.rightBumper().onTrue(
-        new SequentialCommandGroup(
-          new InstantCommand(()-> {
-            AutoBuilder.buildAuto("uto").schedule();
-          })));
-    }}
+    //   driverXbox.rightBumper().onTrue(
+    //     new SequentialCommandGroup(
+    //       new InstantCommand(()-> {
+    //         AutoBuilder.buildAuto("uto").schedule();
+    //       })));
+     }}
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
