@@ -4,7 +4,6 @@
 
 package frc.robot.commands.outake;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
@@ -12,18 +11,6 @@ import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class IntakeCoralEndeffector extends SequentialCommandGroup {
-  /** Creates a new IntakeCoralEndeffector. */
-  public IntakeCoralEndeffector() {
-    // System.out.println("on");
-    // // Add your commands in the addCommands() call, e.g.
-    // // addCommands(new FooCommand(), new BarCommand());
-    // new SequentialCommandGroup(
-    //   cmd.moveBoth(HeightLevels.INTAKE_UP),
-    //   new WaitUntilCommand(cmd.isAtPos()),
-    //   cmd.moveBoth(HeightLevels.INTAKE)
-    // );
-  }
-
   public static SequentialCommandGroup intake(EndEffectorPIDCommand cmd) {
     return new SequentialCommandGroup(
         cmd.moveBoth(HeightLevels.INTAKE_UP),
