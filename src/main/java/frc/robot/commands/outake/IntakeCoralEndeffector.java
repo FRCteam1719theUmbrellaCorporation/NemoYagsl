@@ -13,14 +13,22 @@ import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class IntakeCoralEndeffector extends SequentialCommandGroup {
   /** Creates a new IntakeCoralEndeffector. */
-  public IntakeCoralEndeffector(EndEffectorPIDCommand cmd) {
-    System.out.println("on");
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
-    new SequentialCommandGroup(
-      cmd.moveBoth(HeightLevels.INTAKE_UP),
-      new WaitUntilCommand(cmd.isAtPos()),
-      cmd.moveBoth(HeightLevels.INTAKE)
-    );
+  public IntakeCoralEndeffector() {
+    // System.out.println("on");
+    // // Add your commands in the addCommands() call, e.g.
+    // // addCommands(new FooCommand(), new BarCommand());
+    // new SequentialCommandGroup(
+    //   cmd.moveBoth(HeightLevels.INTAKE_UP),
+    //   new WaitUntilCommand(cmd.isAtPos()),
+    //   cmd.moveBoth(HeightLevels.INTAKE)
+    // );
   }
+
+  public static SequentialCommandGroup intake(EndEffectorPIDCommand cmd) {
+    return new SequentialCommandGroup(
+        cmd.moveBoth(HeightLevels.INTAKE_UP),
+        new WaitUntilCommand(cmd.isAtPos()),
+        cmd.moveBoth(HeightLevels.INTAKE)
+      );
+  } 
 }
