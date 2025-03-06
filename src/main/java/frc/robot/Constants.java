@@ -10,10 +10,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
 import static edu.wpi.first.units.Units.*;
-// import edu.wpi.first.units.measure.Angle;
-// import edu.wpi.first.units.measure.Distance;
-// import edu.wpi.first.wpilibj.DigitalSource;
-// import edu.wpi.first.wpilibj.DutyCycle;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean constants. This
@@ -60,9 +56,8 @@ public final class Constants
 //WHEEL SPIN IS RESPONSIBLE FOR THE INTAKE OUTAKE OF THE WHEELS 
 
   //ALGAE
-  public static final int ALGAE_ARM_WHEEL_SPIN_ID = 8;
-  public static final int ALGAE_ARM_ANGLE_MOTOR_ID = 7; 
-  public static final int ALGAE_ARM_INTAKE_ENCODER_ANGLE_MOTOR = 1000;
+  // public static final int ALGAE_ARM_WHEEL_SPIN_ID = 8;
+  // public static final int ALGAE_ARM_ANGLE_MOTOR_ID = 7; 
 
   //CORAL
   public static final int CORAL_ARM_WHEEL_SPIN_ID = 23;
@@ -75,15 +70,9 @@ public final class Constants
   //ENDEFECTOR
   public static final int ENDEFECTOR_ANGLE_MOTOR_ID = 24;
 
-  //public static final double DEFAULT_INTAKE_ANGLE = 0;
-
-  
-
   public static class IntakeDetails {
     public static final double intakePos = 0; // TODO FIX This will be the position of intaking!
   }
-
-
 
   public static class CoralArmConstants{
     public static final double CoralArm_kP = 1.5;
@@ -120,26 +109,6 @@ public final class Constants
     public static final double coral_outtake_reef_speed = -0.2f;
 
   }
-  public static class AlgaeArmConstants{
-    public static final double AlgaeArm_kP = 2;
-    public static final double AlgaeArm_kI = 0;
-    public static final double AlgaeArm_kD = 0;
-
-    //Imb- dont know if we need both of these
-    public static final double ALgaeArm_startPos = 0;
-    public static final double AlgaeArm_startAngle = 0;
-
-    public static final double AlgaeArmWheelMaxVelocity = Meters.of(0).per(Second).in(MetersPerSecond);
-    public static final double AlgaeArmWheelDefaultSpeed = Meters.of(0).per(Second).in(MetersPerSecond);
-    public static final double AlgaeArmWheelMaxAcceleration = 0;
-
-
-    //Imb - dont know if these are necessary
-    public static final double AlgaeArmWheelRadius = Units.inchesToMeters(0);
-
-    public static final double MIN_SPEED = -.5f;
-    public static final double MAX_SPEED = .5f;
-  } 
 
   public static class EndefectorConstants{
     public static final double Endefector_kP = 4;
@@ -158,8 +127,6 @@ public final class Constants
   }  
 
 public static class ElevatorConstants{
-//These are all the un-tuned constants from what IMB did on 2/18/25
-//These changes should all be in the hbg/Subsystem branch in Nemo YAGSL
 
    public static final double ElevatorkP = 0.2;
     public static final double ElevatorkI = 0;

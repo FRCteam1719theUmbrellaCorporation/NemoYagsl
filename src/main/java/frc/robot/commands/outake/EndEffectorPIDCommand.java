@@ -63,6 +63,7 @@ public class EndEffectorPIDCommand extends Command {
   }
 
   public Command moveBoth(HeightLevels level) {
+
     return new InstantCommand(() -> {
       if (level.numVal() > m_ElevatorSubsytem.getSetPoint()) {
         m_ElevatorSubsytem.setHeightWithEnum(level);
@@ -76,7 +77,6 @@ public class EndEffectorPIDCommand extends Command {
       // if (m_EndEffector.getHeight().numVal() < EndefectorConstants.INTAKE_POS_ELEVATORPOS_MAX && m_ElevatorSubsytem.doubleMeasurement() < EndefectorConstants.INTAKE_POS_ELEVATORPOS_MAX) {
 
       // }
-      
       m_EndEffector.setHeight(level);
     });
   }

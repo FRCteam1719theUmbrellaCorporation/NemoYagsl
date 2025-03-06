@@ -6,16 +6,12 @@ package frc.robot.subsystems.Elevator;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.EndefectorConstants;
-import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 
 
@@ -81,7 +77,7 @@ public class EndEffectorSubsytem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double output = MathUtil.clamp(EndEffectorPIDController.calculate(doubleMeasurement()),EndefectorConstants.MIN_SPEED, EndefectorConstants.MAX_SPEED);
+    // double output = MathUtil.clamp(EndEffectorPIDController.calculate(doubleMeasurement()),EndefectorConstants.MIN_SPEED, EndefectorConstants.MAX_SPEED);
     // System.out.println("endeff output: " + output);
     // setRotation(output);
     // This method will be called once per scheduler run
