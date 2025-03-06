@@ -31,14 +31,7 @@ public final class Constants
   public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
   public static final double SPEED_LIMITER = 0.25;
   public static final double MAX_SPEED  = Units.feetToMeters(14.5*SPEED_LIMITER);
-  // Maximum speed of the robot in meters per second, used to limit acceleration.
 
-//  public static final class AutonConstants
-//  {
-//
-//    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
-//    public static final PIDConstants ANGLE_PID       = new PIDConstants(0.4, 0, 0.01);
-//  }
   public static final CANBus kCANBus = new CANBus("Drivetrain", "./logs/example.hoot");
 
   public static final class DrivebaseConstants
@@ -51,7 +44,6 @@ public final class Constants
 
   public static class OperatorConstants
   {
-
     // Joystick Deadband
     public static final double DEADBAND        = 0.1;
     public static final double LEFT_Y_DEADBAND = 0.1;
@@ -60,15 +52,9 @@ public final class Constants
   }
 
 
-  //MOST MEGA TODO
-  // PROPRELY NAME ALL VARIABLES TO BE SPECIFIC TO EACH PART OF THE ROBOT
-  //I.E. ENDEFECTOR_ROTATE_MOTOR_ID
-  //PART OF THE ROBOT, PURPOSE, MOTOR/ENCODER, ID(IF NECESSARY)
-
-  /*
-   * ROBOT COMPONENT IDS GO HERE. MAKE SURE TO ORDER THEM BY RELEVANCE
-   */
-  // TODO: CHANGE THIS HERE!
+/*
+ * CAN IDS
+ */
 
 //ANGLE MOTORS ARE RESONSIBLE FOR CHANING THE ANGLE OF THE ARM
 //WHEEL SPIN IS RESPONSIBLE FOR THE INTAKE OUTAKE OF THE WHEELS 
@@ -88,14 +74,6 @@ public final class Constants
 
   //ENDEFECTOR
   public static final int ENDEFECTOR_ANGLE_MOTOR_ID = 24;
-
-
-
-  // MEGA TODO: TUNE AND ADD THESE PID VALUES
-  //These PIDS were created by HBG prior to 2/19/25
- // public static final double ARMANGLE_kP = 0;
-  //public static final double ARMANGLE_kI = 0;
-  //public static final double ARMANGLE_kD = 0;
 
   //public static final double DEFAULT_INTAKE_ANGLE = 0;
 
@@ -158,35 +136,28 @@ public final class Constants
 
     //Imb - dont know if these are necessary
     public static final double AlgaeArmWheelRadius = Units.inchesToMeters(0);
-    // public static final double AlgaeArm_kS = 0;
-    // public static final double AlgaeArm_kG = 0;
-    // public static final double AlgaeArm_kV = 0;
-    // public static final double AlgaeArm_kA = 0;
 
     public static final double MIN_SPEED = -.5f;
     public static final double MAX_SPEED = .5f;
   } 
 
-
   public static class EndefectorConstants{
-    public static final double Endefector_kP = 8;
+    public static final double Endefector_kP = 4;
     public static final double Endefector_kI = 0;
-    public static final double Endefector_kD = 1.5;
+    public static final double Endefector_kD = 0.5;
 
     //Imb- dont know if we need both of these
     public static final double Endefector_startPos = 0;
     public static final double Endefector_startAngle = 0;
-    public static final double MIN_SPEED = -.75f;
-    public static final double MAX_SPEED = .75f;
+    public static final double MIN_SPEED = -.5f;
+    public static final double MAX_SPEED = .5f;
 
     // if the height is LESS than 48, the arm should NOT move to / from it's intake position
     public static final double INTAKE_POS_ELEVATORPOS_MAX = 48.f;
 
   }  
 
-
-
-  public static class ElevatorConstants{
+public static class ElevatorConstants{
 //These are all the un-tuned constants from what IMB did on 2/18/25
 //These changes should all be in the hbg/Subsystem branch in Nemo YAGSL
 
@@ -202,26 +173,10 @@ public final class Constants
     public static final double Tolerance = 0; //CHANGE
 
     public static final double ELEVATOR_ROOM_MAX = 84;
-  /* public static final double RampRate = 5;
-    public static final double ElevatorGearing = 5;
-    public static final double ElevatorCarriageMass = 5;
-    public static final double DrumRadius = Units.inchesToMeters(2.0);
-    public static final double MinHeightMeters = 5;
-    public static final double MaxHeightMeters = 5;
 
-//idk what these are - IMB
-
-    public static final double Length = Inches.of(33).in(Meters);
-    public static final Distance StartingHeightSim = Meters.of(0.0);
-    public static final Angle StartingAngle = Degrees.of(-90);
-    public static final Distance LaserCANOffset  = Inches.of(3);
-    public static final double DefaultTolerance = Inches.of(1).in(Meters);
-    
-  */
     public static final double MIN_SPEED = -.7f;
     public static final double MAX_SPEED = .7f;
   }
 
-  
   public static double CORALPIVITMAXAMOUNT = 235;
 }
