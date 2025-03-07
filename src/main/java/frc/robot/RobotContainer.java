@@ -33,6 +33,7 @@ import swervelib.SwerveDrive;
 import java.util.function.BooleanSupplier;
 import javax.print.attribute.standard.MediaSize.NA;
 import swervelib.SwerveInputStream;
+import swervelib.imu.Pigeon2Swerve;
 import frc.robot.subsystems.LimeLightExtra;
 //import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
@@ -69,7 +70,7 @@ public class RobotContainer
 
   final CommandXboxController driverXbox2 = new CommandXboxController(1);
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+  public final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
   
   private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
@@ -102,8 +103,8 @@ public class RobotContainer
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                () -> driverXbox.getLeftY() * -1,
-                                                                () -> driverXbox.getLeftX() * -1)
+                                                                () -> -driverXbox.getLeftY(),
+                                                                () -> -driverXbox.getLeftX())
                                                             .withControllerRotationAxis(driverXbox::getRightX)
                                                             .deadband(OperatorConstants.DEADBAND)
                                                             .scaleTranslation(0.8)
@@ -122,8 +123,12 @@ public class RobotContainer
   // controls are front-left positive
   // left stick controls translation
   // right stick controls the desired angle NOT angular rotation
-  Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
-
+  // Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
+  Command driveFieldOrientedDirectAngle = drivebase.driveCommand(
+    () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+    () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.RIGHT_X_DEADBAND),
+    () -> driverXbox.getRightX(),
+    () -> driverXbox.getRightY());
   // Applies deadbands and inverts controls because joysticks
   // are back-right positive while robot
   // controls are front-left positive
@@ -190,13 +195,11 @@ public class RobotContainer
   
   
 
-  public RobotContainer()
-  {
-    // Pigeon2 m_gyro = new Pigeon2(2);
-    // new LimeLightExtra(drivebase, m_gyro);
+  public RobotContainer() { 
+    new LimeLightExtra(drivebase);
 
     Rotation3d sd = drivebase.getSwerveDrive().imuReadingCache.getValue();
-    // LimelightHelpers.SetRobotOrientation(null, m_gyro.getYaw().getValueAsDouble(), m_gyro.getRate(), m_gyro.getPitch().getValueAsDouble(), 0, m_gyro.getRoll().getValueAsDouble(), 0);
+    LimelightHelpers.SetRobotOrientation(null, drivebase.getHeading().getDegrees(), 0, 0, 0, 0, 0);
     LimelightHelpers.SetIMUMode(null, 1);
     // Configure the trigger bindings
     configureBindings();
@@ -223,7 +226,7 @@ public class RobotContainer
 
    
     drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
-                                driveFieldOrientedAnglularVelocity:
+    driveFieldOrientedAnglularVelocity:
                                 driveFieldOrientedAnglularVelocitySim);
    
     //m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
@@ -313,6 +316,7 @@ public class RobotContainer
         m_CoralIntakeSubsystem.setSetpoint(.1);
         })
        );
+
       driverXbox2.x().whileTrue(
         CoralHumanPlayer
       );
@@ -337,14 +341,12 @@ public class RobotContainer
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox2.a().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
+      
       driverXbox2.start().onTrue(
         IntakeCoralEndeffector.intake(endEffDefaultCmd)
-        // new SequentialCommandGroup(
-          // new InstantCommand(()-> {
-          //   AutoBuilder.buildAuto("uto").schedule();
-          // }))
           );
     }}
+//       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

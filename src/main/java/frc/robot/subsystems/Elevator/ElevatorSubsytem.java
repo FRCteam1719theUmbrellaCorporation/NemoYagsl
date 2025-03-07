@@ -15,13 +15,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
-// import edu.wpi.first.math.controller.ProfiledPIDController;
-// import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-// import edu.wpi.first.units.PerUnit;
-// import edu.wpi.first.wpilibj.DutyCycleEncoder;
-// import edu.wpi.first.wpilibj2.command.Command;
-
-// import static edu.wpi.first.units.Units.*;
 
 public class ElevatorSubsytem extends SubsystemBase {
 
@@ -77,9 +70,7 @@ public class ElevatorSubsytem extends SubsystemBase {
   static double HEIGHT_SETPOINT = 30;
   // private boolean temp = true;
   private static final PIDController elevatorPIDController = new PIDController(ElevatorConstants.ElevatorkP, ElevatorConstants.ElevatorkI, ElevatorConstants.ElevatorkD); // TODO ADD VALUES
-
-  // private static final ElevatorFeedforward elevatorPIDfeed = new ElevatorFeedforward(ElevatorConstants.ElevatorkS, ElevatorConstants.ElevatorkG, ElevatorConstants.ElevatorkV, ElevatorConstants.ElevatorkA);
-
+  
   public ElevatorSubsytem() {
     // temp = true;
     ELEVATOR_MOTOR_ONE = new SparkMax(Constants.ELEVATOR_PIN_ONE, MotorType.kBrushless);
@@ -133,9 +124,6 @@ public class ElevatorSubsytem extends SubsystemBase {
   }
 
   public void setSetpoint(double setSetpoint) {
-    // if (setSetpoint > HEIGHT_SETPOINT) {
-    //   elevatorExtraPowerTimer = 10;
-    // }
     HEIGHT_SETPOINT = setSetpoint;
     elevatorPIDController.setSetpoint(setSetpoint);
   }
@@ -160,20 +148,6 @@ public class ElevatorSubsytem extends SubsystemBase {
     return HEIGHT_SETPOINT;
   }
 
-  
-  // public void reachGoal(double goal){
-  //   double voltsOutput = MathUtil.clamp(elevatorPIDfeed.calculateWithVelocities(ELEVATOR_ENCODER.getVelocity(), elevatorPIDController.getSetpoint().velocity) + elevatorPIDController.calculate(ELEVATOR_ENCODER.getPosition(), goal), -7,7);
-  //   ELEVATOR_MOTOR_ONE.setVoltage(voltsOutput);
-  // }
-
-  // public Command setGoal(double goal){
-  //   return run(() -> reachGoal(goal));
-  // }
-
-  // public Command setElevatorHeight(double height){
-  //   setSetpoint(height);
-  // }
-
   public boolean aroundHeight(double height, double tolerance){
     return MathUtil.isNear(height,ELEVATOR_ENCODER.getPosition(),tolerance);
   }
@@ -188,7 +162,6 @@ public class ElevatorSubsytem extends SubsystemBase {
     
     if (inBounds()) {
       output = MathUtil.clamp(elevatorPIDController.calculate(doubleMeasurement()), ElevatorConstants.MIN_SPEED, ElevatorConstants.MAX_SPEED);
-
     } else {
       // System.out.println("erm its out of bounds " + HEIGHT_SETPOINT);
       output = 0;
