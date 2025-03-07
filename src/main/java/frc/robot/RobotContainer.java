@@ -44,7 +44,6 @@ import frc.robot.subsystems.intake.CoralIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem.IntakePosition;
 //import frc.robot.commands.*;
 // import frc.robot.commands.Elevator.ElevatorPIDMoveCommand;
-//import frc.robot.commands.Intake.AlgaeIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralPivotPIDCommand;
 import frc.robot.commands.outake.EndEffectorPIDCommand;
@@ -266,15 +265,6 @@ public class RobotContainer
     } else
     {
 
-     /* //Algae intake wheels to spin
-      driverXbox2.a().onTrue(
-        new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem).turnMotor(1).withTimeout(1) //Test
-      );
-      
-      driverXbox2.a().onFalse(
-        new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem).stopMotors() //Test
-      );
-*/
       //Coral intake wheels to spin
       driverXbox2.a().whileTrue(
         CoralFloor
@@ -346,17 +336,6 @@ public class RobotContainer
         CoralDrive
       );
 
-      // driverXbox2.b().whileTrue(
-      //   new InstantCommand(() -> {
-      //     m_AlgaeIntakeSubsystem.setSetpoint(0.2);
-      //   })
-      // );
-      // driverXbox2.b().onFalse(
-      //   new InstantCommand(() -> {
-      //     m_AlgaeIntakeSubsystem.setSetpoint(0.1);
-      //   })
-      // );
-
       driverXbox.leftBumper().onTrue(
         new InstantCommand(()->
           drivebase.driveToPose(new Pose2d(new Translation2d(14.32,3.88), Rotation2d.fromDegrees(-90))).schedule()
@@ -388,7 +367,7 @@ public class RobotContainer
     LimelightHelpers.SetIMUMode(null, 2);
 
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("uto");
+    return drivebase.getAutonomousCommand("red paths");
   }
 
   public void setMotorBrake(boolean brake)
