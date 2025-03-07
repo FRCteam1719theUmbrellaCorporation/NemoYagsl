@@ -12,40 +12,41 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.Constants;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
-// import edu.wpi.first.math.controller.ProfiledPIDController;
-// import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-// import edu.wpi.first.units.PerUnit;
-// import edu.wpi.first.wpilibj.DutyCycleEncoder;
-// import edu.wpi.first.wpilibj2.command.Command;
-
-// import static edu.wpi.first.units.Units.*;
 
 public class ElevatorSubsytem extends SubsystemBase {
 
     //TODO: Replace with encoder positions
     //Constant list of heights represented by english. YAY
     public enum HeightLevels {
-        ZERO(0.1), // Sets to the bottom
-        INTAKE(30),
-        REEFBASE(1),
-        LOW(2), // Sets to the lowest 
-        MIDDLE(3), // 
-        HIGH(4),
-        MAX(ElevatorConstants.ELEVATOR_ROOM_MAX); // If our elevator goes higher than the third stalk, this would allow us control. maybe we shouldnt use it 
+        ZERO(5, 0), // Sets to the bottom
+        INTAKE(20.75, .5), //TODO: fix :( 20.75 IS INTAKE
+        INTAKE_PRE_DOWN(60, .47), //TODO: fix :( 20.75 IS INTAKE
+        INTAKE_UP(60, 0),
+        // REEFBASE(1, 0),
+        LOW(9, .2), // Sets to the lowest 
+        MIDDLE(27.75, 0.2), // 
+        HIGH(Constants.EndefectorConstants.INTAKE_POS_ELEVATORPOS_MAX, 0),
+        MAX(ElevatorConstants.ELEVATOR_ROOM_MAX, 0); // If our elevator goes higher than the third stalk, this would allow us control. maybe we shouldnt use it 
 
         private final double value; // value held by each enum val
+        private final double armSetpoints; // value held by each enum val
 
-        HeightLevels(double value) {
+        HeightLevels(double value, double arm) {
             this.value = value;
+            this.armSetpoints = arm;
         }
 
         // returns num val
         public double numVal() {
             return value;
+        }
+
+        // returns num val
+        public double armVal() {
+          return armSetpoints;
         }
 
         // returns an enum based off an associated input
@@ -69,16 +70,14 @@ public class ElevatorSubsytem extends SubsystemBase {
   static double HEIGHT_SETPOINT = 30;
   // private boolean temp = true;
   private static final PIDController elevatorPIDController = new PIDController(ElevatorConstants.ElevatorkP, ElevatorConstants.ElevatorkI, ElevatorConstants.ElevatorkD); // TODO ADD VALUES
-
-  // private static final ElevatorFeedforward elevatorPIDfeed = new ElevatorFeedforward(ElevatorConstants.ElevatorkS, ElevatorConstants.ElevatorkG, ElevatorConstants.ElevatorkV, ElevatorConstants.ElevatorkA);
-
+  
   public ElevatorSubsytem() {
     // temp = true;
     ELEVATOR_MOTOR_ONE = new SparkMax(Constants.ELEVATOR_PIN_ONE, MotorType.kBrushless);
     ELEVATOR_ENCODER = ELEVATOR_MOTOR_ONE.getEncoder();
 
     currentPosEnum = HeightLevels.ZERO;
-    HEIGHT_SETPOINT = 30;
+    HEIGHT_SETPOINT = 0;
     elevatorPIDController.setSetpoint(HEIGHT_SETPOINT);
 
     elevatorPIDController.setTolerance(.5);
@@ -125,9 +124,6 @@ public class ElevatorSubsytem extends SubsystemBase {
   }
 
   public void setSetpoint(double setSetpoint) {
-    // if (setSetpoint > HEIGHT_SETPOINT) {
-    //   elevatorExtraPowerTimer = 10;
-    // }
     HEIGHT_SETPOINT = setSetpoint;
     elevatorPIDController.setSetpoint(setSetpoint);
   }
@@ -148,19 +144,9 @@ public class ElevatorSubsytem extends SubsystemBase {
     return this.currentPosEnum;
   }
 
-  
-  // public void reachGoal(double goal){
-  //   double voltsOutput = MathUtil.clamp(elevatorPIDfeed.calculateWithVelocities(ELEVATOR_ENCODER.getVelocity(), elevatorPIDController.getSetpoint().velocity) + elevatorPIDController.calculate(ELEVATOR_ENCODER.getPosition(), goal), -7,7);
-  //   ELEVATOR_MOTOR_ONE.setVoltage(voltsOutput);
-  // }
-
-  // public Command setGoal(double goal){
-  //   return run(() -> reachGoal(goal));
-  // }
-
-  // public Command setElevatorHeight(double height){
-  //   setSetpoint(height);
-  // }
+  public double getSetPoint() {
+    return HEIGHT_SETPOINT;
+  }
 
   public boolean aroundHeight(double height, double tolerance){
     return MathUtil.isNear(height,ELEVATOR_ENCODER.getPosition(),tolerance);
@@ -176,30 +162,13 @@ public class ElevatorSubsytem extends SubsystemBase {
     
     if (inBounds()) {
       output = MathUtil.clamp(elevatorPIDController.calculate(doubleMeasurement()), ElevatorConstants.MIN_SPEED, ElevatorConstants.MAX_SPEED);
-      // if (elevatorExtraPowerTimer > 0) {
-      //   output = 0.9f;
-      //   --elevatorExtraPowerTimer;
-      //   System.out.println("iOutput" + output);
-      // }
-      // System.out.println(elevatorPIDController.getSetpoint());
-
     } else {
-      // System.out.println("erm its out of bounds");
+      // System.out.println("erm its out of bounds " + HEIGHT_SETPOINT);
       output = 0;
     }
 
-    // if (this.doubleMeasurement() < HEIGHT_SETPOINT + 30 && temp) {
-    //   ELEVATOR_MOTOR_ONE.set(.3);
-    //   System.out.println("output " + ELEVATOR_MOTOR_ONE.getAppliedOutput());
-    // } else {
-    //   temp = false;
-    //   ELEVATOR_MOTOR_ONE.set(0);
-
-    // }
-    // System.out.println("output " + output);
-
     // System.out.println("ELEVATOR DISABLED. FIX THAT, OR COMMENT OUT THE ELEVATOR");
-    // ELEVATOR_MOTOR_ONE.set(output);
+    ELEVATOR_MOTOR_ONE.set(output);
   }
 
 }
