@@ -58,6 +58,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     CORAL_ARM_TURNMOTOR = new SparkMax(Constants.CORAL_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
     CORAL_ARM_ANGLEMOTOR = new SparkMax(Constants.CORAL_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
     CORAL_ARM_ENCODER = CORAL_ARM_ANGLEMOTOR.getAbsoluteEncoder();
+    coralArmPIDController.enableContinuousInput(0,1);
     SETPOINTANGLE = CoralArmConstants.coral_armdriving_pos;
     intakeMode = IntakePosition.DRIVING; 
     m_rangeSensor = new CANrange(Constants.CORAL_ARM_RANGE_SENSOR);
