@@ -332,14 +332,30 @@ public class RobotContainer
         CoralDrive
       );
 
+      driverXbox2.b().whileTrue(
+        new InstantCommand(() -> {
+          m_AlgaeIntakeSubsystem.setSetpoint(0.2);
+        })
+      );
+      driverXbox2.b().onFalse(
+        new InstantCommand(() -> {
+          m_AlgaeIntakeSubsystem.setSetpoint(0.1);
+        })
+      );
+
+      driverXbox.leftBumper().onTrue(
+        new InstantCommand(()->
+          drivebase.driveToPose(new Pose2d(new Translation2d(14.32,3.88), Rotation2d.fromDegrees(-90))).schedule()
+        )
+      );
+
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       // driverXbox.b().whileTrue(
       //     drivebase.driveToPose(
       //         new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
       //                         );
-      // driverXbox.start().whileTrue(Commands.none());
-      driverXbox.back().whileTrue(Commands.none());
-      driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      //driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+
       driverXbox2.a().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
       
       driverXbox2.start().onTrue(
