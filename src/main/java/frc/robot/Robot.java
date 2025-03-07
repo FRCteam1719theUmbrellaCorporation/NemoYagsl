@@ -4,11 +4,16 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import swervelib.imu.SwerveIMU;
+import swervelib.telemetry.SwerveDriveTelemetry;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
@@ -24,6 +29,8 @@ public class Robot extends TimedRobot
   private RobotContainer m_robotContainer;
 
   private Timer disabledTimer;
+
+  private SwerveIMU gyrogyro;
 
   public Robot()
   {
@@ -44,6 +51,32 @@ public class Robot extends TimedRobot
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    gyrogyro = m_robotContainer.drivebase.getSwerveDrive().getGyro();
+
+
+
+    
+    m_robotContainer.drivebase.getSwerveDrive().swerveController.lastAngleScalar = 0;
+    
+
+    if (m_robotContainer.drivebase.isRedAlliance())
+    {
+      //m_robotContainer.drivebase.getSwerveDrive().resetOdometry(new Pose2d(m_robotContainer.drivebase.getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
+      m_robotContainer.drivebase.getSwerveDrive().resetOdometry(new Pose2d(m_robotContainer.drivebase.getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+
+      // gyrogyro.setOffset(new Rotation3d(0,0,Math.PI));
+      
+      
+    } else
+    {
+      m_robotContainer.drivebase.getSwerveDrive().resetOdometry(new Pose2d(m_robotContainer.drivebase.getSwerveDrive().getPose().getTranslation(), new Rotation2d()));
+    }
+
+
+    
+
+    //m_robotContainer.drivebase.zeroGyroWithAlliance();
+    
 
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
     // immediately when disabled, but then also let it be pushed more 
@@ -102,6 +135,8 @@ public class Robot extends TimedRobot
     LimelightHelpers.SetIMUMode(null, 2);
     m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+    //m_robotContainer.drivebase.zeroGyroWithAlliance();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null)
