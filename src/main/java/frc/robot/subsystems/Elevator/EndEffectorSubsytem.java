@@ -63,7 +63,7 @@ public class EndEffectorSubsytem extends SubsystemBase {
 
   public void setHeight(HeightLevels level) {
     heightLevels = level;
-    setSetpoint(heightLevels.armVal());
+    // setSetpoint(heightLevels.armVal());
   }
 
   public void setSetpoint(double point) {
@@ -77,9 +77,10 @@ public class EndEffectorSubsytem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // double output = MathUtil.clamp(EndEffectorPIDController.calculate(doubleMeasurement()),EndefectorConstants.MIN_SPEED, EndefectorConstants.MAX_SPEED);
+    double output = MathUtil.clamp(EndEffectorPIDController.calculate(doubleMeasurement()),EndefectorConstants.MIN_SPEED, EndefectorConstants.MAX_SPEED);
     // System.out.println("endeff output: " + output);
-    // setRotation(output);
+    setRotation(output);
     // This method will be called once per scheduler run
   }
 }
+ 

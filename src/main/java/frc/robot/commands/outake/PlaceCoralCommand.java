@@ -11,18 +11,12 @@ import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class IntakeCoralEndeffector extends SequentialCommandGroup {
-  public static SequentialCommandGroup intake(EndEffectorPIDCommand cmd) {
+public class PlaceCoralCommand extends SequentialCommandGroup {
+  public static SequentialCommandGroup placeAt(EndEffectorPIDCommand cmd, HeightLevels height) {
     return new SequentialCommandGroup(
-        cmd.moveBoth(HeightLevels.INTAKE_UP),
-        new WaitUntilCommand(cmd.isAtPos()),
-        cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
-        new WaitUntilCommand(cmd.isAtPos()),
-        cmd.moveBoth(HeightLevels.INTAKE),
-        new WaitUntilCommand(cmd.isAtPos()),
-        cmd.moveBoth(HeightLevels.INTAKE_UP),
-        new WaitUntilCommand(cmd.isAtPos()),
-        cmd.moveBoth(HeightLevels.ZERO),
+        // cmd.moveBoth(HeightLevels.INTAKE_UP),
+        // new WaitUntilCommand(cmd.isAtPos()),
+        cmd.moveBoth(height),
         new WaitUntilCommand(cmd.isAtPos())
       );
   } 

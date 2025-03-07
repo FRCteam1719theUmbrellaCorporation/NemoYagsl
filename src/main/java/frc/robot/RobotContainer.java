@@ -48,6 +48,7 @@ import frc.robot.commands.Intake.CoralIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralPivotPIDCommand;
 import frc.robot.commands.outake.EndEffectorPIDCommand;
 import frc.robot.commands.outake.IntakeCoralEndeffector;
+import frc.robot.commands.outake.PlaceCoralCommand;
 //import frc.robot.commands.Intake.AlgaePivotPIDCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -335,7 +336,7 @@ public class RobotContainer
       // driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      
+      driverXbox2.a().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
       driverXbox2.start().onTrue(
         IntakeCoralEndeffector.intake(endEffDefaultCmd)
         // new SequentialCommandGroup(

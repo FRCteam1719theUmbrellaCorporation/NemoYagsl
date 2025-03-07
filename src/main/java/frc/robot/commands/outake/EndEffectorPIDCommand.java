@@ -46,7 +46,7 @@ public class EndEffectorPIDCommand extends Command {
   @Override
   public void execute() {
 
-    double output = MathUtil.clamp(m_endEffPID.calculate(m_EndEffector.doubleMeasurement()), EndefectorConstants.MIN_SPEED, EndefectorConstants.MAX_SPEED);
+    // double output = MathUtil.clamp(m_endEffPID.calculate(m_EndEffector.doubleMeasurement()), EndefectorConstants.MIN_SPEED, EndefectorConstants.MAX_SPEED);
 
     // sets the elevator when the arm is near it's setpoint
     if (setElevator && MathUtil.isNear(m_EndEffector.getSetpoint(), m_EndEffector.doubleMeasurement(), 0.1)) {
@@ -54,8 +54,8 @@ public class EndEffectorPIDCommand extends Command {
       setElevator = false;
     } 
 
-    if (!ElevatorMovesFirst) {
-      m_EndEffector.setRotation(output);
+    if (!ElevatorMovesFirst && !setElevator) {
+      m_EndEffector.setSetpoint(m_EndEffector.getHeight().armVal());
       // System.out.println("endeff output: " + output);
     } else if (MathUtil.isNear(m_ElevatorSubsytem.getSetPoint(), m_ElevatorSubsytem.doubleMeasurement(), 1)){
       ElevatorMovesFirst = false;
@@ -68,7 +68,7 @@ public class EndEffectorPIDCommand extends Command {
       if (level.numVal() > m_ElevatorSubsytem.getSetPoint()) {
         m_ElevatorSubsytem.setHeightWithEnum(level);
         ElevatorMovesFirst = true;
-        setElevator = false;
+        setElevator = true;
       } else {
         setElevator = true;
         ElevatorMovesFirst = false;
@@ -82,7 +82,7 @@ public class EndEffectorPIDCommand extends Command {
   }
 
   public BooleanSupplier isAtPos() {
-    return () -> MathUtil.isNear(m_EndEffector.getSetpoint(), m_EndEffector.doubleMeasurement(), 0.1) && MathUtil.isNear(m_ElevatorSubsytem.getSetPoint(), m_ElevatorSubsytem.doubleMeasurement(), 4);
+    return () -> MathUtil.isNear(m_EndEffector.getSetpoint(), m_EndEffector.doubleMeasurement(), 0.1) && MathUtil.isNear(m_ElevatorSubsytem.getSetPoint(), m_ElevatorSubsytem.doubleMeasurement(), 1);
   }
 
   // Called once the command ends or is interrupted.
