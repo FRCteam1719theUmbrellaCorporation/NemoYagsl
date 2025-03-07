@@ -124,8 +124,8 @@ public class CoralIntakeSubsystem extends SubsystemBase {
       return MathUtil.isNear(degrees, doubleMeasurement(), tolerance);
   }
 
-  public boolean hasCoral() {
-    return m_rangeSensor.getDistance().getValueAsDouble() < .45;
+  public BooleanSupplier hasCoral() {
+    return () -> m_rangeSensor.getDistance().getValueAsDouble() < .45;
   }
 
  /*  public void intakeAngle(double angle){

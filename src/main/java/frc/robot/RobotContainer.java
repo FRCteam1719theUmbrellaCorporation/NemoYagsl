@@ -179,15 +179,29 @@ public class RobotContainer
     new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_floorintake_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
     coralWheels.turnMotor(CoralArmConstants.coral_intake_floor_speed));
 
+  Command HalfCoralFloor = new SequentialCommandGroup(
+    new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.FLOOR)),
+    new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_floorintake_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
+    coralWheels.halfIntake());
+
   Command CoralHumanPlayer =  new SequentialCommandGroup(
     new InstantCommand(()->m_CoralIntakeSubsystem.setPosition(IntakePosition.HUMAN_STATION)),
     //new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_humanstatione_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
-    coralWheels.turnMotor(CoralArmConstants.coral_intake_humanStation_speed));
+    coralWheels.turnMotor(CoralArmConstants.coral_intake_humanStation_speed)
+    );
+
+  Command HalfCoralHumanPlayer =  new SequentialCommandGroup(
+    new InstantCommand(()->m_CoralIntakeSubsystem.setPosition(IntakePosition.HUMAN_STATION)),
+    //new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_humanstatione_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
+    coralWheels.halfIntake()
+    );
   
   Command L1 = new SequentialCommandGroup(
     new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.REEF)),
     new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
     coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed));
+
+  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -356,7 +370,7 @@ public class RobotContainer
       //                         );
       //driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
-      driverXbox2.a().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
+      // driverXbox2.a().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
       
       driverXbox2.start().onTrue(
         IntakeCoralEndeffector.intake(endEffDefaultCmd)
