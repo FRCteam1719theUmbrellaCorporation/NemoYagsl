@@ -111,7 +111,7 @@ public final class Constants
   }
 
   public static class EndefectorConstants{
-    public static final double Endefector_kP = 4;
+    public static final double Endefector_kP = 5;
     public static final double Endefector_kI = 0;
     public static final double Endefector_kD = 0.5;
 
@@ -141,8 +141,8 @@ public static class ElevatorConstants{
 
     public static final double ELEVATOR_ROOM_MAX = 84;
 
-    public static final double MIN_SPEED = -.7f;
-    public static final double MAX_SPEED = .7f;
+    public static final double MIN_SPEED = -.35f;
+    public static final double MAX_SPEED = .35f;
   }
 
   public static double CORALPIVITMAXAMOUNT = 235;
