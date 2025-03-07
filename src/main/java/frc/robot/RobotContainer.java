@@ -332,16 +332,16 @@ public class RobotContainer
         CoralDrive
       );
 
-      driverXbox2.b().whileTrue(
-        new InstantCommand(() -> {
-          m_AlgaeIntakeSubsystem.setSetpoint(0.2);
-        })
-      );
-      driverXbox2.b().onFalse(
-        new InstantCommand(() -> {
-          m_AlgaeIntakeSubsystem.setSetpoint(0.1);
-        })
-      );
+      // driverXbox2.b().whileTrue(
+      //   new InstantCommand(() -> {
+      //     m_AlgaeIntakeSubsystem.setSetpoint(0.2);
+      //   })
+      // );
+      // driverXbox2.b().onFalse(
+      //   new InstantCommand(() -> {
+      //     m_AlgaeIntakeSubsystem.setSetpoint(0.1);
+      //   })
+      // );
 
       driverXbox.leftBumper().onTrue(
         new InstantCommand(()->
