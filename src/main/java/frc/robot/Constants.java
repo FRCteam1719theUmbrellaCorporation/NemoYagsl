@@ -55,13 +55,13 @@ public final class Constants
 //ANGLE MOTORS ARE RESONSIBLE FOR CHANING THE ANGLE OF THE ARM
 //WHEEL SPIN IS RESPONSIBLE FOR THE INTAKE OUTAKE OF THE WHEELS 
 
-  //ALGAE
   // public static final int ALGAE_ARM_WHEEL_SPIN_ID = 8;
   // public static final int ALGAE_ARM_ANGLE_MOTOR_ID = 7; 
 
   //CORAL
   public static final int CORAL_ARM_WHEEL_SPIN_ID = 23;
   public static final int CORAL_ARM_ANGLE_MOTOR_ID = 9; 
+  public static final int CORAL_ARM_RANGE_SENSOR = 13;
 
   // ELEVATOR
   public static final int ELEVATOR_PIN_ONE = 6;
