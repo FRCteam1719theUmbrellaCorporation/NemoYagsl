@@ -33,6 +33,7 @@ import swervelib.SwerveDrive;
 import java.util.function.BooleanSupplier;
 import javax.print.attribute.standard.MediaSize.NA;
 import swervelib.SwerveInputStream;
+import swervelib.imu.Pigeon2Swerve;
 import frc.robot.subsystems.LimeLightExtra;
 //import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
@@ -66,7 +67,7 @@ public class RobotContainer
 
   final CommandXboxController driverXbox2 = new CommandXboxController(1);
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+  public final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
   
   private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
@@ -190,12 +191,12 @@ public class RobotContainer
 
   public RobotContainer()
   {
-    Pigeon2 m_gyro = new Pigeon2(2);
+    //Pigeon2 m_gyro = new Pigeon2(2);
     
-    new LimeLightExtra(drivebase, m_gyro);
+    new LimeLightExtra(drivebase);
 
     Rotation3d sd = drivebase.getSwerveDrive().imuReadingCache.getValue();
-    LimelightHelpers.SetRobotOrientation(null, m_gyro.getYaw().getValueAsDouble(), m_gyro.getRate(), m_gyro.getPitch().getValueAsDouble(), 0, m_gyro.getRoll().getValueAsDouble(), 0);
+    LimelightHelpers.SetRobotOrientation(null, drivebase.getHeading().getDegrees(), 0, 0, 0, 0, 0);
     LimelightHelpers.SetIMUMode(null, 1);
     // Configure the trigger bindings
     configureBindings();
