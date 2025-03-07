@@ -30,7 +30,7 @@ public class Robot extends TimedRobot
 
   private Timer disabledTimer;
 
-  private SwerveIMU gyrogyro;
+  //private SwerveIMU gyrogyro;
 
   public Robot()
   {
@@ -51,26 +51,9 @@ public class Robot extends TimedRobot
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    gyrogyro = m_robotContainer.drivebase.getSwerveDrive().getGyro();
-
-
-
+    //gyrogyro = m_robotContainer.drivebase.getSwerveDrive().getGyro();
     
-    m_robotContainer.drivebase.getSwerveDrive().swerveController.lastAngleScalar = 0;
-    
-
-    if (m_robotContainer.drivebase.isRedAlliance())
-    {
-      //m_robotContainer.drivebase.getSwerveDrive().resetOdometry(new Pose2d(m_robotContainer.drivebase.getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
-      m_robotContainer.drivebase.getSwerveDrive().resetOdometry(new Pose2d(m_robotContainer.drivebase.getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(180)));
-
-      // gyrogyro.setOffset(new Rotation3d(0,0,Math.PI));
-      
-      
-    } else
-    {
-      m_robotContainer.drivebase.getSwerveDrive().resetOdometry(new Pose2d(m_robotContainer.drivebase.getSwerveDrive().getPose().getTranslation(), new Rotation2d()));
-    }
+    m_robotContainer.drivebase.customzerogyro();
 
 
     
@@ -126,6 +109,7 @@ public class Robot extends TimedRobot
     }
   }
 
+  
   /**
    * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
    */
@@ -135,6 +119,7 @@ public class Robot extends TimedRobot
     LimelightHelpers.SetIMUMode(null, 2);
     m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_robotContainer.drivebase.customzerogyro();
 
     //m_robotContainer.drivebase.zeroGyroWithAlliance();
 

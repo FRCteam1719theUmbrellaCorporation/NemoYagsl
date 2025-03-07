@@ -69,6 +69,9 @@ public final class Constants
 
   //ENDEFECTOR
   public static final int ENDEFECTOR_ANGLE_MOTOR_ID = 24;
+  
+  public static final double reefLength = Units.metersToInches(65.49);
+  public static final double reefLevelDistance = Units.metersToInches(12.94);
 
   public static class IntakeDetails {
     public static final double intakePos = 0; // TODO FIX This will be the position of intaking!
@@ -128,7 +131,7 @@ public final class Constants
 
 public static class ElevatorConstants{
 
-   public static final double ElevatorkP = 0.2;
+    public static final double ElevatorkP = 0.2;
     public static final double ElevatorkI = 0;
     public static final double ElevatorkD = 0.008;
     public static final double MaxVelocity = Meters.of(4).per(Second).in(MetersPerSecond);

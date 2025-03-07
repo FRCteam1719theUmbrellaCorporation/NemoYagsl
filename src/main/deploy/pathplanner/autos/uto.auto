@@ -23,12 +23,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "CoralFloor"
-          }
-        },
-        {
           "type": "wait",
           "data": {
             "waitTime": 10.0

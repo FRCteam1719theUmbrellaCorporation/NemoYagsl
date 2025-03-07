@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.LimeLightExtra;
 
 //import frc.robot.subsystems.swervedrive.Vision.Cameras;
@@ -737,4 +738,29 @@ public class SwerveSubsystem extends SubsystemBase
   {
     return swerveDrive;
   }
+
+
+  public void customzerogyro() {
+    getSwerveDrive().swerveController.lastAngleScalar = 0;
+    //LimelightHelpers.SetIMUMode(null, 1);
+    //LimelightHelpers.SetRobotOrientation(null, getHeading().getDegrees(), 0, 0, 0, 0, 0);
+
+    if (isRedAlliance())
+    {
+      //m_robotContainer.drivebase.getSwerveDrive().resetOdometry(new Pose2d(m_robotContainer.drivebase.getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
+      getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+
+      // gyrogyro.setOffset(new Rotation3d(0,0,Math.PI));
+      
+      
+    } else
+    {
+      getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), new Rotation2d()));
+    }
+    //LimelightHelpers.SetIMUMode(null, 2);
+  }
+
+
+
+
 }

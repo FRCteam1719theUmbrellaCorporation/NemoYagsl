@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -35,6 +36,7 @@ import javax.print.attribute.standard.MediaSize.NA;
 import swervelib.SwerveInputStream;
 import swervelib.imu.Pigeon2Swerve;
 import frc.robot.subsystems.LimeLightExtra;
+import java.lang.Math;
 //import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
@@ -50,6 +52,7 @@ import frc.robot.commands.Intake.CoralPivotPIDCommand;
 import frc.robot.commands.outake.EndEffectorPIDCommand;
 import frc.robot.commands.outake.IntakeCoralEndeffector;
 import frc.robot.commands.outake.PlaceCoralCommand;
+import frc.robot.calculatePoses;
 //import frc.robot.commands.Intake.AlgaePivotPIDCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -78,6 +81,8 @@ public class RobotContainer
   //private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
 
+  private final calculatePoses poses = new calculatePoses();
+  private final double[][] pos = poses.centralEdges(14.32, 3.88, -90);
 
 
   // Applies deadbands and inverts controls because joysticks
@@ -141,7 +146,7 @@ public class RobotContainer
   SwerveInputStream driveAngularVelocitySim = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                                    () -> -driverXbox.getLeftY(),
                                                                    () -> -driverXbox.getLeftX())
-                                                               .withControllerRotationAxis(() -> driverXbox.getRawAxis(2))
+                                                               .withControllerRotationAxis(() -> -driverXbox.getRawAxis(2))
                                                                .deadband(OperatorConstants.DEADBAND)
                                                                .scaleTranslation(0.8)
                                                                .allianceRelativeControl(true);
@@ -167,7 +172,7 @@ public class RobotContainer
   Command coralAngleSetter = new CoralPivotPIDCommand(m_CoralIntakeSubsystem);
   EndEffectorPIDCommand endEffDefaultCmd = new EndEffectorPIDCommand(m_EndEffectorSubsytem, m_ElevatorSubsytem);
   // Command intakeCoral = new IntakeCoralEndeffector(endEffDefaultCmd);
-
+  
   CoralIntakeWheelsCommand coralWheels = new CoralIntakeWheelsCommand(m_CoralIntakeSubsystem);
 
   Command CoralDrive = new ParallelCommandGroup(
@@ -186,7 +191,7 @@ public class RobotContainer
   
   Command L1 = new SequentialCommandGroup(
     new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.REEF)),
-    new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
+    new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)).withTimeout(1),
     coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed));
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -345,7 +350,8 @@ public class RobotContainer
 
       driverXbox.leftBumper().onTrue(
         new InstantCommand(()->
-          drivebase.driveToPose(new Pose2d(new Translation2d(14.32,3.88), Rotation2d.fromDegrees(-90))).schedule()
+        System.out.println(pos)
+         // drivebase.driveToPose(new Pose2d(new Translation2d(14.32,3.88+Units.inchesToMeters(12.94)), Rotation2d.fromDegrees(-90))).schedule()
         )
       );
 
@@ -356,7 +362,7 @@ public class RobotContainer
       //                         );
       //driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
-      driverXbox2.a().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
+      driverXbox2.y().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
       
       driverXbox2.start().onTrue(
         IntakeCoralEndeffector.intake(endEffDefaultCmd)
