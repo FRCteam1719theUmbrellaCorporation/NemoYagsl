@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -59,11 +60,8 @@ import frc.robot.commands.outake.PlaceCoralCommand;
 public class RobotContainer
 {
 
+  private int reefTarget = 0;
   // Replace with CommandPS4Controller or CommandJoystick if needed
-
-
-
-  
   //Orinal port are driverXBox = 1, driverXBox2 = 0
 
   final CommandXboxController driverXbox = new CommandXboxController(0);
@@ -78,7 +76,7 @@ public class RobotContainer
   //private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
 
-
+  // private final IntegerPublisher = 
 
   // Applies deadbands and inverts controls because joysticks
   // are back-right positive while robot
@@ -252,15 +250,6 @@ public class RobotContainer
     } else
     {
 
-     /* //Algae intake wheels to spin
-      driverXbox2.a().onTrue(
-        new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem).turnMotor(1).withTimeout(1) //Test
-      );
-      
-      driverXbox2.a().onFalse(
-        new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem).stopMotors() //Test
-      );
-*/
       //Coral intake wheels to spin
       driverXbox2.a().whileTrue(
         CoralFloor
@@ -361,7 +350,11 @@ public class RobotContainer
       driverXbox2.start().onTrue(
         IntakeCoralEndeffector.intake(endEffDefaultCmd)
           );
-    }}
+
+      driverXbox2.povLeft().onTrue(new InstantCommand(()->changeReefTarget(-1)));
+      driverXbox2.povRight().onTrue(new InstantCommand(()->changeReefTarget(1)));
+    }
+  }
 //       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
   /**
@@ -377,8 +370,14 @@ public class RobotContainer
     return drivebase.getAutonomousCommand("uto");
   }
 
-  public void setMotorBrake(boolean brake)
-  {
-    drivebase.setMotorBrake(brake);
+  public void changeReefTarget(int amount) {
+    reefTarget = Math.abs((reefTarget + amount) % 6);
+
   }
+
+
+  // public void setMotorBrake(boolean brake)
+  // {
+  //   drivebase.setMotorBrake(brake);
+  // }
 }
