@@ -14,10 +14,14 @@ import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 public class PlaceCoralCommand extends SequentialCommandGroup {
   public static SequentialCommandGroup placeAt(EndEffectorPIDCommand cmd, HeightLevels height) {
     return new SequentialCommandGroup(
-        // cmd.moveBoth(HeightLevels.INTAKE_UP),
-        // new WaitUntilCommand(cmd.isAtPos()),
+        cmd.moveBoth(HeightLevels.INTAKE_UP),
+        new WaitUntilCommand(cmd.isAtPos()),
         cmd.moveBoth(height),
-        new WaitUntilCommand(cmd.isAtPos())
+        new WaitUntilCommand(cmd.isAtPos()),
+        cmd.moveBoth(HeightLevels.INTAKE_UP),
+        new WaitUntilCommand(cmd.isAtPos()),
+        cmd.moveBoth(HeightLevels.ZERO)
+        // new WaitUntilCommand(cmd.isAtPos()),
       );
   } 
 }

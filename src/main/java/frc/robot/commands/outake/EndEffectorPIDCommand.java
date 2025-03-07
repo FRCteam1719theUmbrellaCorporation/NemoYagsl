@@ -49,7 +49,7 @@ public class EndEffectorPIDCommand extends Command {
     // double output = MathUtil.clamp(m_endEffPID.calculate(m_EndEffector.doubleMeasurement()), EndefectorConstants.MIN_SPEED, EndefectorConstants.MAX_SPEED);
 
     // sets the elevator when the arm is near it's setpoint
-    if (setElevator && MathUtil.isNear(m_EndEffector.getSetpoint(), m_EndEffector.doubleMeasurement(), 0.1)) {
+    if (setElevator && MathUtil.isNear(m_EndEffector.getSetpoint(), m_EndEffector.doubleMeasurement(), 0.05)) {
       m_ElevatorSubsytem.setHeightWithEnum(m_EndEffector.getHeight());
       setElevator = false;
     } 
@@ -82,7 +82,7 @@ public class EndEffectorPIDCommand extends Command {
   }
 
   public BooleanSupplier isAtPos() {
-    return () -> MathUtil.isNear(m_EndEffector.getSetpoint(), m_EndEffector.doubleMeasurement(), 0.1) && MathUtil.isNear(m_ElevatorSubsytem.getSetPoint(), m_ElevatorSubsytem.doubleMeasurement(), 1);
+    return () -> MathUtil.isNear(m_EndEffector.getSetpoint(), m_EndEffector.doubleMeasurement(), 0.05) && MathUtil.isNear(m_ElevatorSubsytem.getSetPoint(), m_ElevatorSubsytem.doubleMeasurement(), 1);
   }
 
   // Called once the command ends or is interrupted.

@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -25,6 +26,8 @@ public class EndEffectorSubsytem extends SubsystemBase {
                                                                     EndefectorConstants.Endefector_kI, 
                                                                     EndefectorConstants.Endefector_kD); 
                                                                     // TODO ADD CONSTANT VALUES
+
+  private ArmFeedforward endEffFeedforward = new ArmFeedforward(EndefectorConstants.Endefector_kS, EndefectorConstants.Endefector_kg, EndefectorConstants.Endefector_kV);
 
  
   /** Creates a new EndEffectorSubsytem. */
@@ -77,8 +80,11 @@ public class EndEffectorSubsytem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double output = MathUtil.clamp(EndEffectorPIDController.calculate(doubleMeasurement()),EndefectorConstants.MIN_SPEED, EndefectorConstants.MAX_SPEED);
-    // System.out.println("endeff output: " + output);
+
+    double output = MathUtil.clamp(EndEffectorPIDController.calculate(doubleMeasurement()),
+    EndefectorConstants.MIN_SPEED,
+    EndefectorConstants.MAX_SPEED);
+
     setRotation(output);
     // This method will be called once per scheduler run
   }

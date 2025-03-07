@@ -111,18 +111,21 @@ public final class Constants
   }
 
   public static class EndefectorConstants{
-    public static final double Endefector_kP = 5;
+    public static final double Endefector_kP = 3;
     public static final double Endefector_kI = 0;
     public static final double Endefector_kD = 0.5;
 
     //Imb- dont know if we need both of these
     public static final double Endefector_startPos = 0;
     public static final double Endefector_startAngle = 0;
-    public static final double MIN_SPEED = -.5f;
-    public static final double MAX_SPEED = .5f;
+    public static final double MIN_SPEED = -.6f;
+    public static final double MAX_SPEED = .8f;
 
     // if the height is LESS than 48, the arm should NOT move to / from it's intake position
     public static final double INTAKE_POS_ELEVATORPOS_MAX = 48.f;
+    public static final double Endefector_kS = 2;
+    public static final double Endefector_kg = 1.32;
+    public static final double Endefector_kV = .49;
 
   }  
 
@@ -141,8 +144,8 @@ public static class ElevatorConstants{
 
     public static final double ELEVATOR_ROOM_MAX = 84;
 
-    public static final double MIN_SPEED = -.35f;
-    public static final double MAX_SPEED = .35f;
+    public static final double MIN_SPEED = -.4f;
+    public static final double MAX_SPEED = .4f;
   }
 
   public static double CORALPIVITMAXAMOUNT = 235;

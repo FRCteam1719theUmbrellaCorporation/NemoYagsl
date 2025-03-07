@@ -21,11 +21,12 @@ public class ElevatorSubsytem extends SubsystemBase {
     //TODO: Replace with encoder positions
     //Constant list of heights represented by english. YAY
     public enum HeightLevels {
-        ZERO(5, 0), // Sets to the bottom
+        ZERO(5, .03), // Sets to the bottom
         INTAKE(20.75, .5), //TODO: fix :( 20.75 IS INTAKE
         INTAKE_PRE_DOWN(60, .47), //TODO: fix :( 20.75 IS INTAKE
-        INTAKE_UP(60, 0),
+        INTAKE_UP(60, .03),
         // REEFBASE(1, 0),
+        PRE_LOW(40, .2),
         LOW(9, .2), // Sets to the lowest 
         MIDDLE(27.75, 0.2), // 
         HIGH(Constants.EndefectorConstants.INTAKE_POS_ELEVATORPOS_MAX, 0),

@@ -245,7 +245,7 @@ public class RobotContainer
    
     //m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
     m_CoralIntakeSubsystem.setDefaultCommand(coralAngleSetter);
-    m_EndEffectorSubsytem.setDefaultCommand(endEffDefaultCmd);
+
     
     if (Robot.isSimulation())
     {
@@ -346,6 +346,16 @@ public class RobotContainer
         CoralDrive
       );
 
+      driverXbox2.rightBumper().onTrue(new InstantCommand(()-> {
+        System.out.println("move! ! ! ");
+        m_EndEffectorSubsytem.setSetpoint(.15);
+      }));
+
+      driverXbox2.rightBumper().onFalse(new InstantCommand(()-> {
+        m_EndEffectorSubsytem.setSetpoint(0.03);
+      }));
+
+
       // driverXbox2.b().whileTrue(
       //   new InstantCommand(() -> {
       //     m_AlgaeIntakeSubsystem.setSetpoint(0.2);
@@ -370,7 +380,7 @@ public class RobotContainer
       //                         );
       //driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
-      // driverXbox2.a().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
+      driverXbox2.y().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
       
       driverXbox2.start().onTrue(
         IntakeCoralEndeffector.intake(endEffDefaultCmd)
