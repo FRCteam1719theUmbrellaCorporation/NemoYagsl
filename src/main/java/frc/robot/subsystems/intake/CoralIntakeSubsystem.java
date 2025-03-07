@@ -124,7 +124,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   }
 
   public boolean hasCoral() {
-    return m_rangeSensor.getDistance().getValueAsDouble() > 20;
+    return m_rangeSensor.getDistance().getValueAsDouble() < .45;
   }
 
  /*  public void intakeAngle(double angle){
@@ -148,6 +148,5 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     // CORAL_ARM_ANGLEMOTOR.set(coralArmPIDController.calculate(CORAL_ARM_ANGLEMOTOR.getAbsoluteEncoder().getPosition(), SETPOINTANGLE));
-
   }
 }

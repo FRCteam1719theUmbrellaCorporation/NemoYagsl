@@ -81,7 +81,7 @@ public final class Constants
   //CORAL
   public static final int CORAL_ARM_WHEEL_SPIN_ID = 23;
   public static final int CORAL_ARM_ANGLE_MOTOR_ID = 9; 
-  public static final int CORAL_ARM_RANGE_SENSOR = 0;
+  public static final int CORAL_ARM_RANGE_SENSOR = 13;
 
   // ELEVATOR
   public static final int ELEVATOR_PIN_ONE = 5;
