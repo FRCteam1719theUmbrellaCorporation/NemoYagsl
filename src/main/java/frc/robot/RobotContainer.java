@@ -338,13 +338,19 @@ public class RobotContainer
         })
       );
 
+      driverXbox.leftBumper().onTrue(
+        new InstantCommand(()->
+          drivebase.driveToPose(new Pose2d(new Translation2d(14.32,3.88), Rotation2d.fromDegrees(-90))).schedule()
+        )
+      );
+
 
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       // driverXbox.b().whileTrue(
       //     drivebase.driveToPose(
       //         new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
       //                         );
-      driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      //driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       
     //   driverXbox.rightBumper().onTrue(
     //     new SequentialCommandGroup(
