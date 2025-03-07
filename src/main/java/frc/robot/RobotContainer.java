@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.hardware.Pigeon2;
+// import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
@@ -39,15 +39,18 @@ import frc.robot.subsystems.LimeLightExtra;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
-import frc.robot.subsystems.intake.AlgaeIntakeSubsystem;
+//import frc.robot.subsystems.intake.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem.IntakePosition;
 //import frc.robot.commands.*;
 // import frc.robot.commands.Elevator.ElevatorPIDMoveCommand;
-import frc.robot.commands.Intake.AlgaeIntakeWheelsCommand;
+//import frc.robot.commands.Intake.AlgaeIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralPivotPIDCommand;
-import frc.robot.commands.Intake.AlgaePivotPIDCommand;
+import frc.robot.commands.outake.EndEffectorPIDCommand;
+import frc.robot.commands.outake.IntakeCoralEndeffector;
+import frc.robot.commands.outake.PlaceCoralCommand;
+//import frc.robot.commands.Intake.AlgaePivotPIDCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -72,8 +75,8 @@ public class RobotContainer
   
   private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
   private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
-  private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
-  // private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
+  //private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
+  private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
 
 
 
@@ -159,9 +162,12 @@ public class RobotContainer
 
   Command driveSetpointGenSim = drivebase.driveWithSetpointGeneratorFieldRelative(driveDirectAngleSim);
 
-  Command algaeAngleSetter = new AlgaePivotPIDCommand(m_AlgaeIntakeSubsystem);
-  Command algaeWheels = new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem);
+  // Command algaeAngleSetter = new AlgaePivotPIDCommand(m_AlgaeIntakeSubsystem);
+  // Command algaeWheels = new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem);
   Command coralAngleSetter = new CoralPivotPIDCommand(m_CoralIntakeSubsystem);
+  EndEffectorPIDCommand endEffDefaultCmd = new EndEffectorPIDCommand(m_EndEffectorSubsytem, m_ElevatorSubsytem);
+  // Command intakeCoral = new IntakeCoralEndeffector(endEffDefaultCmd);
+
   CoralIntakeWheelsCommand coralWheels = new CoralIntakeWheelsCommand(m_CoralIntakeSubsystem);
 
   Command CoralDrive = new ParallelCommandGroup(
@@ -189,10 +195,7 @@ public class RobotContainer
   
   
 
-  public RobotContainer()
-  {
-    //Pigeon2 m_gyro = new Pigeon2(2);
-    
+  public RobotContainer() { 
     new LimeLightExtra(drivebase);
 
     Rotation3d sd = drivebase.getSwerveDrive().imuReadingCache.getValue();
@@ -226,9 +229,10 @@ public class RobotContainer
     driveFieldOrientedAnglularVelocity:
                                 driveFieldOrientedAnglularVelocitySim);
    
-    m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
+    //m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
     m_CoralIntakeSubsystem.setDefaultCommand(coralAngleSetter);
-
+    m_EndEffectorSubsytem.setDefaultCommand(endEffDefaultCmd);
+    
     if (Robot.isSimulation())
     {
       driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
@@ -306,12 +310,13 @@ public class RobotContainer
       //   m_ElevatorSubsytem.setSetpoint(50)
       //   )
       // );
-      // //Coral move to setpoint
-      //  driverXbox2.x().whileTrue(
-      //   new InstantCommand(() -> {
-      //   m_CoralIntakeSubsystem.setSetpoint(.1);
-      //   })
-      //  );
+      //Coral move to setpoint
+       driverXbox2.x().whileTrue(
+        new InstantCommand(() -> {
+        m_CoralIntakeSubsystem.setSetpoint(.1);
+        })
+       );
+
       driverXbox2.x().whileTrue(
         CoralHumanPlayer
       );
@@ -327,31 +332,21 @@ public class RobotContainer
         CoralDrive
       );
 
-      driverXbox2.b().whileTrue(
-        new InstantCommand(() -> {
-          m_AlgaeIntakeSubsystem.setSetpoint(0.2);
-        })
-      );
-      driverXbox2.b().onFalse(
-        new InstantCommand(() -> {
-          m_AlgaeIntakeSubsystem.setSetpoint(0.1);
-        })
-      );
-
-
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       // driverXbox.b().whileTrue(
       //     drivebase.driveToPose(
       //         new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
       //                         );
+      // driverXbox.start().whileTrue(Commands.none());
+      driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      driverXbox2.a().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
       
-    //   driverXbox.rightBumper().onTrue(
-    //     new SequentialCommandGroup(
-    //       new InstantCommand(()-> {
-    //         AutoBuilder.buildAuto("uto").schedule();
-    //       })));
-     }}
+      driverXbox2.start().onTrue(
+        IntakeCoralEndeffector.intake(endEffDefaultCmd)
+          );
+    }}
+//       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -22,7 +22,7 @@ public class CoralPivotPIDCommand extends Command {
     private final double SETPOINTANGLE;
     private final AbsoluteEncoder m_ANGLE_ENCODER;
     private CoralIntakeSubsystem.IntakePosition previousPos;
-    private final CoralIntakeWheelsCommand wheelsWoooo;
+    // private final CoralIntakeWheelsCommand wheelsWoooo;
     public CoralPivotPIDCommand(CoralIntakeSubsystem intake) {
         //throw new Exception();
 
@@ -32,7 +32,7 @@ public class CoralPivotPIDCommand extends Command {
         this.SETPOINTANGLE = intake.getSetpoint();
         this.m_ANGLE_ENCODER = intake.getEncoder();
         this.previousPos = null;
-        this.wheelsWoooo = new CoralIntakeWheelsCommand(intake);
+        // this.wheelsWoooo = new CoralIntakeWheelsCommand(intake);
 
     }
     
