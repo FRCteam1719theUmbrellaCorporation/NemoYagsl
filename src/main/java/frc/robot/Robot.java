@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -14,6 +13,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import swervelib.imu.SwerveIMU;
 import utils.Reef;
+// import edu.wpi.first.networktables.DoubleSubscriber;
+// import edu.wpi.first.networktables.NetworkTable;
+// import edu.wpi.first.networktables.NetworkTableInstance;
 // import utils.Reef.Level;
 
 /**
@@ -23,10 +25,13 @@ import utils.Reef;
  */
 public class Robot extends TimedRobot
 {
-  public static Reef.Level reefLevel = Reef.Level.L3;
+  public static Reef.Level reefLevel = Reef.Level.L2;
   private static Robot   instance;
   private        Command m_autonomousCommand;
+  // public static DoubleSubscriber posSetter;
+  // public static DoubleSubscriber posGetter;
 
+  
   private RobotContainer m_robotContainer;
 
   private Timer disabledTimer;
@@ -36,6 +41,8 @@ public class Robot extends TimedRobot
   public Robot()
   {
     instance = this;
+    // NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    //     NetworkTable table = inst.getTable("datatable");
   }
 
   public static Robot getInstance()
