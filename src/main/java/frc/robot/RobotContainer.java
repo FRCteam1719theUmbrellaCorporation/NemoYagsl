@@ -540,12 +540,7 @@ public class RobotContainer
       // );
 
       driverXbox.leftBumper().onTrue(
-        new InstantCommand(()->
-        
-          reefpose.printArray(reefpose.displacementAddition(reefpose.centralEdges(14.32, 3.88, -90)))
-        
-          //drivebase.driveToPose(new Pose2d(new Translation2d(14.32,3.88), Rotation2d.fromDegrees(-90))).schedule()
-        )
+        drivebase.returnPose()
       );
 
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));

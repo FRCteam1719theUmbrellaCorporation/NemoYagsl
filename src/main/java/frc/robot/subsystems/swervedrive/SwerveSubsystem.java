@@ -740,7 +740,7 @@ public class SwerveSubsystem extends SubsystemBase
         );
     }
 
-    public InstantCommand returnPose(InstantCommand cmd) {
+    public InstantCommand returnPose() {
 
       int tag = ConvertAprilTag.getTag(RobotContainer.loc, isRedAlliance());
       boolean left = ConvertAprilTag.leftSide(RobotContainer.loc);
@@ -749,7 +749,7 @@ public class SwerveSubsystem extends SubsystemBase
         //ID 6 left
         return constructPose(constructTranslationPose(13.55, 2.81), constructRotationPose(-150));
       }
-      else if (tag == 6) {
+      else if (tag == 6 && !left) {
         //ID 6 right
         return constructPose(constructTranslationPose(13.89, 2.97), constructRotationPose(-150));
       }
@@ -757,7 +757,7 @@ public class SwerveSubsystem extends SubsystemBase
         //ID 7 left
         return constructPose(constructTranslationPose(14.32, 3.91), constructRotationPose(-90));
       }
-      else if (tag == 7) {
+      else if (tag == 7 && !left) {
         //ID 7 right
         return constructPose(constructTranslationPose(14.32,4.24), constructRotationPose(-90));
       }
@@ -765,7 +765,7 @@ public class SwerveSubsystem extends SubsystemBase
         //ID 8 left
         return constructPose(constructTranslationPose(13.81, 5.07), constructRotationPose(-30));
       }
-      else if (tag == 8) {
+      else if (tag == 8 && !left) {
         //ID 8 right
         return constructPose(constructTranslationPose(13.49, 5.22), constructRotationPose(-30));
       }
@@ -776,7 +776,7 @@ public class SwerveSubsystem extends SubsystemBase
         //ID 9 left
         return constructPose(constructTranslationPose(12.59, 5.19), constructRotationPose(30));
       }
-      else if (tag == 9) {
+      else if (tag == 9 && !left) {
         //ID 9 right
         return constructPose(constructTranslationPose(12.29, 5.02), constructRotationPose(30));
       }
@@ -785,76 +785,76 @@ public class SwerveSubsystem extends SubsystemBase
         //ID 10 left
         return constructPose(constructTranslationPose(11.8, 4.19), constructRotationPose(90));
       }
-      else if (tag == 10) {
+      else if (tag == 10 && !left) {
         //ID 10 right
         return constructPose(constructTranslationPose(11.8, 3.82), constructRotationPose(90));
       }
 
-      if () {
+      else if (tag == 11 && left) {
         //ID 11 left
         return constructPose(constructTranslationPose(12.31, 3.01), constructRotationPose(150));
       }
-      if () {
+      else if (tag == 11 && !left) {
         //ID 11 right
         return constructPose(constructTranslationPose(12.61, 2.86), constructRotationPose(150));
       }
 
 
 
-      if () {
+      else if (tag == 17 && left) {
         //ID 17 left
         return constructPose(constructTranslationPose(3.69, 3.02), constructRotationPose(150));
       }
-      if () {
+      else if (tag == 17 && !left) {
         //ID 17 right
         return constructPose(constructTranslationPose(4.00, 2.86), constructRotationPose(150));
       }
       
-      if () {
+     else if (tag == 18 && left) {
         //ID 18 left
         return constructPose(constructTranslationPose(3.18, 4.17), constructRotationPose(90));
       }
-      if () {
+      if (tag ==18 &&!left) {
         //ID 18 right
         return constructPose(constructTranslationPose(3.20, 3.84), constructRotationPose(90));
       }
-      if () {
+      if (tag == 19 && left) {
         //ID 19 left
         return constructPose(constructTranslationPose(3.96, 5.13), constructRotationPose(30));
       }
-      if () {
+      else if (tag == 19 && !left) {
         //ID 19 right
         return constructPose(constructTranslationPose(3.68, 5.01), constructRotationPose(30));
       }
 
 
       
-      if () {
+      else if (tag == 22 && left) {
         //ID 22 left
         return constructPose(constructTranslationPose(4.92, 2.79), constructRotationPose(-150));
       }
-      if () {
+      else if (tag == 22 && !left) {
         //ID 22 right
         return constructPose(constructTranslationPose(5.27, 2.95), constructRotationPose(-150));
       }
-      if () {
+      else if (tag == 21 && left) {
         //ID 21 left
         return constructPose(constructTranslationPose(5.75, 3.9), constructRotationPose(-90));
       }
-      if () {
+      else if (tag == 21 && !left) {
         //ID 21 right
         return constructPose(constructTranslationPose(5.75, 4.28), constructRotationPose(-90));
       }
-      if () {
+      else if (tag == 20 && left) {
         //ID 20 left
         return constructPose(constructTranslationPose(5.27, 5.03), constructRotationPose(-30));
       }
-      if () {
+      else if (tag == 20 && !left) {
         //ID 20 right
         return constructPose(constructTranslationPose(4.96,5.23), constructRotationPose(-30));
       }
       
-      return constructPose(constructTranslationPose(0, 0), constructRotationPose(0));
+      return constructPose(getPose().getTranslation(), getHeading());
     }
 
 
