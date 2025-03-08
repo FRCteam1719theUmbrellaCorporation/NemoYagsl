@@ -19,6 +19,14 @@ import swervelib.imu.SwerveIMU;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import utils.Reef;
 
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.BooleanLogEntry;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
+
+
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
  * described in the TimedRobot documentation. If you change the name of this class or the package after creating this
@@ -36,9 +44,20 @@ public class Robot extends TimedRobot
 
   private SwerveIMU gyrogyro;
 
+  BooleanLogEntry myBooleanLog;
+  DoubleLogEntry myDoubleLog;
+  StringLogEntry myStringLog;
+
   public Robot()
   {
     instance = this;
+
+    DataLogManager.start();
+    //DataLog log = DataLogManager.getLog();
+    // myBooleanLog = new BooleanLogEntry(log, "/my/boolean");
+    // myDoubleLog = new DoubleLogEntry(log, "/my/double");
+    // myStringLog = new StringLogEntry(log, "/my/string");
+
   }
 
   public static Robot getInstance()
@@ -189,6 +208,11 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic()
   {
+
+    //myBooleanLog.append(); 
+    //myDoubleLog.append(3);
+
+
   }
 
   @Override
