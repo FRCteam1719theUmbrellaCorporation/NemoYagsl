@@ -39,7 +39,7 @@ public class EndEffectorPIDCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    moveBoth(currentHeight.ZERO);
+    moveBoth(HeightLevels.ZERO);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
