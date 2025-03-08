@@ -9,4 +9,6 @@ public class HighTrigger extends Trigger {
     super(() -> controller.getRawAxis(axis.value) >= 0.5);
   }
 
+  
+
 }

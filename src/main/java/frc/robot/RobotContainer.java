@@ -28,8 +28,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.CoralArmConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Reef.Level;
-import frc.robot.Reef.Location;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
@@ -40,6 +38,9 @@ import swervelib.SwerveInputStream;
 import swervelib.imu.Pigeon2Swerve;
 import utils.HighTrigger;
 import utils.LowTrigger;
+import utils.Reef;
+import utils.Reef.Level;
+import utils.Reef.Location;
 import frc.robot.subsystems.LimeLightExtra;
 //import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
@@ -56,7 +57,6 @@ import frc.robot.commands.Intake.CoralPivotPIDCommand;
 import frc.robot.commands.outake.EndEffectorPIDCommand;
 import frc.robot.commands.outake.IntakeCoralEndeffector;
 import frc.robot.commands.outake.PlaceCoralCommand;
-import frc.robot.Reef;
 //import frc.robot.commands.Intake.AlgaePivotPIDCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
