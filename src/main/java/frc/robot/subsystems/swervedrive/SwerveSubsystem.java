@@ -153,7 +153,6 @@ public class SwerveSubsystem extends SubsystemBase
     // When vision is enabled we must manually update odometry in SwerveDrive
     swerveDrive.updateOdometry(); // TODO: UNCOMMENT AFTER TESTING. MUST BE UPDATED FOR POSE ESTIMATION
     LimeLightExtra.updatePoseEstimation();
-    //System.out.println();
   }
 
   @Override
@@ -499,7 +498,6 @@ public class SwerveSubsystem extends SubsystemBase
   public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity)
   {
     return run(() -> {
-      //System.out.println(getHeading());
       swerveDrive.driveFieldOriented(velocity.get());
     });
   }

@@ -177,6 +177,9 @@ public class RobotContainer
   Command coralAngleSetter = new CoralPivotPIDCommand(m_CoralIntakeSubsystem);
   EndEffectorPIDCommand endEffDefaultCmd = new EndEffectorPIDCommand(m_EndEffectorSubsytem, m_ElevatorSubsytem);
   // Command intakeCoral = new IntakeCoralEndeffector(endEffDefaultCmd);
+  
+  // int pos = 3;
+  Command placer = new PlaceCoralCommand(endEffDefaultCmd, drivebase);
 
   CoralIntakeWheelsCommand coralWheels = new CoralIntakeWheelsCommand(m_CoralIntakeSubsystem);
 
@@ -211,33 +214,63 @@ public class RobotContainer
     new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
     coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed));
   
-  public static Level level = Level.L2;
-    Command levelUpCommand = new InstantCommand(() ->{
-    switch (level) {
-      case L2:
-        level= Level.L3;
-        break;
-      case L3:
-        level = Level.L4;
-        break;
-      case L4:
-        level = Level.L2;
-        break;
-    }}
-    );
-    Command levelDownCommand = new InstantCommand(() ->{
-      switch (level) {
+  // public static Level level = Level.L2;
+
+    void levelUpCommand() {
+      switch (Robot.reefLevel) {
         case L2:
-          level=Level.L4;
+          Robot.reefLevel = Level.L3;
+          Reef.pos = 3;
+          // PlaceCoralCommand.height1 = HeightLevels.Middle_PRE;
+          // PlaceCoralCommand.height2 = HeightLevels.MIDDLE;
           break;
         case L3:
-          level = Level.L2;
+          Robot.reefLevel = Level.L4;
+          Reef.pos = 4;
+          // PlaceCoralCommand.height1 = HeightLevels.HIGH_PRE;
+          // PlaceCoralCommand.height2 = HeightLevels.HIGH;
           break;
         case L4:
-          level = Level.L3;
+          Robot.reefLevel = Level.L2;
+          Reef.pos = 2;
+          // PlaceCoralCommand.height1 = HeightLevels.LOW_PRE;
+          // PlaceCoralCommand.height2 = HeightLevels.LOW;
           break;
       }}
-      );
+  
+    void levelDownCommand() {
+      switch (Robot.reefLevel) {
+        case L2:
+          Robot.reefLevel = Level.L4;
+          Reef.pos = 4;
+          // PlaceCoralCommand.height1 = HeightLevels.HIGH_PRE;
+          // PlaceCoralCommand.height2 = HeightLevels.HIGH;
+
+          break;
+        case L3:
+          Robot.reefLevel = Level.L2;
+          Reef.pos = 2;
+          // PlaceCoralCommand.height1 = HeightLevels.LOW_PRE;
+          // PlaceCoralCommand.height2 = HeightLevels.LOW;
+          break;
+        case L4:
+          Robot.reefLevel = Level.L3;
+          Reef.pos = 3;
+          // PlaceCoralCommand.height1 = HeightLevels.Middle_PRE;
+          // PlaceCoralCommand.height2 = HeightLevels.MIDDLE;
+          break;
+        }
+      }
+
+      Command placeAtSpot(Level lev) {
+        System.out.println("pos" + Reef.pos);
+        switch (lev) {
+          case L2: return PlaceCoralCommand.placeL2();
+          case L3: return PlaceCoralCommand.placeL3();
+          case L4: return PlaceCoralCommand.placeL4();
+          default: return Commands.none();
+        }
+      }
       public static Location loc = Location.A;
 
       Command selectorUp = new InstantCommand(() ->{
@@ -428,7 +461,8 @@ public class RobotContainer
 
   private void configureBindings()
   {
-
+    System.out.println("pos" + Reef.pos
+    );
    
     drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
     driveFieldOrientedAnglularVelocity:
@@ -458,7 +492,7 @@ public class RobotContainer
     {
 
       driverXbox2.a().whileTrue(
-        CoralFloor
+        HalfCoralFloor
       );
       driverXbox2.a().onFalse(
         CoralDrive
@@ -519,6 +553,13 @@ public class RobotContainer
       driverXbox2.x().onFalse(
         CoralDrive
       );
+
+      driverXbox2.y().whileTrue(
+        CoralFloor
+      );
+      driverXbox2.y().onFalse(
+        CoralDrive
+      );
       
       //Coral move to reef l1
       driverXbox2.b().onTrue(
@@ -528,11 +569,12 @@ public class RobotContainer
         CoralDrive
       );
       driverXbox2.povUp().onTrue(
-        levelUpCommand
+        new InstantCommand(()->levelUpCommand())
       );
       driverXbox2.povDown().onTrue(
-        levelDownCommand
+        new InstantCommand(()->levelDownCommand())
       );
+
       new HighTrigger(driverXbox2.getHID(), XboxController.Axis.kRightY).onTrue(selectorDown);
       new LowTrigger(driverXbox2.getHID(), XboxController.Axis.kRightY).onTrue(selectorUp);
       new LowTrigger(driverXbox2.getHID(), XboxController.Axis.kRightX).onTrue(selectorLeft);
@@ -553,7 +595,7 @@ public class RobotContainer
         drivebase.returnPose()
       );
 
-      driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+      //driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       // driverXbox.b().whileTrue(
       //     drivebase.driveToPose(
       //         new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
@@ -562,10 +604,26 @@ public class RobotContainer
 
       // driverXbox2.a().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
       
-      driverXbox2.start().onTrue(
+      driverXbox2.leftBumper().onTrue(
         IntakeCoralEndeffector.intake(endEffDefaultCmd)
-          );
-    }}
+        );
+
+        driverXbox2.leftTrigger().onTrue(
+          placeAtSpot(Robot.reefLevel)
+        );
+
+
+        driverXbox2.rightTrigger().onTrue(
+          PlaceCoralCommand.placeL3()
+        );
+
+        driverXbox2.rightBumper().onTrue(
+          PlaceCoralCommand.placeL4()
+        );
+    }
+  }
+
+      
 //       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
   /**
