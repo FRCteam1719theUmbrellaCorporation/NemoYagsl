@@ -6,9 +6,10 @@ import frc.robot.*;
 //import frc.robot.commands.*;
 //import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
+import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
-import frc.robot.subsystems.intake.AlgaeIntakeSubsystem;
+//import frc.robot.subsystems.intake.AlgaeIntakeSubsystem;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -18,28 +19,32 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class IntakeSequence extends Command{
     ElevatorSubsytem m_ElevatorSubsytem;
     EndEffectorSubsytem m_EndEffectorSubsytem;
-    AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem;
+    //AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem;
     CoralIntakeSubsystem m_CoralIntakeSubsystem;
 
     public WaitCommand waitwait(double time) {
         return new WaitCommand(time);
     }
 
-    public InstantCommand set_Height(double height) {
-        return new InstantCommand(()-> m_ElevatorSubsytem.setGoal(height));
+    public InstantCommand set_Height(HeightLevels height) {
+        return new InstantCommand(()-> m_ElevatorSubsytem.setHeightWithEnum(height));
+    }
+
+    public Command incrementHeight(int incrementBy) {
+        return new InstantCommand(() -> m_ElevatorSubsytem.incrementByStage(incrementBy));
     }
 
     public InstantCommand endEffectorAngle(double angle) {
         return new InstantCommand(()->m_EndEffectorSubsytem.setRotation(angle));
     }
 
-    public InstantCommand algaeArmAngle(double point){
-        return new InstantCommand(()->m_AlgaeIntakeSubsystem.setSetpoint(point));
-        //angle is 0.1 or 0.12
-    }
-    public InstantCommand algaeWheelSpin(double speed){
-        return new InstantCommand(()->m_AlgaeIntakeSubsystem.turnIntakeWheels(speed)); 
-    }
+    // public InstantCommand algaeArmAngle(double point){
+    //     return new InstantCommand(()->m_AlgaeIntakeSubsystem.setSetpoint(point));
+    //     //angle is 0.1 or 0.12
+    // }
+    // public InstantCommand algaeWheelSpin(double speed){
+    //     return new InstantCommand(()->m_AlgaeIntakeSubsystem.turnIntakeWheels(speed)); 
+    // }
     
     public InstantCommand coralArmAngle(double point){
         return new InstantCommand(()->m_CoralIntakeSubsystem.setSetpoint(point)); 
@@ -65,14 +70,14 @@ public class IntakeSequence extends Command{
     }
     //This sequence is to intake an algae from off of the floor
     //Could possibly be used to outake as well as there is just a different angle that could be a negative wheel speed
-    public IntakeSequence(AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem){
-        this.m_AlgaeIntakeSubsystem = m_AlgaeIntakeSubsystem;
-        /*
-         * 1 - move algae are to a specific angle 
-         * 2 - spin wheels to intake algae
-         */
-        //addCommand(algaeArmAngle(.1),waitwait(0.5),algaeWheelSpin(1));
-    }
+    // public IntakeSequence(AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem){
+    //     this.m_AlgaeIntakeSubsystem = m_AlgaeIntakeSubsystem;
+    //     /*
+    //      * 1 - move algae are to a specific angle 
+    //      * 2 - spin wheels to intake algae
+    //      */
+    //     //addCommand(algaeArmAngle(.1),waitwait(0.5),algaeWheelSpin(1));
+    // }
     //This command sequence is to intake coral from off the floor not any other time
     public IntakeSequence(CoralIntakeSubsystem m_CoralIntakeSubsystem){
         this.m_CoralIntakeSubsystem = m_CoralIntakeSubsystem;

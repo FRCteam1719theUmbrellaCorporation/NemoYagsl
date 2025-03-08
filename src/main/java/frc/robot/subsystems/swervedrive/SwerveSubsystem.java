@@ -6,6 +6,7 @@ package frc.robot.subsystems.swervedrive;
 
 import static edu.wpi.first.units.Units.Meter;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
@@ -38,7 +39,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
-import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.LimeLightExtra;
 
 //import frc.robot.subsystems.swervedrive.Vision.Cameras;
@@ -66,6 +66,9 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase
 {
+
+      // private final Pigeon2 m_gyro = new Pigeon2(2);
+
 
   /**
    * Swerve drive object.
@@ -107,8 +110,8 @@ public class SwerveSubsystem extends SubsystemBase
     }
     swerveDrive.setHeadingCorrection(true); // Heading correction should only be used while controlling the robot via angle.
     swerveDrive.setCosineCompensator(false);//!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
-    swerveDrive.setAngularVelocityCompensation(true,
-                                               true,
+    swerveDrive.setAngularVelocityCompensation(false,
+                                               false,
                                                0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
     swerveDrive.setModuleEncoderAutoSynchronize(false,
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
@@ -149,15 +152,10 @@ public class SwerveSubsystem extends SubsystemBase
   public void periodic()
   {
     // When vision is enabled we must manually update odometry in SwerveDrive
-    if (visionDriveTest)
-    {
-      swerveDrive.updateOdometry();
-//      vision.updatePoseEstimation(swerveDrive);
-    }
-    //System.out.println(LimelightHelpers.getTV(LimeLightExtra.backCam));
-    LimelightHelpers.SetRobotOrientation(LimeLightExtra.backCam, swerveDrive.getYaw().getDegrees(), 0, 0, 0, 0, 0);
 
-
+    swerveDrive.updateOdometry(); // TODO: UNCOMMENT AFTER TESTING. MUST BE UPDATED FOR POSE ESTIMATION
+    LimeLightExtra.updatePoseEstimation();
+    System.out.println();
   }
 
   @Override
@@ -282,8 +280,8 @@ public class SwerveSubsystem extends SubsystemBase
   {
 // Create the constraints to use while pathfinding
     PathConstraints constraints = new PathConstraints(
-        swerveDrive.getMaximumChassisVelocity(), 4.0,
-        swerveDrive.getMaximumChassisAngularVelocity(), Units.degreesToRadians(720));
+        swerveDrive.getMaximumChassisVelocity(), 1.0,
+        swerveDrive.getMaximumChassisAngularVelocity(), Units.degreesToRadians(180));
 
 // Since AutoBuilder is configured, we can use it to build pathfinding commands
     return AutoBuilder.pathfindToPose(
@@ -481,7 +479,7 @@ PathPlannerPath path = new PathPlannerPath(
       swerveDrive.drive(SwerveMath.scaleTranslation(new Translation2d(
                             translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
                             translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()), 0.8),
-                        Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumChassisAngularVelocity(),
+                        angularRotationX.getAsDouble() * swerveDrive.getMaximumChassisAngularVelocity(),
                         true,
                         false);
     });
@@ -509,7 +507,7 @@ PathPlannerPath path = new PathPlannerPath(
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(scaledInputs.getX(), scaledInputs.getY(),
                                                                       headingX.getAsDouble(),
                                                                       headingY.getAsDouble(),
-                                                                      swerveDrive.getOdometryHeading().getRadians(),
+                                                                      swerveDrive.getOdometryHeading().getDegrees(),
                                                                       swerveDrive.getMaximumChassisVelocity()));
     });
   }
@@ -554,6 +552,7 @@ PathPlannerPath path = new PathPlannerPath(
   public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity)
   {
     return run(() -> {
+      System.out.println(getHeading());
       swerveDrive.driveFieldOriented(velocity.get());
     });
   }
@@ -634,7 +633,7 @@ PathPlannerPath path = new PathPlannerPath(
    *
    * @return true if the red alliance, false if blue. Defaults to false if none is available.
    */
-  private boolean isRedAlliance()
+  public boolean isRedAlliance()
   {
     var alliance = DriverStation.getAlliance();
     return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
