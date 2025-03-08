@@ -4,15 +4,12 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.Util;
-// import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -24,34 +21,24 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-// import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.CoralArmConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
-import swervelib.SwerveDrive;
-import java.util.function.BooleanSupplier;
-import javax.print.attribute.standard.MediaSize.NA;
+import java.util.function.Supplier;
+
 import swervelib.SwerveInputStream;
-import swervelib.imu.Pigeon2Swerve;
 import utils.Reef.Level;
 import utils.Reef.Location;
 import frc.robot.subsystems.LimeLightExtra;
-//import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
-import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
-//import frc.robot.subsystems.intake.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem.IntakePosition;
-//import frc.robot.commands.*;
-// import frc.robot.commands.Elevator.ElevatorPIDMoveCommand;
-//import frc.robot.commands.Intake.AlgaeIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralPivotPIDCommand;
 import frc.robot.commands.outake.EndEffectorPIDCommand;
@@ -74,6 +61,7 @@ public class RobotContainer
   
   //Orinal port are driverXBox = 1, driverXBox2 = 0
 
+  int invert = 1;
   final CommandXboxController driverXbox = new CommandXboxController(0);
 
   final CommandXboxController driverXbox2 = new CommandXboxController(1);
@@ -89,6 +77,8 @@ public class RobotContainer
   private static final reefposes reefpose = new reefposes();
 
   private boolean ismoving;
+
+  private Supplier<Command> currentMoveCommand;
 
   // Applies deadbands and inverts controls because joysticks
   // are back-right positive while robot
@@ -113,8 +103,8 @@ public class RobotContainer
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                () -> -driverXbox.getLeftY(),
-                                                                () -> -driverXbox.getLeftX())
+                                                                () -> invert *driverXbox.getLeftY(),
+                                                                () -> invert *driverXbox.getLeftX())
                                                             .withControllerRotationAxis(driverXbox::getRightX)
                                                             .deadband(OperatorConstants.DEADBAND)
                                                             .scaleTranslation(0.8)
@@ -190,7 +180,7 @@ public class RobotContainer
   Command CoralFloor = new SequentialCommandGroup(
     new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.FLOOR)),
     new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_floorintake_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
-    coralWheels.turnMotor(CoralArmConstants.coral_intake_floor_speed));
+    coralWheels.fullIntake());
 
   Command HalfCoralFloor = new SequentialCommandGroup(
     new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.FLOOR)),
@@ -491,6 +481,12 @@ public class RobotContainer
     } else
     {
 
+      driverXbox.start().onTrue(new InstantCommand(()->invert = invert *-1));
+      driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      
+      // driverXbox.b().onTrue(new InstantCommand(()->drivebase.setMaxSpeed(.5)));
+      // driverXbox.b().onTrue(new InstantCommand(()->drivebase.setMaxSpeed(1)));
+
       driverXbox2.a().whileTrue(
         HalfCoralFloor
       );
@@ -498,12 +494,12 @@ public class RobotContainer
         CoralDrive
       );
 
-      driverXbox2.y().whileTrue(
-        CoralFloor
-      );
-      driverXbox2.y().onFalse(
-        CoralDrive
-      );
+      // driverXbox2.y().whileTrue(
+      //   CoralFloor
+      // );
+      // driverXbox2.y().onFalse(
+      //   CoralDrive
+      // );
      // driverXbox2.right
 
       //Algae move to setpoint
@@ -599,10 +595,13 @@ public class RobotContainer
       // );
 
       // driverXbox.leftBumper().onTrue(
-      //   new SequentialCommandGroup(new InstantCommand(()->ismoving = true),
-      //   drivebase.returnPose()
-      //   )
+      //   new InstantCommand(()->currentMoveCommand = ()->drivebase.returnPose())
+      //   );
+
+      // driverXbox.leftBumper().onFalse(
+      //   currentMoveCommand.get() != null ? new InstantCommand(()->currentMoveCommand.get().cancel()) : Commands.none()
       // );
+
 
       // driverXbox.leftBumper().onFalse( 
       //   ismoving ? new SequentialCommandGroup(Commands.runOnce(drivebase::lock, drivebase), new InstantCommand(()->ismoving = true)) : Commands.none()
