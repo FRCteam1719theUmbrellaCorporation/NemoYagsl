@@ -30,8 +30,8 @@ public class ElevatorSubsytem extends SubsystemBase {
         LOW(8, .2), // Sets to the lowest 
         Middle_PRE(27.5, 0.03),
         MIDDLE(27.75, 0.2), // 
-        HIGH_PRE(54,0.03),
-        HIGH(54, 0.2),
+        HIGH_PRE(58,0.03),
+        HIGH(58, 0.2),
         MAX(ElevatorConstants.ELEVATOR_ROOM_MAX, 0); // If our elevator goes higher than the third stalk, this would allow us control. maybe we shouldnt use it 
 
         private final double value; // value held by each enum val
