@@ -81,6 +81,7 @@ public class SwerveSubsystem extends SubsystemBase
    * Enable vision odometry updates while driving.
    */
   private final boolean visionDriveTest     = false;
+  // public static boolean slowSpeed = true;
   /**
    * PhotonVision class to keep an accurate odometry.
    */
@@ -137,6 +138,10 @@ public class SwerveSubsystem extends SubsystemBase
                                   Constants.MAX_SPEED,
                                   new Pose2d(new Translation2d(Meter.of(1), Meter.of(1)),
                                              Rotation2d.fromDegrees(0)));
+  }
+
+  public void setMaxSpeed(double multiplier) {
+    swerveDrive.setMaximumAttainableSpeeds(Constants.MAX_SPEED * multiplier, Constants.MAX_SPEED * multiplier);
   }
 
 //  /**
@@ -664,7 +669,7 @@ public class SwerveSubsystem extends SubsystemBase
                                                         scaledInputs.getY(),
                                                         angle.getRadians(),
                                                         getHeading().getRadians(),
-                                                        Constants.MAX_SPEED);
+                                                        Constants.MAX_SPEED );
   }
 
   /**
@@ -735,13 +740,13 @@ public class SwerveSubsystem extends SubsystemBase
         return new Rotation2d(angle);
     }
 
-    public InstantCommand constructPose(Translation2d t, Rotation2d r) {
-        return new InstantCommand(()->
-            driveToPose(new Pose2d(t, r)).schedule()
-        );
+    public Command constructPose(Translation2d t, Rotation2d r) {
+      Command x = driveToPose(new Pose2d(t, r));
+      x.schedule();
+      return x;
     }
 
-    public InstantCommand returnPose() {
+    public Command returnPose() {
 
       int tag = ConvertAprilTag.getTag(RobotContainer.loc, isRedAlliance());
       boolean left = ConvertAprilTag.leftSide(RobotContainer.loc);
