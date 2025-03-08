@@ -1,3 +1,5 @@
+[![CI](https://github.com/FRCteam1719theUmbrellaCorporation/NemoYagsl/actions/workflows/main.yml/badge.svg)](https://github.com/FRCteam1719theUmbrellaCorporation/NemoYagsl/actions/workflows/main.yml)
+
 # Yet Another Generic Swerve Library (YAGSL) Example project
 
 YAGSL is intended to be an easy implementation of a generic swerve drive that should work for most
