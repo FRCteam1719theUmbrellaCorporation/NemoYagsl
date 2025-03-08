@@ -24,7 +24,7 @@ public class ElevatorSubsytem extends SubsystemBase {
         ZERO(5, 0.03), // Sets to the bottom
         INTAKE(20.75, .5), //TODO: fix :( 20.75 IS INTAKE
         INTAKE_PRE_DOWN(60, .47), //TODO: fix :( 20.75 IS INTAKE
-        INTAKE_UP(60, 0.03),
+        INTAKE_UP(50, 0.03),
         // REEFBASE(1, 0),
         LOW_PRE(8, 0.03), // Sets to the lowest 
         LOW(8, .2), // Sets to the lowest 

@@ -738,10 +738,22 @@ public class SwerveSubsystem extends SubsystemBase
         );
     }
 
-    public InstantCommand returnPose() {
-
-      int tag = ConvertAprilTag.getTag(RobotContainer.loc, isRedAlliance());
-      boolean left = ConvertAprilTag.leftSide(RobotContainer.loc);
+    public InstantCommand returnPose(int tag2, boolean left2) {
+      int tag;
+      boolean left;
+      if (tag2 != 0) {
+        tag = ConvertAprilTag.getTag(RobotContainer.loc, isRedAlliance());
+      }
+      else {
+        tag = tag2;
+      }
+      if (left2 != (Boolean) null) {
+        left = ConvertAprilTag.leftSide(RobotContainer.loc);
+      } else {
+        left = left2;
+      }
+      
+      //System.out.println(tag);
       
       if (tag == 6 && left) {
         //ID 6 left

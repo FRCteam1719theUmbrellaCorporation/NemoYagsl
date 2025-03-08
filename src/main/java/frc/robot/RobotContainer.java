@@ -86,7 +86,7 @@ public class RobotContainer
   private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
   //private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
-  private static final reefposes reefpose = new reefposes();
+  //private static final reefposes reefpose = new reefposes();
 
 
 
@@ -599,7 +599,9 @@ public class RobotContainer
       // );
 
       driverXbox.leftBumper().onTrue(
-        drivebase.returnPose()
+        
+        drivebase.returnPose(6, true)
+        
       );
 
       //driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));

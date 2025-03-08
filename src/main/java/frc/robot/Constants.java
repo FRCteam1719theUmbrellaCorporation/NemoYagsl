@@ -144,8 +144,8 @@ public static class ElevatorConstants{
 
     public static final double ELEVATOR_ROOM_MAX = 84;
 
-    public static final double MIN_SPEED = -.35f;
-    public static final double MAX_SPEED = .35f;
+    public static final double MIN_SPEED = -.5f;
+    public static final double MAX_SPEED = .5f;
   }
 
   public static double CORALPIVITMAXAMOUNT = 235;
