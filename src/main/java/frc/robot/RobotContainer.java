@@ -197,7 +197,7 @@ public class RobotContainer
   
   Command L1 = new SequentialCommandGroup(
     new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.REEF)),
-    new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
+    new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)).withTimeout(.25),
     coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed));
 
   
@@ -257,15 +257,13 @@ public class RobotContainer
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
 
       driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
+      driverXbox.y().whileTrue(Commands.none());
       driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.back().whileTrue(drivebase.centerModulesCommand());
       driverXbox.leftBumper().onTrue(Commands.none());
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
-
-      //Coral intake wheels to spin
       driverXbox2.a().whileTrue(
         CoralFloor
       );
@@ -273,6 +271,34 @@ public class RobotContainer
         CoralDrive
       );
 
+      // driverXbox2.x().whileTrue(
+      //   new InstantCommand(() -> {
+      //   m_CoralIntakeSubsystem.setSetpoint(.1);
+      //   })
+      //  );
+
+      driverXbox2.x().whileTrue(
+        CoralHumanPlayer
+      );
+      driverXbox2.x().onFalse(
+        CoralDrive
+      );
+      
+      driverXbox2.b().onTrue(
+        L1
+      );
+      driverXbox2.b().onFalse(
+        CoralDrive
+      );
+
+      // driverXbox.leftBumper().onTrue(
+      //   new InstantCommand(()->
+      //     drivebase.driveToPose(new Pose2d(new Translation2d(14.32,3.88), Rotation2d.fromDegrees(-90))).schedule()
+      //   )
+      // );
+
+      driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+      /* 
       //Algae move to setpoint
       // driverXbox2.y().whileTrue(
       //   new SequentialCommandGroup(
@@ -315,34 +341,7 @@ public class RobotContainer
       //   )
       // );
       //Coral move to setpoint
-       driverXbox2.x().whileTrue(
-        new InstantCommand(() -> {
-        m_CoralIntakeSubsystem.setSetpoint(.1);
-        })
-       );
-
-      driverXbox2.x().whileTrue(
-        CoralHumanPlayer
-      );
-      driverXbox2.x().onFalse(
-        CoralDrive
-      );
-      
-      //Coral move to reef l1
-      driverXbox2.b().onTrue(
-        L1
-      );
-      driverXbox2.b().onFalse(
-        CoralDrive
-      );
-
-      driverXbox.leftBumper().onTrue(
-        new InstantCommand(()->
-          drivebase.driveToPose(new Pose2d(new Translation2d(14.32,3.88), Rotation2d.fromDegrees(-90))).schedule()
-        )
-      );
-
-      driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+       
       // driverXbox.b().whileTrue(
       //     drivebase.driveToPose(
       //         new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
@@ -351,9 +350,10 @@ public class RobotContainer
 
       // driverXbox2.a().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
       
-      driverXbox2.start().onTrue(
-        IntakeCoralEndeffector.intake(endEffDefaultCmd)
-          );
+      // driverXbox2.start().onTrue(
+      //   IntakeCoralEndeffector.intake(endEffDefaultCmd)
+      //     );
+      */
     }}
 //       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
