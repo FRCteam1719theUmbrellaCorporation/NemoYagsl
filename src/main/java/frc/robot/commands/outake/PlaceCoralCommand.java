@@ -8,9 +8,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import utils.Reef.Level; // i will end it
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -18,34 +20,34 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 public class PlaceCoralCommand extends SequentialCommandGroup {
   private static EndEffectorPIDCommand m_cmd;
   private static SwerveSubsystem m_swerve;
-  static HeightLevels height1;
-  static HeightLevels height2;
+  public static HeightLevels height1;
+  public static HeightLevels height2;
 
   public PlaceCoralCommand(EndEffectorPIDCommand cmd, SwerveSubsystem swerve) {
     m_cmd = cmd;
     m_swerve = swerve;
-    System.out.println(RobotContainer.level);
+    System.out.println(Robot.reefLevel);
   }
 
   public static SequentialCommandGroup placeAt() {
+    // System.out.println(RobotContainer.level);
+    switch(Robot.reefLevel) {
+      case L2:
+        PlaceCoralCommand.height1 = HeightLevels.LOW_PRE;
+        PlaceCoralCommand.height2 = HeightLevels.LOW;
+
+        break;
+      case L3:
+        PlaceCoralCommand.height1 = HeightLevels.Middle_PRE;
+        PlaceCoralCommand.height2 = HeightLevels.MIDDLE;
+        break;
+      default:
+        PlaceCoralCommand.height1 = HeightLevels.HIGH_PRE;
+        PlaceCoralCommand.height2 = HeightLevels.HIGH;
+        break;
+    }
+
     return new SequentialCommandGroup(
-        new InstantCommand(()->{
-          switch(RobotContainer.level) {
-            case L2:
-              PlaceCoralCommand.height1 = HeightLevels.LOW_PRE;
-              PlaceCoralCommand.height2 = HeightLevels.LOW;
-      
-              break;
-            case L3:
-              PlaceCoralCommand.height1 = HeightLevels.Middle_PRE;
-              PlaceCoralCommand.height2 = HeightLevels.MIDDLE;
-              break;
-            default:
-              PlaceCoralCommand.height1 = HeightLevels.HIGH_PRE;
-              PlaceCoralCommand.height2 = HeightLevels.HIGH;
-              break;
-          }
-        }),
         // cmd.moveBoth(HeightLevels.INTAKE_UP),
         // new WaitUntilCommand(cmd.isAtPos()),
         m_cmd.moveBoth(PlaceCoralCommand.height1),

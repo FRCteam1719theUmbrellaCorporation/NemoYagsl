@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import swervelib.imu.SwerveIMU;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import utils.Reef;
+// import utils.Reef.Level;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
@@ -26,7 +27,7 @@ import utils.Reef;
  */
 public class Robot extends TimedRobot
 {
-
+  public static Reef.Level reefLevel = Reef.Level.L2;
   private static Robot   instance;
   private        Command m_autonomousCommand;
 
@@ -107,9 +108,9 @@ public class Robot extends TimedRobot
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    SmartDashboard.putBoolean("L2", RobotContainer.level == Reef.Level.L2);
-    SmartDashboard.putBoolean("L3", RobotContainer.level == Reef.Level.L3);
-    SmartDashboard.putBoolean("L4", RobotContainer.level == Reef.Level.L4);
+    SmartDashboard.putBoolean("L2", reefLevel == Reef.Level.L2);
+    SmartDashboard.putBoolean("L3", reefLevel == Reef.Level.L3);
+    SmartDashboard.putBoolean("L4", reefLevel == Reef.Level.L4);
     SmartDashboard.putBoolean("A", RobotContainer.loc == Reef.Location.A);
     SmartDashboard.putBoolean("B", RobotContainer.loc == Reef.Location.B);
     SmartDashboard.putBoolean("C", RobotContainer.loc == Reef.Location.C);

@@ -210,32 +210,32 @@ public class RobotContainer
     new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
     coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed));
   
-  public static Level level = Level.L2;
+  // public static Level level = Level.L2;
 
     Command levelUpCommand = new InstantCommand(() ->{
-    switch (level) {
+    switch (Robot.reefLevel) {
       case L2:
-        level= Level.L3;
+        Robot.reefLevel = Level.L3;
         break;
       case L3:
-        level = Level.L4;
+        Robot.reefLevel = Level.L4;
         break;
       case L4:
-        level = Level.L2;
+        Robot.reefLevel = Level.L2;
         break;
     }}
     );
     Command levelDownCommand = new InstantCommand(() ->{
 
-      switch (level) {
+      switch (Robot.reefLevel) {
         case L2:
-          level=Level.L4;
+          Robot.reefLevel = Level.L4;
           break;
         case L3:
-          level = Level.L2;
+          Robot.reefLevel = Level.L2;
           break;
         case L4:
-          level = Level.L3;
+          Robot.reefLevel = Level.L3;
           break;
       }}
       );
@@ -451,7 +451,7 @@ public class RobotContainer
     {
 
       driverXbox2.a().whileTrue(
-        CoralFloor
+        HalfCoralFloor
       );
       driverXbox2.a().onFalse(
         CoralDrive
@@ -548,7 +548,7 @@ public class RobotContainer
         )
       );
 
-      driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+      //driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       // driverXbox.b().whileTrue(
       //     drivebase.driveToPose(
       //         new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
@@ -580,7 +580,8 @@ public class RobotContainer
     LimelightHelpers.SetIMUMode(null, 2);
 
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("uto");
+    return Commands.none(); 
+    //return drivebase.getAutonomousCommand("uto");
   }
 
   public void setMotorBrake(boolean brake)
