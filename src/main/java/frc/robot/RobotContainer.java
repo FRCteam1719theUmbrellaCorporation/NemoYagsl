@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -23,9 +24,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 // import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.CoralArmConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Reef.Level;
+import frc.robot.Reef.Location;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
@@ -34,6 +38,8 @@ import java.util.function.BooleanSupplier;
 import javax.print.attribute.standard.MediaSize.NA;
 import swervelib.SwerveInputStream;
 import swervelib.imu.Pigeon2Swerve;
+import utils.HighTrigger;
+import utils.LowTrigger;
 import frc.robot.subsystems.LimeLightExtra;
 //import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
@@ -50,6 +56,7 @@ import frc.robot.commands.Intake.CoralPivotPIDCommand;
 import frc.robot.commands.outake.EndEffectorPIDCommand;
 import frc.robot.commands.outake.IntakeCoralEndeffector;
 import frc.robot.commands.outake.PlaceCoralCommand;
+import frc.robot.Reef;
 //import frc.robot.commands.Intake.AlgaePivotPIDCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -188,13 +195,188 @@ public class RobotContainer
     new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.REEF)),
     new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
     coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed));
+  
+  public static Level level = Level.L2;
+    Command levelUpCommand = new InstantCommand(() ->{
+    switch (level) {
+      case L2:
+        level= Level.L3;
+        break;
+      case L3:
+        level = Level.L4;
+        break;
+      case L4:
+        level = Level.L2;
+        break;
+    }}
+    );
+    Command levelDownCommand = new InstantCommand(() ->{
+      switch (level) {
+        case L2:
+          level=Level.L4;
+          break;
+        case L3:
+          level = Level.L2;
+          break;
+        case L4:
+          level = Level.L3;
+          break;
+      }}
+      );
+      public static Location loc = Location.A;
+
+      Command selectorUp = new InstantCommand(() ->{
+        switch (loc) {
+          case A:
+          loc = Location.L;
+          break;
+          case B:
+          loc = Location.C;
+          break;
+          case C:
+          loc = Location.D;
+          break;
+          case D:
+          loc = Location.E;
+          break;
+          case E:
+          loc = Location.F;
+          break;
+          case F:
+          loc = Location.G;
+          break;
+          case G:
+          case H:
+          break;
+          case I:
+          loc = Location.H;
+          break;
+          case J:
+          loc = Location.I;
+          break;
+          case K:
+          loc = Location.J;
+          break;
+          case L:
+          loc = Location.K;
+          break;
+        }}
+        );
+        Command selectorDown = new InstantCommand(() ->{
+          switch (loc) {
+            case A:
+            case B:
+            break;
+            case C:
+            loc = Location.B;
+            break;
+            case D:
+            loc = Location.C;
+            break;
+            case E:
+            loc = Location.D;
+            break;
+            case F:
+            loc = Location.E;
+            break;
+            case G:
+            loc = Location.F;
+            break;
+            case H:
+            loc = Location.I;
+            break;
+            case I:
+            loc = Location.J;
+            break;
+            case J:
+            loc = Location.K;
+            break;
+            case K:
+            loc = Location.L;
+            break;
+            case L:
+            loc = Location.A;
+            break;
+          }}
+          );
+          Command selectorLeft = new InstantCommand(() ->{
+            switch (loc) {
+              case A:
+              loc = Location.L;
+              break;
+              case B:
+              loc = Location.A;
+              break;
+              case C:
+              loc = Location.B;
+              break;
+              case D:
+              loc = Location.C;
+              break;
+              case E:
+              loc = Location.F;
+              break;
+              case F:
+              loc = Location.G;
+              break;
+              case G:
+              loc = Location.H;
+              break;
+              case H:
+              loc = Location.I;
+              break;
+              case I:
+              loc = Location.J;
+              break;
+              case J:
+              case K:
+              break;
+              case L:
+              loc = Location.K;
+              break;
+            }}
+            );
+            Command selectorRight = new InstantCommand(() ->{
+              switch (loc) {
+                case A:
+                loc = Location.B;
+                break;
+                case B:
+                loc = Location.C;
+                break;
+                case C:
+                loc = Location.D;
+                break;
+                case D:
+                case E:
+                break;
+                case F:
+                loc = Location.E;
+                break;
+                case G:
+                loc = Location.F;
+                break;
+                case H:
+                loc = Location.G;
+                break;
+                case I:
+                loc = Location.H;
+                break;
+                case J:
+                loc = Location.I;
+                break;
+                case K:
+                loc = Location.L;
+                break;
+                                case L:
+                loc = Location.A;
+                break;
+              }}
+              );
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
-  int i = 0;
+   */  
   
-  
-
   public RobotContainer() { 
     new LimeLightExtra(drivebase);
 
@@ -252,22 +434,13 @@ public class RobotContainer
     } else
     {
 
-     /* //Algae intake wheels to spin
-      driverXbox2.a().onTrue(
-        new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem).turnMotor(1).withTimeout(1) //Test
-      );
-      
-      driverXbox2.a().onFalse(
-        new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem).stopMotors() //Test
-      );
-*/
-      //Coral intake wheels to spin
       driverXbox2.a().whileTrue(
         CoralFloor
       );
       driverXbox2.a().onFalse(
         CoralDrive
       );
+     // driverXbox2.right
 
       //Algae move to setpoint
       // driverXbox2.y().whileTrue(
@@ -331,6 +504,16 @@ public class RobotContainer
       driverXbox2.b().onFalse(
         CoralDrive
       );
+      driverXbox2.povUp().onTrue(
+        levelUpCommand
+      );
+      driverXbox2.povDown().onTrue(
+        levelDownCommand
+      );
+      new HighTrigger(driverXbox2.getHID(), XboxController.Axis.kRightY).onTrue(selectorDown);
+      new LowTrigger(driverXbox2.getHID(), XboxController.Axis.kRightY).onTrue(selectorUp);
+      new LowTrigger(driverXbox2.getHID(), XboxController.Axis.kRightX).onTrue(selectorLeft);
+      new HighTrigger(driverXbox2.getHID(), XboxController.Axis.kRightX).onTrue(selectorRight);
 
       // driverXbox2.b().whileTrue(
       //   new InstantCommand(() -> {

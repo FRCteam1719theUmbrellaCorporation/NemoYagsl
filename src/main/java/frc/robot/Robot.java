@@ -4,16 +4,20 @@
 
 package frc.robot;
 
+import java.util.logging.Level;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import swervelib.imu.SwerveIMU;
 import swervelib.telemetry.SwerveDriveTelemetry;
+import frc.robot.Reef;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
@@ -103,6 +107,24 @@ public class Robot extends TimedRobot
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    SmartDashboard.putBoolean("L2", RobotContainer.level == Reef.Level.L2);
+    SmartDashboard.putBoolean("L3", RobotContainer.level == Reef.Level.L3);
+    SmartDashboard.putBoolean("L4", RobotContainer.level == Reef.Level.L4);
+    SmartDashboard.putBoolean("A", RobotContainer.loc == Reef.Location.A);
+    SmartDashboard.putBoolean("B", RobotContainer.loc == Reef.Location.B);
+    SmartDashboard.putBoolean("C", RobotContainer.loc == Reef.Location.C);
+    SmartDashboard.putBoolean("D", RobotContainer.loc == Reef.Location.D);
+    SmartDashboard.putBoolean("E", RobotContainer.loc == Reef.Location.E);
+    SmartDashboard.putBoolean("F", RobotContainer.loc == Reef.Location.F);
+    SmartDashboard.putBoolean("G", RobotContainer.loc == Reef.Location.G);
+    SmartDashboard.putBoolean("H", RobotContainer.loc == Reef.Location.H);
+    SmartDashboard.putBoolean("I", RobotContainer.loc == Reef.Location.I);
+    SmartDashboard.putBoolean("J", RobotContainer.loc == Reef.Location.J);
+    SmartDashboard.putBoolean("K", RobotContainer.loc == Reef.Location.K);
+    SmartDashboard.putBoolean("L", RobotContainer.loc == Reef.Location.L);
+
+
+
   }
 
   /**
