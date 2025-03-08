@@ -18,6 +18,14 @@ import utils.Reef;
 // import edu.wpi.first.networktables.NetworkTableInstance;
 // import utils.Reef.Level;
 
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.BooleanLogEntry;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
+
+
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
  * described in the TimedRobot documentation. If you change the name of this class or the package after creating this
@@ -38,11 +46,18 @@ public class Robot extends TimedRobot
 
   private SwerveIMU gyrogyro;
 
+  BooleanLogEntry myBooleanLog;
+  DoubleLogEntry myDoubleLog;
+  StringLogEntry myStringLog;
+
   public Robot()
   {
     instance = this;
-    // NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    //     NetworkTable table = inst.getTable("datatable");
+    DataLogManager.start();
+    //DataLog log = DataLogManager.getLog();
+    // myBooleanLog = new BooleanLogEntry(log, "/my/boolean");
+    // myDoubleLog = new DoubleLogEntry(log, "/my/double");
+    // myStringLog = new StringLogEntry(log, "/my/string");
   }
 
   public static Robot getInstance()
@@ -59,26 +74,15 @@ public class Robot extends TimedRobot
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    gyrogyro = m_robotContainer.drivebase.getSwerveDrive().getGyro();
-
+    //gyrogyro = m_robotContainer.drivebase.getSwerveDrive().getGyro();
+    //m_robotContainer.drivebase.newzeroGyro();
 
 
     
     m_robotContainer.drivebase.getSwerveDrive().swerveController.lastAngleScalar = 0;
     
 
-    if (m_robotContainer.drivebase.isRedAlliance())
-    {
-      //m_robotContainer.drivebase.getSwerveDrive().resetOdometry(new Pose2d(m_robotContainer.drivebase.getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
-      m_robotContainer.drivebase.getSwerveDrive().resetOdometry(new Pose2d(m_robotContainer.drivebase.getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(180)));
-
-      // gyrogyro.setOffset(new Rotation3d(0,0,Math.PI));
-      
-      
-    } else
-    {
-      m_robotContainer.drivebase.getSwerveDrive().resetOdometry(new Pose2d(m_robotContainer.drivebase.getSwerveDrive().getPose().getTranslation(), new Rotation2d()));
-    }
+    
 
 
     
@@ -162,6 +166,8 @@ public class Robot extends TimedRobot
     m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+    m_robotContainer.drivebase.newzeroGyro();
+
     //m_robotContainer.drivebase.zeroGyroWithAlliance();
 
     // schedule the autonomous command (example)
@@ -202,6 +208,11 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic()
   {
+
+    //myBooleanLog.append(); 
+    //myDoubleLog.append(3);
+
+
   }
 
   @Override
