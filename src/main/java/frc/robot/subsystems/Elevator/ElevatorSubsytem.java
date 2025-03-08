@@ -26,8 +26,11 @@ public class ElevatorSubsytem extends SubsystemBase {
         INTAKE_PRE_DOWN(60, .47), //TODO: fix :( 20.75 IS INTAKE
         INTAKE_UP(60, 0),
         // REEFBASE(1, 0),
-        LOW(9, .2), // Sets to the lowest 
+        LOW_PRE(8, 0), // Sets to the lowest 
+        LOW(8, .2), // Sets to the lowest 
+        Middle_PRE(27.5, 0),
         MIDDLE(27.75, 0.2), // 
+        HIGH_PRE(54,0),
         HIGH(Constants.EndefectorConstants.INTAKE_POS_ELEVATORPOS_MAX, 0),
         MAX(ElevatorConstants.ELEVATOR_ROOM_MAX, 0); // If our elevator goes higher than the third stalk, this would allow us control. maybe we shouldnt use it 
 
