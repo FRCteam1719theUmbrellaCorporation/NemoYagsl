@@ -75,7 +75,7 @@ public class Robot extends TimedRobot
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     //gyrogyro = m_robotContainer.drivebase.getSwerveDrive().getGyro();
-    m_robotContainer.drivebase.newzeroGyro();
+    //m_robotContainer.drivebase.newzeroGyro();
 
 
     

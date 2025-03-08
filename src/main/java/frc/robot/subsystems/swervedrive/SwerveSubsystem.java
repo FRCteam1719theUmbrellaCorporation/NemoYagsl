@@ -863,14 +863,14 @@ public class SwerveSubsystem extends SubsystemBase
       if (isRedAlliance())
     {
       //m_robotContainer.drivebase.getSwerveDrive().resetOdometry(new Pose2d(m_robotContainer.drivebase.getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
-      getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+      getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
 
       // gyrogyro.setOffset(new Rotation3d(0,0,Math.PI));
       
       
     } else
     {
-      getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
+      getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(180)));
     }
     }
 
