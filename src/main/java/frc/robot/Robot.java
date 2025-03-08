@@ -3,12 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-import java.util.logging.Level;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -16,8 +12,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import swervelib.imu.SwerveIMU;
-import swervelib.telemetry.SwerveDriveTelemetry;
 import utils.Reef;
+// import edu.wpi.first.networktables.DoubleSubscriber;
+// import edu.wpi.first.networktables.NetworkTable;
+// import edu.wpi.first.networktables.NetworkTableInstance;
+// import utils.Reef.Level;
 
 import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
@@ -34,10 +33,13 @@ import edu.wpi.first.wpilibj.DataLogManager;
  */
 public class Robot extends TimedRobot
 {
-
+  public static Reef.Level reefLevel = Reef.Level.L2;
   private static Robot   instance;
   private        Command m_autonomousCommand;
+  // public static DoubleSubscriber posSetter;
+  // public static DoubleSubscriber posGetter;
 
+  
   private RobotContainer m_robotContainer;
 
   private Timer disabledTimer;
@@ -51,13 +53,11 @@ public class Robot extends TimedRobot
   public Robot()
   {
     instance = this;
-
     DataLogManager.start();
     //DataLog log = DataLogManager.getLog();
     // myBooleanLog = new BooleanLogEntry(log, "/my/boolean");
     // myDoubleLog = new DoubleLogEntry(log, "/my/double");
     // myStringLog = new StringLogEntry(log, "/my/string");
-
   }
 
   public static Robot getInstance()
@@ -115,9 +115,9 @@ public class Robot extends TimedRobot
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    SmartDashboard.putBoolean("L2", RobotContainer.level == Reef.Level.L2);
-    SmartDashboard.putBoolean("L3", RobotContainer.level == Reef.Level.L3);
-    SmartDashboard.putBoolean("L4", RobotContainer.level == Reef.Level.L4);
+    SmartDashboard.putBoolean("L2", reefLevel == Reef.Level.L2);
+    SmartDashboard.putBoolean("L3", reefLevel == Reef.Level.L3);
+    SmartDashboard.putBoolean("L4", reefLevel == Reef.Level.L4);
     SmartDashboard.putBoolean("A", RobotContainer.loc == Reef.Location.A);
     SmartDashboard.putBoolean("B", RobotContainer.loc == Reef.Location.B);
     SmartDashboard.putBoolean("C", RobotContainer.loc == Reef.Location.C);
