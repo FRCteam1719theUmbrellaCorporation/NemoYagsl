@@ -554,12 +554,12 @@ public class RobotContainer
         })
        );
 
-      driverXbox2.x().whileTrue(
-        CoralHumanPlayer
-      );
-      driverXbox2.x().onFalse(
-        CoralDrive
-      );
+      // driverXbox2.x().whileTrue(
+      //   CoralHumanPlayer
+      // );
+      // driverXbox2.x().onFalse(
+      //   CoralDrive
+      // );
 
       driverXbox2.y().whileTrue(
         CoralFloor
@@ -575,12 +575,12 @@ public class RobotContainer
       driverXbox2.b().onFalse(
         CoralDrive
       );
-      driverXbox2.povUp().onTrue(
-        new InstantCommand(()->levelUpCommand())
-      );
-      driverXbox2.povDown().onTrue(
-        new InstantCommand(()->levelDownCommand())
-      );
+      // driverXbox2.povUp().onTrue(
+      //   new InstantCommand(()->levelUpCommand())
+      // );
+      // driverXbox2.povDown().onTrue(
+      //   new InstantCommand(()->levelDownCommand())
+      // );
 
       new HighTrigger(driverXbox2.getHID(), XboxController.Axis.kRightY).onTrue(selectorDown);
       new LowTrigger(driverXbox2.getHID(), XboxController.Axis.kRightY).onTrue(selectorUp);
