@@ -175,6 +175,8 @@ public class RobotContainer
   EndEffectorPIDCommand endEffDefaultCmd = new EndEffectorPIDCommand(m_EndEffectorSubsytem, m_ElevatorSubsytem);
   // Command intakeCoral = new IntakeCoralEndeffector(endEffDefaultCmd);
 
+  Command placer = new PlaceCoralCommand(endEffDefaultCmd, drivebase);
+
   CoralIntakeWheelsCommand coralWheels = new CoralIntakeWheelsCommand(m_CoralIntakeSubsystem);
 
   Command CoralDrive = new ParallelCommandGroup(
@@ -556,7 +558,14 @@ public class RobotContainer
       driverXbox2.start().onTrue(
         IntakeCoralEndeffector.intake(endEffDefaultCmd)
           );
-    }}
+
+        driverXbox2.rightBumper().onTrue(
+          PlaceCoralCommand.placeAt()
+        );
+    }
+  }
+
+      
 //       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
   /**
