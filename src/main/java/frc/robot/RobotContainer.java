@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.Util;
 // import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -36,9 +37,6 @@ import java.util.function.BooleanSupplier;
 import javax.print.attribute.standard.MediaSize.NA;
 import swervelib.SwerveInputStream;
 import swervelib.imu.Pigeon2Swerve;
-import utils.HighTrigger;
-import utils.LowTrigger;
-import utils.Reef;
 import utils.Reef.Level;
 import utils.Reef.Location;
 import frc.robot.subsystems.LimeLightExtra;
@@ -57,6 +55,7 @@ import frc.robot.commands.Intake.CoralPivotPIDCommand;
 import frc.robot.commands.outake.EndEffectorPIDCommand;
 import frc.robot.commands.outake.IntakeCoralEndeffector;
 import frc.robot.commands.outake.PlaceCoralCommand;
+import utils.*;
 //import frc.robot.commands.Intake.AlgaePivotPIDCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -79,11 +78,13 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   public final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
+                                                                            
   
   private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
   private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
   //private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
+  private static final reefposes reefpose = new reefposes();
 
 
 
@@ -528,7 +529,10 @@ public class RobotContainer
 
       driverXbox.leftBumper().onTrue(
         new InstantCommand(()->
-          drivebase.driveToPose(new Pose2d(new Translation2d(14.32,3.88), Rotation2d.fromDegrees(-90))).schedule()
+        
+          reefpose.printArray(reefpose.displacementAddition(reefpose.centralEdges(14.32, 3.88, -90)))
+        
+          //drivebase.driveToPose(new Pose2d(new Translation2d(14.32,3.88), Rotation2d.fromDegrees(-90))).schedule()
         )
       );
 

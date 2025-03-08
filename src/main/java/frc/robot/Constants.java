@@ -70,6 +70,9 @@ public final class Constants
   //ENDEFECTOR
   public static final int ENDEFECTOR_ANGLE_MOTOR_ID = 24;
 
+  public static final double reefLength = Units.inchesToMeters(65.49);
+  public static final double reefLevelDistance = Units.inchesToMeters(12.94);
+
   public static class IntakeDetails {
     public static final double intakePos = 0; // TODO FIX This will be the position of intaking!
   }
