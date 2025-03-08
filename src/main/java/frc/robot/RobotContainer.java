@@ -211,6 +211,7 @@ public class RobotContainer
     coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed));
   
   public static Level level = Level.L2;
+
     Command levelUpCommand = new InstantCommand(() ->{
     switch (level) {
       case L2:
@@ -225,6 +226,7 @@ public class RobotContainer
     }}
     );
     Command levelDownCommand = new InstantCommand(() ->{
+
       switch (level) {
         case L2:
           level=Level.L4;
