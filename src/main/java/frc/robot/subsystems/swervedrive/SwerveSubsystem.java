@@ -152,7 +152,10 @@ public class SwerveSubsystem extends SubsystemBase
   {
     // When vision is enabled we must manually update odometry in SwerveDrive
     swerveDrive.updateOdometry(); // TODO: UNCOMMENT AFTER TESTING. MUST BE UPDATED FOR POSE ESTIMATION
-    LimeLightExtra.updatePoseEstimation();
+    try {
+      LimeLightExtra.updatePoseEstimation();
+    } catch (Exception e) {
+    }
   }
 
   @Override

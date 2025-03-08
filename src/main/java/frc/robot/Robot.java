@@ -130,9 +130,6 @@ public class Robot extends TimedRobot
     SmartDashboard.putBoolean("J", RobotContainer.loc == Reef.Location.J);
     SmartDashboard.putBoolean("K", RobotContainer.loc == Reef.Location.K);
     SmartDashboard.putBoolean("L", RobotContainer.loc == Reef.Location.L);
-
-
-
   }
 
   /**
@@ -162,7 +159,11 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit()
   {
-    LimelightHelpers.SetIMUMode(null, 2);
+    try {
+      LimelightHelpers.SetIMUMode(null, 2);
+    } catch (Exception e) {
+      System.out.println("ll did not init. terror");
+    }
     m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
