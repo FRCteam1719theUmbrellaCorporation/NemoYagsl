@@ -562,7 +562,7 @@ public class RobotContainer
           );
 
         driverXbox2.rightBumper().onTrue(
-          PlaceCoralCommand.placeAt()
+          PlaceCoralCommand.placeAt(Robot.reefLevel)
         );
     }
   }

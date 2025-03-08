@@ -29,9 +29,9 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
     System.out.println(Robot.reefLevel);
   }
 
-  public static SequentialCommandGroup placeAt() {
+  public static SequentialCommandGroup placeAt(Level rLevel) {
     // System.out.println(RobotContainer.level);
-    switch(Robot.reefLevel) {
+    switch(rLevel) {
       case L2:
         PlaceCoralCommand.height1 = HeightLevels.LOW_PRE;
         PlaceCoralCommand.height2 = HeightLevels.LOW;
@@ -48,14 +48,12 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
     }
 
     return new SequentialCommandGroup(
-        // cmd.moveBoth(HeightLevels.INTAKE_UP),
-        // new WaitUntilCommand(cmd.isAtPos()),
         m_cmd.moveBoth(PlaceCoralCommand.height1),
         new WaitUntilCommand(m_cmd.isAtPos()),
         m_cmd.moveBoth(PlaceCoralCommand.height2),
         new WaitUntilCommand(m_cmd.isAtPos()),
         new WaitCommand(2),
-        // m_swerve.driveToPose(null),
+
         m_cmd.moveBoth(HeightLevels.ZERO),
         new WaitUntilCommand(m_cmd.isAtPos())
         

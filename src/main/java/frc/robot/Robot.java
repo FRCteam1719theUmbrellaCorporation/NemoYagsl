@@ -23,7 +23,7 @@ import utils.Reef;
  */
 public class Robot extends TimedRobot
 {
-  public static Reef.Level reefLevel = Reef.Level.L2;
+  public static Reef.Level reefLevel = Reef.Level.L3;
   private static Robot   instance;
   private        Command m_autonomousCommand;
 
