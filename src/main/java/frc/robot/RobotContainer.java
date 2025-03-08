@@ -88,7 +88,7 @@ public class RobotContainer
   private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
   private static final reefposes reefpose = new reefposes();
 
-
+  private boolean ismoving;
 
   // Applies deadbands and inverts controls because joysticks
   // are back-right positive while robot
@@ -599,7 +599,13 @@ public class RobotContainer
       // );
 
       // driverXbox.leftBumper().onTrue(
+      //   new SequentialCommandGroup(new InstantCommand(()->ismoving = true),
       //   drivebase.returnPose()
+      //   )
+      // );
+
+      // driverXbox.leftBumper().onFalse( 
+      //   ismoving ? new SequentialCommandGroup(Commands.runOnce(drivebase::lock, drivebase), new InstantCommand(()->ismoving = true)) : Commands.none()
       // );
 
       //driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
