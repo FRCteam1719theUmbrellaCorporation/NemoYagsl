@@ -25,7 +25,8 @@ public final class Constants
   public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
   public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
   public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
-  public static final double SPEED_LIMITER = .90; // was 0.25 3/5/25
+  public static final double SPEED_LIMITER = .7; // was 0.25 3/5/25
+  public static final double slow_speed = .5;
   public static final double MAX_SPEED  = Units.feetToMeters(14.5*SPEED_LIMITER);
 
   public static final CANBus kCANBus = new CANBus("Drivetrain", "./logs/example.hoot");
@@ -107,7 +108,8 @@ public final class Constants
     public static final double coral_humanstatione_pos = 0.10;
     public static final double coral_reef_l1 = 0.2;
 
-    public static final double coral_intake_floor_speed = 0.3f;
+    public static final double coral_intake_floor_speed = 0.5f;
+    public static final double coral_intake_floor_speed_limited = 0.2f;
     public static final double coral_intake_humanStation_speed = 0.1f;
     public static final double coral_outtake_reef_speed = -0.2f;
 
