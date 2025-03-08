@@ -34,9 +34,11 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.LimeLightExtra;
 
 //import frc.robot.subsystems.swervedrive.Vision.Cameras;
@@ -58,6 +60,8 @@ import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
+import utils.ConvertAprilTag;
+import utils.Reef;
 
 public class SwerveSubsystem extends SubsystemBase
 {
@@ -720,6 +724,150 @@ public class SwerveSubsystem extends SubsystemBase
     return swerveDrive.getPitch();
   }
 
+  //ADDED FOR APRIL TAG POSES
+
+  public Translation2d constructTranslationPose(double x, double y) {
+        return new Translation2d(x,y);
+    }
+
+    public Rotation2d constructRotationPose(double angle) {
+        return new Rotation2d(angle);
+    }
+
+    public InstantCommand constructPose(Translation2d t, Rotation2d r) {
+        return new InstantCommand(()->
+            driveToPose(new Pose2d(t, r)).schedule()
+        );
+    }
+
+    public InstantCommand returnPose(InstantCommand cmd) {
+
+      int tag = ConvertAprilTag.getTag(RobotContainer.loc, isRedAlliance());
+      boolean left = ConvertAprilTag.leftSide(RobotContainer.loc);
+      
+      if (tag == 6 && left) {
+        //ID 6 left
+        return constructPose(constructTranslationPose(13.55, 2.81), constructRotationPose(-150));
+      }
+      else if (tag == 6) {
+        //ID 6 right
+        return constructPose(constructTranslationPose(13.89, 2.97), constructRotationPose(-150));
+      }
+      else if (tag == 7 && left) {
+        //ID 7 left
+        return constructPose(constructTranslationPose(14.32, 3.91), constructRotationPose(-90));
+      }
+      else if (tag == 7) {
+        //ID 7 right
+        return constructPose(constructTranslationPose(14.32,4.24), constructRotationPose(-90));
+      }
+      else if (tag == 8 && left) {
+        //ID 8 left
+        return constructPose(constructTranslationPose(13.81, 5.07), constructRotationPose(-30));
+      }
+      else if (tag == 8) {
+        //ID 8 right
+        return constructPose(constructTranslationPose(13.49, 5.22), constructRotationPose(-30));
+      }
+
+
+      
+      else if (tag == 9 && left) {
+        //ID 9 left
+        return constructPose(constructTranslationPose(12.59, 5.19), constructRotationPose(30));
+      }
+      else if (tag == 9) {
+        //ID 9 right
+        return constructPose(constructTranslationPose(12.29, 5.02), constructRotationPose(30));
+      }
+      
+      else if (tag == 10 && left) {
+        //ID 10 left
+        return constructPose(constructTranslationPose(11.8, 4.19), constructRotationPose(90));
+      }
+      else if (tag == 10) {
+        //ID 10 right
+        return constructPose(constructTranslationPose(11.8, 3.82), constructRotationPose(90));
+      }
+
+      if () {
+        //ID 11 left
+        return constructPose(constructTranslationPose(12.31, 3.01), constructRotationPose(150));
+      }
+      if () {
+        //ID 11 right
+        return constructPose(constructTranslationPose(12.61, 2.86), constructRotationPose(150));
+      }
+
+
+
+      if () {
+        //ID 17 left
+        return constructPose(constructTranslationPose(3.69, 3.02), constructRotationPose(150));
+      }
+      if () {
+        //ID 17 right
+        return constructPose(constructTranslationPose(4.00, 2.86), constructRotationPose(150));
+      }
+      
+      if () {
+        //ID 18 left
+        return constructPose(constructTranslationPose(3.18, 4.17), constructRotationPose(90));
+      }
+      if () {
+        //ID 18 right
+        return constructPose(constructTranslationPose(3.20, 3.84), constructRotationPose(90));
+      }
+      if () {
+        //ID 19 left
+        return constructPose(constructTranslationPose(3.96, 5.13), constructRotationPose(30));
+      }
+      if () {
+        //ID 19 right
+        return constructPose(constructTranslationPose(3.68, 5.01), constructRotationPose(30));
+      }
+
+
+      
+      if () {
+        //ID 22 left
+        return constructPose(constructTranslationPose(4.92, 2.79), constructRotationPose(-150));
+      }
+      if () {
+        //ID 22 right
+        return constructPose(constructTranslationPose(5.27, 2.95), constructRotationPose(-150));
+      }
+      if () {
+        //ID 21 left
+        return constructPose(constructTranslationPose(5.75, 3.9), constructRotationPose(-90));
+      }
+      if () {
+        //ID 21 right
+        return constructPose(constructTranslationPose(5.75, 4.28), constructRotationPose(-90));
+      }
+      if () {
+        //ID 20 left
+        return constructPose(constructTranslationPose(5.27, 5.03), constructRotationPose(-30));
+      }
+      if () {
+        //ID 20 right
+        return constructPose(constructTranslationPose(4.96,5.23), constructRotationPose(-30));
+      }
+      
+      return constructPose(constructTranslationPose(0, 0), constructRotationPose(0));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
   /**
    * Add a fake vision reading for testing purposes.
    */
@@ -737,4 +885,7 @@ public class SwerveSubsystem extends SubsystemBase
   {
     return swerveDrive;
   }
+
+
+
 }
