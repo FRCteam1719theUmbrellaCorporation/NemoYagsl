@@ -4,14 +4,16 @@
 
 package frc.robot;
 
-// import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -33,7 +35,6 @@ import swervelib.SwerveDrive;
 import java.util.function.BooleanSupplier;
 import javax.print.attribute.standard.MediaSize.NA;
 import swervelib.SwerveInputStream;
-import swervelib.imu.Pigeon2Swerve;
 import frc.robot.subsystems.LimeLightExtra;
 //import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
@@ -65,9 +66,10 @@ public class RobotContainer
   
   //Orinal port are driverXBox = 1, driverXBox2 = 0
 
-  final CommandXboxController driverXbox = new CommandXboxController(0);
 
+  final CommandXboxController driverXbox = new CommandXboxController(0);
   final CommandXboxController driverXbox2 = new CommandXboxController(1);
+  
   // The robot's subsystems and commands are defined here...
   public final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
@@ -236,8 +238,6 @@ public class RobotContainer
 
   private void configureBindings()
   {
-
-   
     drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
     driveFieldOrientedAnglularVelocity:
                                 driveFieldOrientedAnglularVelocitySim);
@@ -362,10 +362,17 @@ public class RobotContainer
    *
    * @return the command to run in autonomous
    */
+  // public Command getAutonomousCommand()
+  // {
+  //   // An example command will be run in autonomous
+  //   return drivebase.getAutonomousCommand("New Auto");
+  // }
   public Command getAutonomousCommand()
   {
+    // drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+    // "swerve"));
     LimelightHelpers.SetIMUMode(null, 2);
-
+    return new PathPlannerAuto("2meterauto");
     // An example command will be run in autonomous
     return drivebase.getAutonomousCommand("red paths");
   }
