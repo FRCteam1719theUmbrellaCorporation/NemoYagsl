@@ -11,27 +11,33 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "CoralDrive"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.25
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "olf"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CoralFloor"
+            "pathName": "Red 2"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 10.0
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralL1"
           }
         }
       ]

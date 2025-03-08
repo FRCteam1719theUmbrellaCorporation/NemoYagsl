@@ -27,7 +27,7 @@ public final class Constants
   public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
 
   public static final double SPEED_LIMITER = 0.3; // was 0.25 3/5/25
-`  public static final double MAX_SPEED  = Units.feetToMeters(14.5*SPEED_LIMITER);
+  public static final double MAX_SPEED  = Units.feetToMeters(14.5*SPEED_LIMITER);
 
   public static final CANBus kCANBus = new CANBus("Drivetrain", "./logs/example.hoot");
 
