@@ -568,7 +568,7 @@ public class RobotContainer
     LimelightHelpers.SetIMUMode(null, 2);
 
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("uto");
+    return drivebase.getAutonomousCommand("red paths");
   }
 
   public void setMotorBrake(boolean brake)
