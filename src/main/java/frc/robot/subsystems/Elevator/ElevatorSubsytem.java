@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.Elevator;
 
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 
 // import java.security.PublicKey;
@@ -157,6 +158,10 @@ public class ElevatorSubsytem extends SubsystemBase {
 
   private boolean inBounds() {
     return HEIGHT_SETPOINT > 0 && ElevatorConstants.ELEVATOR_ROOM_MAX >= HEIGHT_SETPOINT;
+  }
+
+  public boolean isConnected() {
+    return !ELEVATOR_MOTOR_ONE.getLastError().equals(REVLibError.kCANDisconnected);
   }
 
   @Override

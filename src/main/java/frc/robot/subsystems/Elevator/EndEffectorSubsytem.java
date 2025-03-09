@@ -6,6 +6,7 @@ package frc.robot.subsystems.Elevator;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.REVLibError;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -73,6 +74,10 @@ public class EndEffectorSubsytem extends SubsystemBase {
 
   public HeightLevels getHeight() {
     return heightLevels;
+  }
+
+  public boolean isConnected() {
+    return !ENDEFFECTOR_ROTATE_MOTOR.getLastError().equals(REVLibError.kCANDisconnected);
   }
 
   @Override
