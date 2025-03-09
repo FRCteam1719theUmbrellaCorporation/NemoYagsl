@@ -204,7 +204,12 @@ public class RobotContainer
     new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.REEF)),
     new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
     coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed));
-  
+
+  Command HumanStationHalfIntake =  new SequentialCommandGroup(
+    coralWheels.turnMotor(CoralArmConstants.coral_humanstatione_pos),
+    new WaitUntilCommand(m_CoralIntakeSubsystem.hasCoral()),
+    coralWheels.turnMotor(0)
+    );
   // public static Level level = Level.L2;
 
     void levelUpCommand() {
@@ -431,6 +436,9 @@ public class RobotContainer
     NamedCommands.registerCommand("CoralFloor", CoralFloor);
     NamedCommands.registerCommand("CoralHumanPlayer", CoralHumanPlayer);
     NamedCommands.registerCommand("CoralL1", L1);
+    NamedCommands.registerCommand("StopMotors",coralWheels.stopMotors());
+    NamedCommands.registerCommand("HumanStationHalfIntake",HumanStationHalfIntake);
+    
 
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
       (stream) -> false

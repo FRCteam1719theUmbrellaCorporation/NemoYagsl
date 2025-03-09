@@ -1,0 +1,103 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralDrive"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue 3"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralL1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopMotors"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralDrive"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Human from Blue 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HumanStationHalfIntake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralDrive"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Human to trough 3"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralL1"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
