@@ -546,9 +546,9 @@ public class RobotContainer
       // );
 
       driverXbox.a().whileTrue(new InstantCommand(()-> {
-        Constants.MAX_SPEED = 0.5;
+        Constants.MAX_SPEED = Units.feetToMeters(14.5*0.35);
       }));
-      
+
       driverXbox.a().onFalse(new InstantCommand(()-> {
         Constants.MAX_SPEED = Units.feetToMeters(14.5*Constants.SPEED_LIMITER);
       }));
