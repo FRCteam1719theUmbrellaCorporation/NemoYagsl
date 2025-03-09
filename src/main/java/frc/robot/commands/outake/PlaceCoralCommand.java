@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.commands.Elevator.ElevatorFallback;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import utils.Reef.Level; // i will end it
@@ -72,7 +73,9 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
   public static SequentialCommandGroup placeL2() {
     return new SequentialCommandGroup(
         m_cmd.moveBoth(HeightLevels.LOW_PRE),
-        new WaitUntilCommand(m_cmd.isAtPos()),
+        new WaitUntilCommand(m_cmd.isAtPos())
+                            .unless(m_cmd.hasDisconnect())
+                            .andThen(new ElevatorFallback(m_cmd.getElevator(), m_cmd.getEndEffectorSubsytem())),
         m_cmd.moveBoth(HeightLevels.LOW),
         new WaitUntilCommand(m_cmd.isAtPos()),
         new WaitCommand(2),

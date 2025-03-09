@@ -20,7 +20,7 @@ import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class EndEffectorPIDCommand extends Command {
   private EndEffectorSubsytem m_EndEffector;
-  ElevatorSubsytem m_ElevatorSubsytem;
+  private ElevatorSubsytem m_ElevatorSubsytem;
   boolean setElevator;
   boolean ElevatorMovesFirst;
   PIDController m_endEffPID;
@@ -84,6 +84,19 @@ public class EndEffectorPIDCommand extends Command {
   public BooleanSupplier isAtPos() {
     return () -> MathUtil.isNear(m_EndEffector.getSetpoint(), m_EndEffector.doubleMeasurement(), 0.1) && MathUtil.isNear(m_ElevatorSubsytem.getSetPoint(), m_ElevatorSubsytem.doubleMeasurement(), 1);
   }
+
+  public BooleanSupplier hasDisconnect() {
+    return ()->!m_ElevatorSubsytem.isConnected() || !m_EndEffector.isConnected();
+  }
+
+  public ElevatorSubsytem getElevator() {
+    return this.m_ElevatorSubsytem;
+  }
+
+  public EndEffectorSubsytem getEndEffectorSubsytem() {
+    return this.m_EndEffector;
+  }
+
 
   // Called once the command ends or is interrupted.
   @Override

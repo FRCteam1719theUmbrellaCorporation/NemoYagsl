@@ -71,6 +71,7 @@ public class LimeLightExtra {
         {
           doRejectUpdate = true;
         }
+        if (distanceFromEstimate(mt2) > 3) doRejectUpdate = true;
         if(!doRejectUpdate)
         {
             // SWERVE.getSwerveDrive().setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
@@ -108,5 +109,12 @@ public class LimeLightExtra {
         } 
 
         return false;
+    }
+
+    public static double distanceFromEstimate(PoseEstimate estimate) {
+        Pose2d difference = estimate.pose.relativeTo(SWERVE.getPose());
+        double dist = Math.sqrt(Math.pow(difference.getX(), 2) +Math.pow(difference.getY(), 2));
+        System.out.println(dist);
+        return dist;
     }
 }
