@@ -25,10 +25,9 @@ public final class Constants
   public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
   public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
   public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
-  public static final double SPEED_LIMITER = .7; // was 0.25 3/5/25
-  public static final double slow_speed = .5;
-  public static final double MAX_SPEED  = Units.feetToMeters(14.5*SPEED_LIMITER);
-
+  public static final double SPEED_LIMITER = .70; // was 0.25 3/5/25
+  public static double MAX_SPEED  = Units.feetToMeters(14.5*SPEED_LIMITER);
+  
   public static final CANBus kCANBus = new CANBus("Drivetrain", "./logs/example.hoot");
 
   public static final class DrivebaseConstants
@@ -146,8 +145,8 @@ public static class ElevatorConstants{
 
     public static final double ELEVATOR_ROOM_MAX = 84;
 
-    public static final double MIN_SPEED = -.35f;
-    public static final double MAX_SPEED = .35f;
+    public static final double MIN_SPEED = -.5f;
+    public static final double MAX_SPEED = .5f;
   }
 
   public static double CORALPIVITMAXAMOUNT = 235;

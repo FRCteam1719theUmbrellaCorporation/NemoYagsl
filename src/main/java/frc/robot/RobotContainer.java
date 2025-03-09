@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -543,6 +544,15 @@ public class RobotContainer
       //   m_ElevatorSubsytem.setSetpoint(50)
       //   )
       // );
+
+      driverXbox.a().whileTrue(new InstantCommand(()-> {
+        Constants.MAX_SPEED = 0.5;
+      }));
+      
+      driverXbox.a().onFalse(new InstantCommand(()-> {
+        Constants.MAX_SPEED = Units.feetToMeters(14.5*Constants.SPEED_LIMITER);
+      }));
+
       //Coral move to setpoint
        driverXbox2.x().whileTrue(
         new InstantCommand(() -> {
@@ -633,6 +643,7 @@ public class RobotContainer
           PlaceCoralCommand.placeL4()
         );
     }
+
   }
 
       

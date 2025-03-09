@@ -11,21 +11,21 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "CoralDrive"
-          }
-        },
-        {
           "type": "wait",
           "data": {
             "waitTime": 0.25
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "CoralDrive"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Red 2"
+            "pathName": "Blue 2"
           }
         },
         {

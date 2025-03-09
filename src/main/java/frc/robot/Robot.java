@@ -54,6 +54,9 @@ public class Robot extends TimedRobot
   {
     instance = this;
     DataLogManager.start();
+
+    DriverStation.startDataLog(DataLogManager.getLog());
+    DriverStation.startDataLog(DataLogManager.getLog(), false);
     //DataLog log = DataLogManager.getLog();
     // myBooleanLog = new BooleanLogEntry(log, "/my/boolean");
     // myDoubleLog = new DoubleLogEntry(log, "/my/double");

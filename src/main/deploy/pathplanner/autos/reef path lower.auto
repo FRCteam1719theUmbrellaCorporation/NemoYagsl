@@ -25,7 +25,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Emergency Path middle"
+            "pathName": "Blue 1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralL1"
           }
         }
       ]
