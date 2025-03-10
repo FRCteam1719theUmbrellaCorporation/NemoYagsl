@@ -1,18 +1,11 @@
 package frc.robot.commands.SequenceCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.*;
-//import frc.robot.commands.*;
-//import frc.robot.subsystems.*;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
-//import frc.robot.subsystems.intake.AlgaeIntakeSubsystem;
-import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 
@@ -37,14 +30,6 @@ public class IntakeSequence extends Command{
     public InstantCommand endEffectorAngle(double angle) {
         return new InstantCommand(()->m_EndEffectorSubsytem.setRotation(angle));
     }
-
-    // public InstantCommand algaeArmAngle(double point){
-    //     return new InstantCommand(()->m_AlgaeIntakeSubsystem.setSetpoint(point));
-    //     //angle is 0.1 or 0.12
-    // }
-    // public InstantCommand algaeWheelSpin(double speed){
-    //     return new InstantCommand(()->m_AlgaeIntakeSubsystem.turnIntakeWheels(speed)); 
-    // }
     
     public InstantCommand coralArmAngle(double point){
         return new InstantCommand(()->m_CoralIntakeSubsystem.setSetpoint(point)); 
@@ -87,4 +72,12 @@ public class IntakeSequence extends Command{
          */
         //addCommand(coralArmAngle(.1),waitwait(0.5),coraleWheelSpin(1));
     }
+
+    // public InstantCommand algaeArmAngle(double point){
+    //     return new InstantCommand(()->m_AlgaeIntakeSubsystem.setSetpoint(point));
+    //     //angle is 0.1 or 0.12
+    // }
+    // public InstantCommand algaeWheelSpin(double speed){
+    //     return new InstantCommand(()->m_AlgaeIntakeSubsystem.turnIntakeWheels(speed)); 
+    // }
 }
