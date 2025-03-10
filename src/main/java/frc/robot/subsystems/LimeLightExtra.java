@@ -5,43 +5,48 @@ import java.util.Optional;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.LimelightHelpers;
-import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.LimelightHelpers.RawFiducial;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import swervelib.SwerveDrive;
 import swervelib.imu.Pigeon2Swerve;
-import swervelib.telemetry.SwerveDriveTelemetry;
 
 public class LimeLightExtra {
 
+    // old limelight names
     public final static String backCam = "limelight-back";
     public final static String frontCam = "limelight-front";
     
     private static Pigeon2 m_gyro;
     private static SwerveSubsystem SWERVE;
-    private static SwerveDrivePoseEstimator estimator;
 
-
+    /**
+     * Inits static variables used by this class
+     * 
+     * @param Swerve our swerve subsystem
+     */
     public LimeLightExtra(SwerveSubsystem Swerve) {
-
         this.SWERVE = Swerve;
-        estimator = SWERVE.getSwerveDrive().swerveDrivePoseEstimator;
-        //this.m_gyro = gyro;
+        // estimator = SWERVE.getSwerveDrive().swerveDrivePoseEstimator;
         this.m_gyro = (Pigeon2) ((Pigeon2Swerve) SWERVE.getSwerveDrive().getGyro()).getIMU();
     }
 
+    /**
+     * Returns the best tag
+     * 
+     * 
+     * @param limeLightName
+     * @return
+     */
     public static Optional<RawFiducial> getBestTag(String limeLightName) {
-        RawFiducial[] tags = LimelightHelpers.getRawFiducials(limeLightName);
-        if (tags.length == 0) {
+        RawFiducial[] tags = LimelightHelpers.getRawFiducials(limeLightName); // gets tags
 
-            System.out.println("x");
+        // if there are no tags, nothing happens
+        if (tags.length == 0) {
             return Optional.empty();
         }
 
+        // finds the clearest tag
         RawFiducial bestResult = tags[0];
         double amiguity = tags[0].ambiguity;
         double currentAmbiguity = 0;
@@ -57,8 +62,10 @@ public class LimeLightExtra {
         return Optional.of(bestResult);
     }
 
-    
-
+    /**
+     * Updates the pose estimate of the best tag using MT2
+     * 
+     */
     public static void updatePoseEstimation() {
         boolean doRejectUpdate = false;
         LimelightHelpers.SetRobotOrientation("limelight", SWERVE.getHeading().getDegrees(), 0, 0, 0, 0, 0);
