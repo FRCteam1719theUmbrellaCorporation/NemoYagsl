@@ -29,7 +29,54 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
     System.out.println(Robot.reefLevel);
   }
 
-  // public static SequentialCommandGroup placeAt(Level rLevel) {
+  public static SequentialCommandGroup placeL2() {
+    return new SequentialCommandGroup(
+        m_cmd.moveBoth(HeightLevels.LOW_PRE),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.LOW),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        new WaitCommand(2),
+        m_cmd.moveBoth(HeightLevels.ZERO),
+        new WaitUntilCommand(m_cmd.isAtPos())
+      );
+  }
+
+  // test
+  public static SequentialCommandGroup placeL2ThenIntake(SequentialCommandGroup intakeCommand) {
+    return new SequentialCommandGroup(
+
+      intakeCommand,
+      m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN)
+      );
+  }
+
+  public static SequentialCommandGroup placeL3() {
+    return new SequentialCommandGroup(
+        m_cmd.moveBoth(HeightLevels.Middle_PRE),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.MIDDLE),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        new WaitCommand(2),
+        m_cmd.moveBoth(HeightLevels.ZERO),
+        new WaitUntilCommand(m_cmd.isAtPos())
+      );
+  }
+
+  public static SequentialCommandGroup placeL4() {
+    return new SequentialCommandGroup(
+        m_cmd.moveBoth(HeightLevels.HIGH_PRE),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.HIGH),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        new WaitCommand(2),
+        m_cmd.moveBoth(HeightLevels.ZERO),
+        new WaitUntilCommand(m_cmd.isAtPos())
+      );
+  }
+
+    // public static SequentialCommandGroup placeAt(Level rLevel) {
   
   //   // System.out.println(RobotContainer.level);
 
@@ -69,41 +116,5 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
 
   // i'd rather kms then write this code again
 
-  public static SequentialCommandGroup placeL2() {
-    return new SequentialCommandGroup(
-        m_cmd.moveBoth(HeightLevels.LOW_PRE),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        m_cmd.moveBoth(HeightLevels.LOW),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        new WaitCommand(2),
-        m_cmd.moveBoth(HeightLevels.ZERO),
-        new WaitUntilCommand(m_cmd.isAtPos())
-        
-      );
-  }
-
-  public static SequentialCommandGroup placeL3() {
-    return new SequentialCommandGroup(
-        m_cmd.moveBoth(HeightLevels.Middle_PRE),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        m_cmd.moveBoth(HeightLevels.MIDDLE),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        new WaitCommand(2),
-        m_cmd.moveBoth(HeightLevels.ZERO),
-        new WaitUntilCommand(m_cmd.isAtPos())
-      );
-  }
-
-  public static SequentialCommandGroup placeL4() {
-    return new SequentialCommandGroup(
-        m_cmd.moveBoth(HeightLevels.HIGH_PRE),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        m_cmd.moveBoth(HeightLevels.HIGH),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        new WaitCommand(2),
-        m_cmd.moveBoth(HeightLevels.ZERO),
-        new WaitUntilCommand(m_cmd.isAtPos())
-      );
-  }
 
 }

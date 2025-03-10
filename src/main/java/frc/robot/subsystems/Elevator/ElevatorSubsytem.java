@@ -22,7 +22,8 @@ public class ElevatorSubsytem extends SubsystemBase {
     //Constant list of heights represented by english. YAY
     public enum HeightLevels {
         ZERO(5, 0.03), // Sets to the bottom
-        INTAKE(20.75, .5), //TODO: fix :( 20.75 IS INTAKE
+        INTAKE(20.75, .5), 
+        INTAKE_WITH_ARN_DOWN(30, .5), // this sets the arm hovering above the coral
         INTAKE_PRE_DOWN(60, .47), //TODO: fix :( 20.75 IS INTAKE
         INTAKE_UP(60, 0.03),
         // REEFBASE(1, 0),
