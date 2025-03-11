@@ -171,14 +171,6 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     CoralIntakeSubsystem.intakeMode = pos;
   }
 
-  // public boolean aroundAngle(double degrees){
-  //   return aroundAngle(degrees, 0.2);
-  // }
-
-  // public boolean aroundAngle(double degrees, double tolerance){
-  //     return MathUtil.isNear(degrees, doubleMeasurement(), tolerance);
-  // }
-
   /**
    * Checks if there is coral inside of the intake. 
    * 
@@ -187,6 +179,14 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   public BooleanSupplier hasCoral() {
     return () -> m_rangeSensor.getDistance().getValueAsDouble() < .45;
   }
+
+   // public boolean aroundAngle(double degrees){
+  //   return aroundAngle(degrees, 0.2);
+  // }
+
+  // public boolean aroundAngle(double degrees, double tolerance){
+  //     return MathUtil.isNear(degrees, doubleMeasurement(), tolerance);
+  // }
 
   @ Override
   public void periodic() {}
