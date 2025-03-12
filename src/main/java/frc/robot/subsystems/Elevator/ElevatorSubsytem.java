@@ -18,7 +18,6 @@ import frc.robot.Constants.ElevatorConstants;
 
 public class ElevatorSubsytem extends SubsystemBase {
 
-    //TODO: Replace with encoder positions
     //Constant list of heights represented by english. YAY
     public enum HeightLevels {
         ZERO(5, 0.03), // Sets to the bottom
@@ -42,17 +41,31 @@ public class ElevatorSubsytem extends SubsystemBase {
             this.armSetpoints = arm;
         }
 
-        // returns num val
+        /**
+         * This is the setpoint associated with the elevator
+         * 
+         * @return elevator desired position
+         */
         public double numVal() {
             return value;
         }
 
-        // returns num val
+        /**
+         * This is the setpoint associated with the endeffecto
+         * 
+         * @return endeffector desired position
+         */
         public double armVal() {
           return armSetpoints;
         }
 
-        // returns an enum based off an associated input
+        /**
+         * turns a double associated with the elevator into an enum
+         * 
+         * 
+         * @param input: a double you'd like to attempt to cast into an enum
+         * @return a enum if the double is valid, or an enum val
+         */
         public static HeightLevels doubleToEnum(double input) {
             for (HeightLevels h: HeightLevels.values()) {
                 if (h.numVal() == input) return h;
@@ -63,28 +76,31 @@ public class ElevatorSubsytem extends SubsystemBase {
 
     }
 
-  /** Creates a new ElevatorSubsytem. */
+ /**
+  * Hardware:
+  */
   private final SparkMax ELEVATOR_MOTOR_ONE;
   private final RelativeEncoder ELEVATOR_ENCODER;
-  private HeightLevels currentPosEnum;
-  // private int elevatorExtraPowerTimer;
-  //ENCODER
 
+  /**
+   * Setpoint stuff
+   */
   static double HEIGHT_SETPOINT = 30;
-  // private boolean temp = true;
+  private HeightLevels currentPosEnum;
+
   private static final PIDController elevatorPIDController = new PIDController(ElevatorConstants.ElevatorkP, ElevatorConstants.ElevatorkI, ElevatorConstants.ElevatorkD); // TODO ADD VALUES
   
   public ElevatorSubsytem() {
-    // temp = true;
+    //defines motors
     ELEVATOR_MOTOR_ONE = new SparkMax(Constants.ELEVATOR_PIN_ONE, MotorType.kBrushless);
     ELEVATOR_ENCODER = ELEVATOR_MOTOR_ONE.getEncoder();
 
+    // setpoints
     currentPosEnum = HeightLevels.ZERO;
     HEIGHT_SETPOINT = 0;
     elevatorPIDController.setSetpoint(HEIGHT_SETPOINT);
 
     elevatorPIDController.setTolerance(.5);
-    // elevatorExtraPowerTimer = 0;
   }
 
   // sets the pos based off an enum value
@@ -126,52 +142,87 @@ public class ElevatorSubsytem extends SubsystemBase {
     setSetpoint(setpoint);
   }
 
+  /**
+   * Sets the elevators setpoint
+   * 
+   * @param setSetpoint: sets the elevators setpoint to the specified double
+   */
   public void setSetpoint(double setSetpoint) {
     HEIGHT_SETPOINT = setSetpoint;
     elevatorPIDController.setSetpoint(setSetpoint);
   }
 
+  /**
+   * sends the elevator back to 0
+   */
   public void zeroElevator() {
     setHeightWithEnum(HeightLevels.ZERO);;
   }
 
+  /**
+   * stops the elevator
+   */
   public void stop()    {
     ELEVATOR_MOTOR_ONE.set(0.0);
   }
 
+  /**
+   * Returns the elevators current position, which should range from 0 - 84.
+   * if you get a number out of those bounds, something is probably horribly wrong
+   */
   public double doubleMeasurement() {
     return ELEVATOR_ENCODER.getPosition();
   }
 
+  /**
+   * Returns the current height level stored in the elevator
+   */
   public HeightLevels currentPos() {
     return this.currentPosEnum;
   }
 
+  /**
+   * Returns the current set point stored in the elevator
+   */
   public double getSetPoint() {
     return HEIGHT_SETPOINT;
   }
 
+  /**
+   * Checks if the elevator is around a certain height
+   * 
+   * @param height height to compare to
+   * @param tolerance tne amount of tolerance to check
+   * @return if the elevator is around that point, returns true, else false
+   */
   public boolean aroundHeight(double height, double tolerance){
     return MathUtil.isNear(height,ELEVATOR_ENCODER.getPosition(),tolerance);
   }
 
+  /**
+   * Returns if the elevator is within the 0 - 84 domain
+   * @return true if the elevator is within the domain, false if it's not
+   */
   private boolean inBounds() {
     return HEIGHT_SETPOINT > 0 && ElevatorConstants.ELEVATOR_ROOM_MAX >= HEIGHT_SETPOINT;
   }
 
+  /**
+   * Constant control of the elevator
+   * This will allow the elevator to ALWAYS hold it's position
+   */
   @Override
   public void periodic() {
-    double output;
-    
+    double output; // this is the speed that the elevator will move at
+
+    // checks to see if the elevator setpoint is safe 
     if (inBounds()) {
       output = MathUtil.clamp(elevatorPIDController.calculate(doubleMeasurement()), ElevatorConstants.MIN_SPEED, ElevatorConstants.MAX_SPEED);
     } else {
-      // System.out.println("erm its out of bounds " + HEIGHT_SETPOINT);
       output = 0;
     }
 
-    // System.out.println("ELEVATOR DISABLED. FIX THAT, OR COMMENT OUT THE ELEVATOR");
+    // moves the elevator at the output speed
     ELEVATOR_MOTOR_ONE.set(output);
   }
-
 }

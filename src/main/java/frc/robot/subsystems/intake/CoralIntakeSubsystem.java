@@ -8,16 +8,11 @@ import frc.robot.Constants.CoralArmConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//import com.revrobotics.CANSparkMax;
 import com.revrobotics.spark.SparkMax;
-
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
 import java.util.function.BooleanSupplier;
-
 import com.ctre.phoenix6.hardware.CANrange;
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.RelativeEncoder;
 
 public class CoralIntakeSubsystem extends SubsystemBase {
   /** Creates a new CoralIntakeSubsystem. */
@@ -27,7 +22,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     REEF(CoralArmConstants.coral_reef_l1, CoralArmConstants.coral_outtake_reef_speed), 
     HUMAN_STATION(CoralArmConstants.coral_floorintake_pos,CoralArmConstants.coral_intake_humanStation_speed);
 
-    double angle;
+    double angle; 
     double speed;
     int button;
 
@@ -47,107 +42,152 @@ public class CoralIntakeSubsystem extends SubsystemBase {
                                                                     CoralArmConstants.CoralArm_kD); 
                                                                     // TODO ADD CONSTANT 
 
+  // HARDWARE
   private static SparkMax CORAL_ARM_TURNMOTOR;
   private static SparkMax CORAL_ARM_ANGLEMOTOR;
   private static AbsoluteEncoder CORAL_ARM_ENCODER;
-  private static double SETPOINTANGLE;
-  private static IntakePosition intakeMode;
   private static CANrange m_rangeSensor;
 
+  private static double SETPOINTANGLE; // setpoint where the angle motor wants to go
+  private static IntakePosition intakeMode; 
+
   public CoralIntakeSubsystem() {
+    // defines hardware
     CORAL_ARM_TURNMOTOR = new SparkMax(Constants.CORAL_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
     CORAL_ARM_ANGLEMOTOR = new SparkMax(Constants.CORAL_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
     CORAL_ARM_ENCODER = CORAL_ARM_ANGLEMOTOR.getAbsoluteEncoder();
-    coralArmPIDController.enableContinuousInput(0,1);
-    SETPOINTANGLE = CoralArmConstants.coral_armdriving_pos;
-    intakeMode = IntakePosition.DRIVING; 
     m_rangeSensor = new CANrange(Constants.CORAL_ARM_RANGE_SENSOR);
 
+    // updates the PID 
+    coralArmPIDController.enableContinuousInput(0,1); 
     coralArmPIDController.setTolerance(5,10);
+
+    // sets inital positions and settings
+    SETPOINTANGLE = CoralArmConstants.coral_armdriving_pos;
+    intakeMode = IntakePosition.DRIVING; 
   }
 
+  /**
+   * Turns the intake wheels at the specified speed
+   * 
+   * @param speed: speed specified
+   * 
+   */
   public void intakeSpinWheels(double speed){
     CORAL_ARM_TURNMOTOR.set(speed);
   }
 
+  // stops the intake
   public void turnOffIntakeWheel(){
-    CORAL_ARM_TURNMOTOR.set(0);
+    CORAL_ARM_TURNMOTOR.stopMotor();
   }
-  
+
+  /**
+   * Gets the position of the coral arm
+   * 
+   * @return CORAL_ARM_ENCODER.getPosition()
+   */
   public double doubleMeasurement() {
     return CORAL_ARM_ENCODER.getPosition();
   }
 
+  /**
+   * sets the speed that the coral arm must move at
+   * 
+   * @param angle: the speed at which the arm should move
+   */
   public void setRotation(double angle) {
     CORAL_ARM_ANGLEMOTOR.set(angle);
   }
 
-  public void stopRotation(double angle) {
+  /**
+   * Sets the arms move speed to 0
+   * 
+   */
+  public void stopRotation() {
     CORAL_ARM_ANGLEMOTOR.set(0);
   }
 
+  /**
+   * Checks if the intake is on the floor
+   * 
+   * @return if the intake is on the floor
+   */
   public boolean isIntaking() {
     return intakeMode == IntakePosition.FLOOR;
   }
 
-  // returns the current mode
+  /**
+   * Gets the current intake mode, as an enum
+   * 
+   * @return intake mode
+   */
   public IntakePosition currentMode() {
     return intakeMode;
   }
 
+  
+  /**
+   * @return Coral arm encoder
+   */
   public AbsoluteEncoder getEncoder() {
     return CORAL_ARM_ENCODER;
   }
 
+  /**
+   * Current setpoint the arm is being moved to
+   * 
+   *  @return the current setpoint the arm is being moved to
+   */
   public double getSetpoint() {
     return SETPOINTANGLE;
   }
 
+  /**
+   * PID for the arm
+   * 
+   *  @return the arm's PID controller
+   */
   public PIDController getPID() {
     return coralArmPIDController;
   }  
 
+  /**
+   * Sets the arms setpoint. this will then cause the arm to move there
+   * 
+   *  @param point position from 0 - 1 that the intake will point to
+   */
   public void setSetpoint(double point) {
     SETPOINTANGLE = MathUtil.clamp(point, CoralArmConstants.MINROTATE, CoralArmConstants.MAXROTATE);
     coralArmPIDController.setSetpoint(point);
   }
 
+  /**
+   * Sets the current enum of where the arm should be and how it should intake / outake coral
+   * 
+   *  @param pos: the num value passed in
+   */
   public void setPosition(IntakePosition pos) {
-    this.intakeMode = pos;
+    CoralIntakeSubsystem.intakeMode = pos;
   }
 
-  public boolean aroundAngle(double degrees){
-    return aroundAngle(degrees, 0.2);
-  }
-
-  public boolean aroundAngle(double degrees, double tolerance){
-      return MathUtil.isNear(degrees, doubleMeasurement(), tolerance);
-  }
-
+  /**
+   * Checks if there is coral inside of the intake. 
+   * 
+   *  @return returns true if there is a coral in the intake
+   */
   public BooleanSupplier hasCoral() {
     return () -> m_rangeSensor.getDistance().getValueAsDouble() < .45;
   }
 
- /*  public void intakeAngle(double angle){
-    CORAL_ARM_ANGLEMOTOR.getAbsoluteEncoder().getPosition();
-  }
+   // public boolean aroundAngle(double degrees){
+  //   return aroundAngle(degrees, 0.2);
+  // }
 
-  
-
-  
-
-
-/* 
-  public void resetAngle(){
-    CORAL_ARM_ANGLEMOTOR.set(0);
-  }
-*/
-
-
+  // public boolean aroundAngle(double degrees, double tolerance){
+  //     return MathUtil.isNear(degrees, doubleMeasurement(), tolerance);
+  // }
 
   @ Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    // CORAL_ARM_ANGLEMOTOR.set(coralArmPIDController.calculate(CORAL_ARM_ANGLEMOTOR.getAbsoluteEncoder().getPosition(), SETPOINTANGLE));
-  }
+  public void periodic() {}
 }
