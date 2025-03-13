@@ -27,7 +27,8 @@ public final class Constants
   public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
   public static final double SPEED_LIMITER = .70; // was 0.25 3/5/25
   public static double MAX_SPEED  = Units.feetToMeters(14.5*SPEED_LIMITER);
-  
+  public static final double GYRO_OFFSET_MULT = 2.975207/360; // terror number. 363 * that = 3.00000039. such a small margin of error is... FINE
+
   public static final CANBus kCANBus = new CANBus("Drivetrain", "./logs/example.hoot");
 
   public static final class DrivebaseConstants

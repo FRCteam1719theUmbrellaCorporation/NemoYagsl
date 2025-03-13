@@ -15,6 +15,7 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveDrive;
 import swervelib.imu.Pigeon2Swerve;
 import swervelib.telemetry.SwerveDriveTelemetry;
+import utils.HarrisonsAwfulGyro;
 
 public class LimeLightExtra {
 
@@ -31,7 +32,7 @@ public class LimeLightExtra {
         this.SWERVE = Swerve;
         estimator = SWERVE.getSwerveDrive().swerveDrivePoseEstimator;
         //this.m_gyro = gyro;
-        this.m_gyro = (Pigeon2) ((Pigeon2Swerve) SWERVE.getSwerveDrive().getGyro()).getIMU();
+        this.m_gyro = (HarrisonsAwfulGyro) ((Pigeon2Swerve) SWERVE.getSwerveDrive().getGyro()).getIMU();
     }
 
     public static Optional<RawFiducial> getBestTag(String limeLightName) {
