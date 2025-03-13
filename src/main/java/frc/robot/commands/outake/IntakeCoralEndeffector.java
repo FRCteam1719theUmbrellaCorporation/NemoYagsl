@@ -40,11 +40,26 @@ public class IntakeCoralEndeffector extends SequentialCommandGroup {
    */
   public static SequentialCommandGroup quickIntakeFacingDown(EndEffectorPIDCommand cmd) {
     // doesnt move if it isnt in the right position
-    if (!cmd.comparePosition(HeightLevels.INTAKE_WITH_ARN_DOWN).getAsBoolean()) return emptyCommand;
+    // if (!cmd.comparePosition(HeightLevels.INTAKE_WITH_ARN_DOWN).getAsBoolean()) return emptyCommand;
 
     return new SequentialCommandGroup(
-      IntakeCoralEndeffector.quickIntake(cmd),
-      cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN)
+      cmd.moveBoth(HeightLevels.INTAKE),
+      new WaitUntilCommand(cmd.isAtPos()),
+      cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN)
+    );
+  }
+
+  public static SequentialCommandGroup quickIntakeToUp(EndEffectorPIDCommand cmd) {
+    // doesnt move if it isnt in the right position
+    // if (!cmd.comparePosition(HeightLevels.INTAKE_WITH_ARN_DOWN).getAsBoolean()) return emptyCommand;
+
+    return new SequentialCommandGroup(
+      cmd.moveBoth(HeightLevels.INTAKE),
+      new WaitUntilCommand(cmd.isAtPos()),
+      cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+      new WaitUntilCommand(cmd.isAtPos()),
+      cmd.moveBoth(HeightLevels.ZERO),
+      new WaitUntilCommand(cmd.isAtPos())
     );
   }
 

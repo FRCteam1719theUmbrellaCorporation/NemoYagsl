@@ -650,6 +650,12 @@ public class RobotContainer
         driverXbox2.rightBumper().onTrue(
           PlaceCoralCommand.placeL4()
         );
+
+        driverXbox2.start().onTrue(
+          IntakeCoralEndeffector.quickIntakeToUp(endEffDefaultCmd)
+        );
+
+
     }
 
   }
