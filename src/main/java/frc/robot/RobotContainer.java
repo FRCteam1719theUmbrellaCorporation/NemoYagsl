@@ -577,7 +577,7 @@ public class RobotContainer
       // );
 
       driverXbox2.y().whileTrue(
-        CoralFloor
+        coralWheels.fullIntake()
       );
       driverXbox2.y().onFalse(
         CoralDrive
@@ -590,6 +590,7 @@ public class RobotContainer
       driverXbox2.b().onFalse(
         CoralDrive
       );
+
       // driverXbox2.povUp().onTrue(
       //   new InstantCommand(()->levelUpCommand())
       // );
