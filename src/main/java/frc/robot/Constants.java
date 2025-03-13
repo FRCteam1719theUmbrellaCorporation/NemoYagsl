@@ -101,7 +101,7 @@ public final class Constants
 
     public static final double MIN_SPEED = -.5f;
     public static final double MAX_SPEED = .5f;
-    public static final double coral_floorintake_pos = 0.36;
+    public static final double coral_floorintake_pos = 0.34;
     public static final double coral_armdriving_pos = 0.15;
     public static final double coral_humanstatione_pos = 0.10;
     public static final double coral_reef_l1 = 0.2;
