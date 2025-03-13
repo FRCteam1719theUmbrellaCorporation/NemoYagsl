@@ -635,7 +635,7 @@ public class RobotContainer
       // driverXbox2.a().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
       
       driverXbox2.leftBumper().onTrue(
-        IntakeCoralEndeffector.intake(endEffDefaultCmd)
+        IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
         );
 
         driverXbox2.leftTrigger().onTrue(
