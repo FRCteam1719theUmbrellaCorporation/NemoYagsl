@@ -642,16 +642,20 @@ public class RobotContainer
       // driverXbox2.a().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
       
       driverXbox2.leftBumper().onTrue(
-        IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
+        IntakeCoralEndeffector.quickIntakeToUp(endEffDefaultCmd)
         );
 
         driverXbox2.leftTrigger().onTrue(
-          placeAtSpot(Robot.reefLevel)
+          PlaceCoralCommand.l2CommandFlip()
         );
 
 
         driverXbox2.rightTrigger().onTrue(
-          PlaceCoralCommand.placeL3()
+          PlaceCoralCommand.l3CommandFlip()
+        );
+
+        driverXbox2.a().onTrue(
+          IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
         );
 
         driverXbox2.rightBumper().onTrue(

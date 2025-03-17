@@ -116,14 +116,14 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
       );
   }
 
-  public static SequentialCommandGroup l4CommandFlip() {
+  public static SequentialCommandGroup l2CommandFlip() {
     return new SequentialCommandGroup(
       m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
       new WaitUntilCommand(m_cmd.isAtPos()),
-      m_cmd.moveBoth(HeightLevels.HIGH),
-      m_cmd.moveBoth(HeightLevels.HIGH_PRE),
+      new WaitCommand(0.1),
+      m_cmd.moveBoth(HeightLevels.LOW_PRE),
       new WaitUntilCommand(m_cmd.isAtPos()),
-      m_cmd.moveBoth(HeightLevels.HIGH),
+      m_cmd.moveBoth(HeightLevels.LOW),
       new WaitUntilCommand(m_cmd.isAtPos()),
       new WaitCommand(2),
       m_cmd.moveBoth(HeightLevels.INTAKE_UP),
@@ -132,6 +132,45 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
       new WaitUntilCommand(m_cmd.isAtPos()),
       m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
       new WaitUntilCommand(m_cmd.isAtPos())
+      );
+  }
+
+  public static SequentialCommandGroup l3CommandFlip() {
+    return new SequentialCommandGroup(
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      new WaitCommand(0.1),
+        m_cmd.moveBoth(HeightLevels.Middle_PRE),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.MIDDLE),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        new WaitCommand(2),
+        m_cmd.moveBoth(HeightLevels.INTAKE_UP),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos())
+      );
+  }
+
+  public static SequentialCommandGroup l4CommandFlip() {
+    return new SequentialCommandGroup(
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      new WaitCommand(0.1),
+
+      m_cmd.moveBoth(HeightLevels.HIGH_PRE),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.HIGH),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        new WaitCommand(2),
+        m_cmd.moveBoth(HeightLevels.INTAKE_UP),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos())
     );
   }
 
