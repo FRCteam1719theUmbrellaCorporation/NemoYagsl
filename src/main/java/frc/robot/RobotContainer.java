@@ -590,6 +590,11 @@ public class RobotContainer
       driverXbox2.b().onFalse(
         CoralDrive
       );
+      
+      driverXbox2.start().onTrue(
+        PlaceCoralCommand.resetArm()
+        );
+
 
       // driverXbox2.povUp().onTrue(
       //   new InstantCommand(()->levelUpCommand())

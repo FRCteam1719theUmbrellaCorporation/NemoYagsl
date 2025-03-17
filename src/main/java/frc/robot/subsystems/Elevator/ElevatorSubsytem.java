@@ -20,17 +20,17 @@ public class ElevatorSubsytem extends SubsystemBase {
 
     //Constant list of heights represented by english. YAY
     public enum HeightLevels {
-        ZERO(5, 0.03), // Sets to the bottom
-        INTAKE(20.75, .5), 
+        ZERO(5, 0.0), // Sets to the bottom
+        INTAKE(22.9, .5), 
         INTAKE_WITH_ARN_DOWN(30, .5), // this sets the arm hovering above the coral
-        INTAKE_PRE_DOWN(60, .47), //TODO: fix :( 20.75 IS INTAKE
+        INTAKE_PRE_DOWN(60, .5), //TODO: fix :( 20.75 IS INTAKE
         INTAKE_UP(60, 0.03),
         // REEFBASE(1, 0),
-        LOW_PRE(8, 0.03), // Sets to the lowest 
+        LOW_PRE(8, 0.0), // Sets to the lowest 
         LOW(8, .2), // Sets to the lowest 
-        Middle_PRE(27.5, 0.03),
+        Middle_PRE(27.5, 0.0),
         MIDDLE(27.75, 0.2), // 
-        HIGH_PRE(58,0.03),
+        HIGH_PRE(58,0.0),
         HIGH(58, 0.2),
         MAX(ElevatorConstants.ELEVATOR_ROOM_MAX, 0); // If our elevator goes higher than the third stalk, this would allow us control. maybe we shouldnt use it 
 
