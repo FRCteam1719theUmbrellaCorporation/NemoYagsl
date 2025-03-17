@@ -116,6 +116,38 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
       );
   }
 
+  public static SequentialCommandGroup l4CommandFlip() {
+    return new SequentialCommandGroup(
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      m_cmd.moveBoth(HeightLevels.HIGH),
+      m_cmd.moveBoth(HeightLevels.HIGH_PRE),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      m_cmd.moveBoth(HeightLevels.HIGH),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      new WaitCommand(2),
+      m_cmd.moveBoth(HeightLevels.INTAKE_UP),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+      new WaitUntilCommand(m_cmd.isAtPos())
+    );
+  }
+
+  public static SequentialCommandGroup resetArm() {
+    return new SequentialCommandGroup(
+        m_cmd.moveBoth(HeightLevels.INTAKE_UP),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos())
+        // m_cmd.moveBoth(HeightLevels.ZERO),
+        // new WaitUntilCommand(m_cmd.isAtPos())
+      );
+  }
+
     // public static SequentialCommandGroup placeAt(Level rLevel) {
   
   //   // System.out.println(RobotContainer.level);

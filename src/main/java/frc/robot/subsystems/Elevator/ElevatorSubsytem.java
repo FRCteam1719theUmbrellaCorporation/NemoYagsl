@@ -25,6 +25,7 @@ public class ElevatorSubsytem extends SubsystemBase {
         INTAKE_WITH_ARN_DOWN(30, .5), // this sets the arm hovering above the coral
         INTAKE_PRE_DOWN(60, .5), //TODO: fix :( 20.75 IS INTAKE
         INTAKE_UP(60, 0.03),
+        INTAKE_FLIP_AROUND(ElevatorConstants.ARM_180_SPIN, 0.8),
         // REEFBASE(1, 0),
         LOW_PRE(8, 0.0), // Sets to the lowest 
         LOW(8, .2), // Sets to the lowest 
