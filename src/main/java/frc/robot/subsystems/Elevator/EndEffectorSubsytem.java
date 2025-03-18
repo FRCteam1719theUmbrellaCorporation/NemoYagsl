@@ -14,13 +14,22 @@ import frc.robot.Constants;
 import frc.robot.Constants.EndefectorConstants;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 
-
+/**
+ * Controls the robots outake, aka the endeffector
+ * 
+ * This endeffector only manages 1 motor, the wrist motor. The actual outake method is passive!
+ * This subsystem also controls the constant movement of the real endeffector via it's periodic
+ */
 public class EndEffectorSubsytem extends SubsystemBase {
-
+  // HARDWARE
   private final SparkMax ENDEFFECTOR_ROTATE_MOTOR;
-  private final AbsoluteEncoder ENDEFFECTOR_ENCODER;
+  private final AbsoluteEncoder ENDEFFECTOR_ENCODER; // abs encoder built into spark
+
+  // these are where the robot wants to be positioned
   private double setPoint;
   private HeightLevels heightLevels;
+
+  // PID controller
   private PIDController EndEffectorPIDController = new PIDController(EndefectorConstants.Endefector_kP, 
                                                                     EndefectorConstants.Endefector_kI, 
                                                                     EndefectorConstants.Endefector_kD); 
@@ -29,58 +38,90 @@ public class EndEffectorSubsytem extends SubsystemBase {
  
   /** Creates a new EndEffectorSubsytem. */
   public EndEffectorSubsytem() {
+    // defines hardware
     ENDEFFECTOR_ROTATE_MOTOR = new SparkMax(Constants.ENDEFECTOR_ANGLE_MOTOR_ID, MotorType.kBrushless); 
     ENDEFFECTOR_ENCODER = ENDEFFECTOR_ROTATE_MOTOR.getAbsoluteEncoder();
+
+    // sets the PID settings, and inital setpoint, so the arm always points up on init
     setPoint = 0;
     EndEffectorPIDController.setSetpoint(setPoint);
     EndEffectorPIDController.enableContinuousInput(0,1);
     heightLevels = HeightLevels.ZERO;
   }
 
+  /**
+   * Stops the endeffector
+   */
   public void stop() {
     ENDEFFECTOR_ROTATE_MOTOR.set(0);
   }
-
+  /**
+   * Returns the encoder measurement position. ranges from 0 to 1
+   */
   public double doubleMeasurement() {
     return ENDEFFECTOR_ENCODER.getPosition();
   }
 
+  /**
+   * Sets the rotation of the endeffector motor
+   */
   public void setRotation(double angle) {
     ENDEFFECTOR_ROTATE_MOTOR.set(angle);
   }
 
-  public void stopRotation(double angle) {
-    ENDEFFECTOR_ROTATE_MOTOR.set(0);
-  }
-
+  /**
+   * Returns the PID controller from the endeffector
+   * 
+   * @return Returns the robots PID controller
+   */
   public PIDController getPID() {
     return EndEffectorPIDController;
   }
 
+  /**
+   * Returns the Endeffector's desired setpoint
+   * 
+   * @return Returns the desired setpoint
+   */
   public double getSetpoint() {
     return setPoint;
   }
 
+  /**
+   * Sets the height level
+   * 
+   * @param desired height level
+   */
   public void setHeight(HeightLevels level) {
     heightLevels = level;
     // setSetpoint(heightLevels.armVal());
   }
 
+  /**
+   * Sets the desired setpoint for the endeffector. This also accounts for values outside the range of 0 to 1
+   * 
+   * @param point: desired setpoint. will be clamped to 0 to 1
+   */
   public void setSetpoint(double point) {
-    setPoint = point;
-    EndEffectorPIDController.setSetpoint(point);
+    setPoint = MathUtil.clamp(point, 0, 1);
+    EndEffectorPIDController.setSetpoint(setPoint);
   }
 
+  /**
+   * Returns the set height level
+   * 
+   * @return heightlevel 
+   */
   public HeightLevels getHeight() {
     return heightLevels;
   }
 
+  // This method will be called once per scheduler run
   @Override
   public void periodic() {
     double output = MathUtil.clamp(EndEffectorPIDController.calculate(doubleMeasurement()),EndefectorConstants.MIN_SPEED, EndefectorConstants.MAX_SPEED);
     // System.out.println("endeff output: " + output);
     setRotation(output);
-    // This method will be called once per scheduler run
   }
 }
  

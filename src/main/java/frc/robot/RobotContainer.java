@@ -9,7 +9,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -46,7 +45,7 @@ import frc.robot.commands.outake.EndEffectorPIDCommand;
 import frc.robot.commands.outake.IntakeCoralEndeffector;
 import frc.robot.commands.outake.PlaceCoralCommand;
 import utils.*;
-//import frc.robot.commands.Intake.AlgaePivotPIDCommand;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -54,13 +53,9 @@ import utils.*;
  */
 public class RobotContainer
 {
-
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-
-
   private final SendableChooser<Command> autoChooser;
   
-  //Orinal port are driverXBox = 1, driverXBox2 = 0
+  //Original port are driverXBox = 1, driverXBox2 = 0
 
   int invert = 1;
   final CommandXboxController driverXbox = new CommandXboxController(0);
@@ -262,9 +257,9 @@ public class RobotContainer
       Command placeAtSpot(Level lev) {
         System.out.println("pos" + Reef.pos);
         switch (lev) {
-          case L2: return PlaceCoralCommand.placeL2();
-          case L3: return PlaceCoralCommand.placeL3();
-          case L4: return PlaceCoralCommand.placeL4();
+          case L2: return PlaceCoralCommand.l2CommandFlip();
+          case L3: return PlaceCoralCommand.l3CommandFlip();
+          case L4: return PlaceCoralCommand.l4CommandFlip();
           default: return Commands.none();
         }
       }
@@ -425,7 +420,6 @@ public class RobotContainer
   public RobotContainer() { 
     new LimeLightExtra(drivebase);
 
-    Rotation3d sd = drivebase.getSwerveDrive().imuReadingCache.getValue();
     LimelightHelpers.SetRobotOrientation(null, drivebase.getHeading().getDegrees(), 0, 0, 0, 0, 0);
     LimelightHelpers.SetIMUMode(null, 1);
     // Configure the trigger bindings

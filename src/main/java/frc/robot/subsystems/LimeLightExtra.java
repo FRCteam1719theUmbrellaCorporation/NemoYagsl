@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.RawFiducial;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -49,7 +48,7 @@ public class LimeLightExtra {
         // finds the clearest tag
         RawFiducial bestResult = tags[0];
         double amiguity = tags[0].ambiguity;
-        double currentAmbiguity = 0;
+        // double currentAmbiguity = 0;
 
         for (RawFiducial tag : tags) {
             if (tag.ambiguity < amiguity) {
