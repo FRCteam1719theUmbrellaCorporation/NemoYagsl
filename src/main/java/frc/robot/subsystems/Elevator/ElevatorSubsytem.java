@@ -19,6 +19,7 @@ import frc.robot.Constants.ElevatorConstants;
 public class ElevatorSubsytem extends SubsystemBase {
 
     //Constant list of heights represented by english. YAY
+    //Side note: this is gods ugliested enum.. :(
     public enum HeightLevels {
         ZERO(5, 0.0), // Sets to the bottom
         INTAKE(22.9, .5), 
@@ -26,6 +27,8 @@ public class ElevatorSubsytem extends SubsystemBase {
         INTAKE_PRE_DOWN(60, .5), //TODO: fix :( 20.75 IS INTAKE
         INTAKE_UP(60, 0.03),
         INTAKE_FLIP_AROUND(ElevatorConstants.ARM_180_SPIN, 0.2),
+        INTAKE_FLIP_TO_DOWN(ElevatorConstants.ARM_180_SPIN, 0.5),
+
         // REEFBASE(1, 0),
         LOW_PRE(8, 0.0), // Sets to the lowest 
         LOW(10f, .8), // Sets to the lowest 
