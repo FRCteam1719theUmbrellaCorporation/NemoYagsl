@@ -56,11 +56,37 @@ public class EndEffectorPIDCommand extends Command {
     }
   }
 
+  /**
+   * Allows the user to move the arm and the elevator at the same time. 
+   * The prefered direction of the arm will be determined by the enum attatched
+   * 
+   * @param level: height level that you want the elevator and arm to move to
+   * @return Command that begins the arm and elevator moving in different directions
+   */
   public Command moveBoth(HeightLevels level) {
+    return moveBoth(level, level.preferedDirection());
+  }
+
+  /**
+   * Allows the user to move the arm and the elevator at the same time.
+   * This specific command allows the arm to move to the closest spot regaurdless of if the enum wants it to
+   * 
+   * @param level: height level that you want the elevator and arm to move to
+   * @return Command that begins the arm and elevator moving in different directions
+   */
+  public Command moveBothNoDirection(HeightLevels level) {
     return moveBoth(level, null);
   }
 
-  public Command moveBoth(HeightLevels level, Boolean moveArmPosotiveDirection) {
+  /**
+   * Allows the user to move the arm and the elevator at the same time. 
+   * A passed in value will be applied for the direction of the arm
+   * 
+   * @param level: height level that you want the elevator and arm to move to
+   * @param explicitDirection: Direction the endeffector will move in. + is left, - is right. null is whatever is closest
+   * @return Command that begins the arm and elevator moving in different directions
+   */
+  public Command moveBoth(HeightLevels level, Boolean explicitDirection) {
 
     return new InstantCommand(() -> {
       if (level.numVal() > m_ElevatorSubsytem.getSetPoint()) {
@@ -76,7 +102,7 @@ public class EndEffectorPIDCommand extends Command {
 
       // }
       m_EndEffector.setHeight(level);
-      m_EndEffector.setDirection(moveArmPosotiveDirection);
+      m_EndEffector.setDirection(explicitDirection);
     });
   }
 

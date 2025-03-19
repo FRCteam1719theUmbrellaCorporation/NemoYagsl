@@ -35,11 +35,20 @@ public class ElevatorSubsytem extends SubsystemBase {
 
         private final double value; // value held by each enum val
         private final double armSetpoints; // value held by each enum val
+        private final Boolean direction; // value held by each enum val
+
 
         HeightLevels(double value, double arm) {
             this.value = value;
             this.armSetpoints = arm;
+            this.direction = null;
         }
+
+        HeightLevels(double value, double arm, Boolean explicitDirection) {
+          this.value = value;
+          this.armSetpoints = arm;
+          this.direction = explicitDirection;
+      }
 
         /**
          * This is the setpoint associated with the elevator
@@ -57,6 +66,15 @@ public class ElevatorSubsytem extends SubsystemBase {
          */
         public double armVal() {
           return armSetpoints;
+        }
+
+        /**
+         * Gets prefered direction of the endeffector in this position
+         * 
+         * @return Boolean associated with it's prefered direction
+         */
+        public Boolean preferedDirection() {
+          return direction;
         }
 
         /**
