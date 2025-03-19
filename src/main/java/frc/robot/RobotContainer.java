@@ -206,6 +206,7 @@ public class RobotContainer
     coralWheels.turnMotor(0)
     );
   // public static Level level = Level.L2;
+  Command drivetotag;// = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
 
     void levelUpCommand() {
       switch (Robot.reefLevel) {
@@ -592,26 +593,33 @@ public class RobotContainer
         );
 
       driverXbox.x().onTrue(
+        new SequentialCommandGroup(
         new InstantCommand(()->{
           String loca = SmartDashboard.getString("location", null);
           Boolean redAlliance = drivebase.isRedAlliance();
           if (loca==null) return ;
-          double x = reefpose.getArrayfromKey(loca, redAlliance)[0]+(drivebase.isRedAlliance()?13.058902:4.489323);
-          double y = reefpose.getArrayfromKey(loca, redAlliance)[1]+4.0259;
-          double r = reefpose.getArrayfromKey(loca, redAlliance)[2];
-
-          drivebase.driveToPose(new Pose2d(new Translation2d(x,y), new Rotation2d(r))).schedule();
-          // System.out.println(x);
-          // System.out.println(y);
-          // System.out.println(r);
-
+          double xap = reefpose.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
+          double yap = reefpose.getArrayfromKey(loca, redAlliance)[1]+4.0259;
+          double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
+          drivetotag = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
+          if (!drivetotag.isScheduled()) drivetotag.schedule();
         }
+        ), 
+        new InstantCommand(()->drivebase.lock())
+        )
+      );
+
+      driverXbox.x().onFalse(
+        new InstantCommand(()->{
+          if (drivetotag.isScheduled()) drivetotag.cancel();
+          }
         )
       );
 
       driverXbox2.povUp().onTrue(
         new InstantCommand(()->levelUpCommand())
       );
+
       driverXbox2.povDown().onTrue(
         new InstantCommand(()->levelDownCommand())
       );
@@ -667,10 +675,10 @@ public class RobotContainer
       //     PlaceCoralCommand.l3CommandFlip()
       //   );
 
-        driverXbox2.a().onTrue(
-          IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
-          // IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
-        );
+        // driverXbox2.a().onTrue(
+        //   IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
+        //   // IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
+        // );
 
         driverXbox2.rightBumper().onTrue(
           placeAtSpot()
