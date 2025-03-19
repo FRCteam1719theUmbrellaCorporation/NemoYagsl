@@ -17,10 +17,8 @@ public class EndEffectorPIDCommand extends Command {
   private EndEffectorSubsytem m_EndEffector;
   private boolean setElevator;
   private boolean ElevatorMovesFirst;
-  ElevatorSubsytem m_ElevatorSubsytem;
-  boolean setElevator;
-  boolean ElevatorMovesFirst;
-  HeightLevels currentHeight;
+  private ElevatorSubsytem m_ElevatorSubsytem;
+  private HeightLevels currentHeight;
 
   /** Creates a new ArmRotatePID. */
   public EndEffectorPIDCommand(EndEffectorSubsytem endeff, ElevatorSubsytem mElevatorSubsytem) {
@@ -87,7 +85,8 @@ public class EndEffectorPIDCommand extends Command {
    * @return Command that begins the arm and elevator moving in different directions
    */
   public Command moveBoth(HeightLevels level, Boolean explicitDirection) {
-
+    currentHeight = level;
+    
     return new InstantCommand(() -> {
       // elevator moves first when going up
       if (level.numVal() > m_ElevatorSubsytem.getSetPoint()) {
