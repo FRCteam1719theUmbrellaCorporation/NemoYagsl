@@ -67,54 +67,55 @@ public class reefposes {
             "L", 
             calc[1]
         );
-       
+        
+
         blueAlliance.put(
             "A", 
-            calc[6]
-        );
-        blueAlliance.put(
-            "B", 
-            calc[7]
-        );
-        blueAlliance.put(
-            "C", 
             calc[8]
         );
         blueAlliance.put(
-            "D", 
+            "B", 
             calc[9]
         );
         blueAlliance.put(
-            "E", 
+            "C", 
             calc[10]
         );
         blueAlliance.put(
-            "F", 
+            "D", 
             calc[11]
         );
         blueAlliance.put(
-            "G", 
+            "E", 
             calc[0]
         );
         blueAlliance.put(
-            "H", 
+            "F", 
             calc[1]
         );
         blueAlliance.put(
-            "I", 
+            "G", 
             calc[2]
         );
         blueAlliance.put(
-            "J", 
+            "H", 
             calc[3]
         );
         blueAlliance.put(
-            "K", 
+            "I", 
             calc[4]
         );
         blueAlliance.put(
-            "L", 
+            "J", 
             calc[5]
+        );
+        blueAlliance.put(
+            "K", 
+            calc[6]
+        );
+        blueAlliance.put(
+            "L", 
+            calc[7]
         );
     }
 
