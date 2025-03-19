@@ -1,3 +1,5 @@
+[![CI](https://github.com/FRCteam1719theUmbrellaCorporation/NemoYagsl/actions/workflows/main.yml/badge.svg)](https://github.com/FRCteam1719theUmbrellaCorporation/NemoYagsl/actions/workflows/main.yml)
+
 # 1719Code2025
 Code for 1719's 2025 robot: Nessie!
 
@@ -61,6 +63,7 @@ Field-Oriented Driving - We also found an issue in our robot's field-oriented dr
 ### Git commands    
 
 Note: Just use the built in visual studio code git stuff, it's easiar. I'm leaving this here in case.
+For the love of god, stop using Harrison's branches 💔💔💔💔💔
 
 ```git clone https://github.com/FRCTeam1719/2022Robot_3``` command to get brand new repository
 
@@ -100,3 +103,4 @@ _______________________________________________________
 Ben Sugarman @bsugarman
 _______________________________________________________
 Matthew Green @matthewdgreen
+
