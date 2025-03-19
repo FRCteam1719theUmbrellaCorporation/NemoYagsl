@@ -79,11 +79,11 @@ public class EndEffectorPIDCommand extends Command {
         ElevatorMovesFirst = false;
       }
 
-      m_EndEffector.setHeight(level);
+      m_EndEffector.setHeight(level); // this will hold the data for the desired height level
     });
   }
   /**
-   * Check if the endeffector and arm are at t
+   * Check if the endeffector and arm are at their required height setpoints
    * 
    * @param heightToCheck: Height level to compare to 
    * @return boolean supplier that asserts that both elevator and endeffector are at that currentpos

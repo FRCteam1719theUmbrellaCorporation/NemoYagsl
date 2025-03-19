@@ -7,6 +7,10 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.CoralArmConstants;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
 
+/**
+ * Controls the coral wheels on the coral intake 
+ * 
+ */
 public class CoralIntakeWheelsCommand extends Command {
     CoralIntakeSubsystem m_CoralIntakeSubsystem;
 

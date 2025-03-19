@@ -4,7 +4,6 @@
 
 package frc.robot.commands.outake;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -48,6 +47,13 @@ public class IntakeCoralEndeffector extends SequentialCommandGroup {
     );
   }
 
+  /**
+   * Moves the arm from above the intake positon, picks up a coral, 
+   * and flips the then proceeds to move the arm back to it's zero position
+   * 
+   * @param cmd: endeffector PID move command
+   * @return Sequential command
+   */
   public static SequentialCommandGroup quickIntakeToUp(EndEffectorPIDCommand cmd) {
     // doesnt move if it isnt in the right position
     // if (!cmd.comparePosition(HeightLevels.INTAKE_WITH_ARN_DOWN).getAsBoolean()) return emptyCommand;
@@ -61,8 +67,6 @@ public class IntakeCoralEndeffector extends SequentialCommandGroup {
       new WaitUntilCommand(cmd.isAtPos())
     );
   }
-
-// DO NOT RUN UNTIL COMMAND ABOVE IS OK! VVV
 
 
   /**
