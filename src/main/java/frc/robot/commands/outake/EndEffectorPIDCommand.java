@@ -6,13 +6,9 @@ package frc.robot.commands.outake;
 
 import java.util.function.BooleanSupplier;
 
-import com.revrobotics.AbsoluteEncoder;
-
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Constants.EndefectorConstants;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
 import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
@@ -23,7 +19,6 @@ public class EndEffectorPIDCommand extends Command {
   ElevatorSubsytem m_ElevatorSubsytem;
   boolean setElevator;
   boolean ElevatorMovesFirst;
-  PIDController m_endEffPID;
   HeightLevels currentHeight;
   /** Creates a new ArmRotatePID. */
   public EndEffectorPIDCommand(EndEffectorSubsytem endeff, ElevatorSubsytem mElevatorSubsytem) {
@@ -33,7 +28,6 @@ public class EndEffectorPIDCommand extends Command {
     m_ElevatorSubsytem = mElevatorSubsytem;
     setElevator = true;
     ElevatorMovesFirst = true;
-    m_endEffPID = endeff.getPID();
   }
 
   // Called when the command is initially scheduled.
@@ -63,6 +57,10 @@ public class EndEffectorPIDCommand extends Command {
   }
 
   public Command moveBoth(HeightLevels level) {
+    return moveBoth(level, null);
+  }
+
+  public Command moveBoth(HeightLevels level, Boolean moveArmPosotiveDirection) {
 
     return new InstantCommand(() -> {
       if (level.numVal() > m_ElevatorSubsytem.getSetPoint()) {
@@ -78,6 +76,7 @@ public class EndEffectorPIDCommand extends Command {
 
       // }
       m_EndEffector.setHeight(level);
+      m_EndEffector.setDirection(moveArmPosotiveDirection);
     });
   }
 

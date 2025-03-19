@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.EndefectorConstants;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
+import utils.DirectionalPIDController;
 
 
 public class EndEffectorSubsytem extends SubsystemBase {
@@ -21,7 +22,8 @@ public class EndEffectorSubsytem extends SubsystemBase {
   private final AbsoluteEncoder ENDEFFECTOR_ENCODER;
   private double setPoint;
   private HeightLevels heightLevels;
-  private PIDController EndEffectorPIDController = new PIDController(EndefectorConstants.Endefector_kP, 
+  private Boolean moveDirection; // + is true, - is false, null is fastest
+  private DirectionalPIDController EndEffectorPIDController = new DirectionalPIDController(EndefectorConstants.Endefector_kP, 
                                                                     EndefectorConstants.Endefector_kI, 
                                                                     EndefectorConstants.Endefector_kD); 
                                                                     // TODO ADD CONSTANT VALUES
@@ -35,6 +37,7 @@ public class EndEffectorSubsytem extends SubsystemBase {
     EndEffectorPIDController.setSetpoint(setPoint);
     EndEffectorPIDController.enableContinuousInput(0,1);
     heightLevels = HeightLevels.ZERO;
+    moveDirection = null;
   }
 
   public void stop() {
@@ -53,7 +56,7 @@ public class EndEffectorSubsytem extends SubsystemBase {
     ENDEFFECTOR_ROTATE_MOTOR.set(0);
   }
 
-  public PIDController getPID() {
+  public DirectionalPIDController getPID() {
     return EndEffectorPIDController;
   }
 
@@ -63,7 +66,10 @@ public class EndEffectorSubsytem extends SubsystemBase {
 
   public void setHeight(HeightLevels level) {
     heightLevels = level;
-    // setSetpoint(heightLevels.armVal());
+  }
+
+  public void setDirection(Boolean dir) {
+    moveDirection = dir;
   }
 
   public void setSetpoint(double point) {
@@ -77,7 +83,7 @@ public class EndEffectorSubsytem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double output = MathUtil.clamp(EndEffectorPIDController.calculate(doubleMeasurement()),EndefectorConstants.MIN_SPEED, EndefectorConstants.MAX_SPEED);
+    double output = MathUtil.clamp(EndEffectorPIDController.calculate(doubleMeasurement(), moveDirection),EndefectorConstants.MIN_SPEED, EndefectorConstants.MAX_SPEED);
     // System.out.println("endeff output: " + output);
     setRotation(output);
     // This method will be called once per scheduler run
