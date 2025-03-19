@@ -101,10 +101,10 @@ public final class Constants
 
     public static final double MIN_SPEED = -.5f;
     public static final double MAX_SPEED = .5f;
-    public static final double coral_floorintake_pos = 0.36;
+    public static final double coral_floorintake_pos = 0.32;
     public static final double coral_armdriving_pos = 0.15;
     public static final double coral_humanstatione_pos = 0.10;
-    public static final double coral_reef_l1 = 0.2;
+    public static final double coral_reef_l1 = 0.18;
 
     public static final double coral_intake_floor_speed = 0.65f;
     public static final double coral_intake_floor_speed_limited = 0.4f;
@@ -114,9 +114,9 @@ public final class Constants
   }
 
   public static class EndefectorConstants{
-    public static final double Endefector_kP = 5;
+    public static final double Endefector_kP = 5; //10
     public static final double Endefector_kI = 0;
-    public static final double Endefector_kD = 0.5;
+    public static final double Endefector_kD = 0;//0.75
 
     //Imb- dont know if we need both of these
     public static final double Endefector_startPos = 0;
@@ -144,8 +144,10 @@ public static class ElevatorConstants{
 
     public static final double ELEVATOR_ROOM_MAX = 84;
 
-    public static final double MIN_SPEED = -.5f;
-    public static final double MAX_SPEED = .5f;
+    public static final double MIN_SPEED = -.6f;
+    public static final double MAX_SPEED = .6f;
+
+    public static final double ARM_180_SPIN = 36.5;
   }
 
   public static double CORALPIVITMAXAMOUNT = 235;

@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.RawFiducial;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -17,7 +16,7 @@ public class LimeLightExtra {
     public final static String backCam = "limelight-back";
     public final static String frontCam = "limelight-front";
     
-    private static Pigeon2 m_gyro;
+    public static Pigeon2 m_gyro;
     private static SwerveSubsystem SWERVE;
 
     /**
@@ -49,7 +48,7 @@ public class LimeLightExtra {
         // finds the clearest tag
         RawFiducial bestResult = tags[0];
         double amiguity = tags[0].ambiguity;
-        double currentAmbiguity = 0;
+        // double currentAmbiguity = 0;
 
         for (RawFiducial tag : tags) {
             if (tag.ambiguity < amiguity) {
@@ -70,7 +69,7 @@ public class LimeLightExtra {
         boolean doRejectUpdate = false;
         LimelightHelpers.SetRobotOrientation("limelight", SWERVE.getHeading().getDegrees(), 0, 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-        if(Math.abs(m_gyro.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        if(Math.abs(m_gyro.getRate()) > 180) // if our angular velocity is greater than 90 degrees per second, ignore vision updates
         {
           doRejectUpdate = true;
         }

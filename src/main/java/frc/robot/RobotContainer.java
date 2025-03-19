@@ -9,8 +9,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -30,8 +30,6 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
-import java.util.function.Supplier;
-
 import swervelib.SwerveInputStream;
 import utils.Reef.Level;
 import utils.Reef.Location;
@@ -46,7 +44,7 @@ import frc.robot.commands.outake.EndEffectorPIDCommand;
 import frc.robot.commands.outake.IntakeCoralEndeffector;
 import frc.robot.commands.outake.PlaceCoralCommand;
 import utils.*;
-//import frc.robot.commands.Intake.AlgaePivotPIDCommand;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -54,15 +52,11 @@ import utils.*;
  */
 public class RobotContainer
 {
-
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-
-
   private final SendableChooser<Command> autoChooser;
   
-  //Orinal port are driverXBox = 1, driverXBox2 = 0
+  //Original port are driverXBox = 1, driverXBox2 = 0
 
-  int invert = 1;
+  public int invert = 1;
   final CommandXboxController driverXbox = new CommandXboxController(0);
 
   final CommandXboxController driverXbox2 = new CommandXboxController(1);
@@ -75,11 +69,10 @@ public class RobotContainer
   private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
   //private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
-  private static final reefposes reefpose = new reefposes();
+  //private static final reefposes reefpose = new reefposes();
 
-  private boolean ismoving;
-
-  private Supplier<Command> currentMoveCommand;
+  // Shuffle board stuff
+  // private GenericEntry reefHeightTab;
 
   // Applies deadbands and inverts controls because joysticks
   // are back-right positive while robot
@@ -106,10 +99,10 @@ public class RobotContainer
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                                 () -> invert *driverXbox.getLeftY(),
                                                                 () -> invert *driverXbox.getLeftX())
-                                                            .withControllerRotationAxis(driverXbox::getRightX)
+                                                            .withControllerRotationAxis(() -> -1 * driverXbox.getRightX())
                                                             .deadband(OperatorConstants.DEADBAND)
                                                             .scaleTranslation(0.8)
-                                                            .allianceRelativeControl(true);
+                                                            .allianceRelativeControl(false);
 
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
@@ -259,16 +252,18 @@ public class RobotContainer
         }
       }
 
-      Command placeAtSpot(Level lev) {
-        System.out.println("pos" + Reef.pos);
-        switch (lev) {
-          case L2: return PlaceCoralCommand.placeL2();
-          case L3: return PlaceCoralCommand.placeL3();
-          case L4: return PlaceCoralCommand.placeL4();
+      Command placeAtSpot() {
+
+
+        switch (SmartDashboard.getString("level", null)) {
+          case "L2": return PlaceCoralCommand.l2CommandFlip();
+          case "L3": return PlaceCoralCommand.l3CommandFlip();
+          case "L4": return PlaceCoralCommand.l4CommandFlip();
           default: return Commands.none();
         }
       }
-      public static Location loc = Location.A;
+
+      public static volatile Location loc = Location.A;
 
       Command selectorUp = new InstantCommand(() ->{
         switch (loc) {
@@ -425,9 +420,8 @@ public class RobotContainer
   public RobotContainer() { 
     new LimeLightExtra(drivebase);
 
-    Rotation3d sd = drivebase.getSwerveDrive().imuReadingCache.getValue();
     LimelightHelpers.SetRobotOrientation(null, drivebase.getHeading().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.SetIMUMode(null, 1);
+    LimelightHelpers.SetIMUMode(null, 4);
     // Configure the trigger bindings
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
@@ -497,9 +491,9 @@ public class RobotContainer
       // driverXbox.b().onTrue(new InstantCommand(()->drivebase.setMaxSpeed(.5)));
       // driverXbox.b().onTrue(new InstantCommand(()->drivebase.setMaxSpeed(1)));
 
-      driverXbox2.a().whileTrue(
-        HalfCoralFloor
-      );
+      // driverXbox2.a().whileTrue(
+      //   HalfCoralFloor
+      // );
       driverXbox2.a().onFalse(
         CoralDrive
       );
@@ -568,6 +562,9 @@ public class RobotContainer
         m_CoralIntakeSubsystem.setSetpoint(.1);
         })
        );
+       driverXbox2.x().onFalse(
+        CoralDrive
+      );
 
       // driverXbox2.x().whileTrue(
       //   CoralHumanPlayer
@@ -577,7 +574,7 @@ public class RobotContainer
       // );
 
       driverXbox2.y().whileTrue(
-        CoralFloor
+        coralWheels.fullIntake()
       );
       driverXbox2.y().onFalse(
         CoralDrive
@@ -590,12 +587,24 @@ public class RobotContainer
       driverXbox2.b().onFalse(
         CoralDrive
       );
-      // driverXbox2.povUp().onTrue(
-      //   new InstantCommand(()->levelUpCommand())
-      // );
-      // driverXbox2.povDown().onTrue(
-      //   new InstantCommand(()->levelDownCommand())
-      // );
+      
+      driverXbox2.start().onTrue(
+        PlaceCoralCommand.resetArm()
+        );
+
+      driverXbox.x().onTrue(
+        new InstantCommand(()->
+           drivebase.constructPose(drivebase.constructTranslationPose(14.35, 3.79+Units.inchesToMeters(12.94)), drivebase.constructRotationPose(Units.degreesToRadians(90)))
+        )
+      );
+
+
+      driverXbox2.povUp().onTrue(
+        new InstantCommand(()->levelUpCommand())
+      );
+      driverXbox2.povDown().onTrue(
+        new InstantCommand(()->levelDownCommand())
+      );
 
       new HighTrigger(driverXbox2.getHID(), XboxController.Axis.kRightY).onTrue(selectorDown);
       new LowTrigger(driverXbox2.getHID(), XboxController.Axis.kRightY).onTrue(selectorUp);
@@ -636,20 +645,25 @@ public class RobotContainer
       // driverXbox2.a().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
       
       driverXbox2.leftBumper().onTrue(
-        IntakeCoralEndeffector.intake(endEffDefaultCmd)
+        IntakeCoralEndeffector.quickIntakeToUp(endEffDefaultCmd)
         );
 
-        driverXbox2.leftTrigger().onTrue(
-          placeAtSpot(Robot.reefLevel)
-        );
+      //   driverXbox2.leftTrigger().onTrue(
+      //     PlaceCoralCommand.l2CommandFlip()
+      //   );
 
 
-        driverXbox2.rightTrigger().onTrue(
-          PlaceCoralCommand.placeL3()
+      //   driverXbox2.rightTrigger().onTrue(
+      //     PlaceCoralCommand.l3CommandFlip()
+      //   );
+
+        driverXbox2.a().onTrue(
+          IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
+          // IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
         );
 
         driverXbox2.rightBumper().onTrue(
-          PlaceCoralCommand.placeL4()
+          placeAtSpot()
         );
     }
 

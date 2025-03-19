@@ -19,17 +19,221 @@ import utils.Reef.Level; // i will end it
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PlaceCoralCommand extends SequentialCommandGroup {
   private static EndEffectorPIDCommand m_cmd;
-  private static SwerveSubsystem m_swerve;
+  private static SwerveSubsystem m_swerve; // to be used to move the robot backwards
+
+  // these will be the desired height levels to move the robot to
   public static volatile HeightLevels height1;
   public static volatile HeightLevels height2;
 
+  /**
+   * Defines the 
+   * 
+   * @param cmd: controller command for both the arm and elevator movements
+   * @param swerve: Swervedrive subsystem, which is currently unused
+   */
   public PlaceCoralCommand(EndEffectorPIDCommand cmd, SwerveSubsystem swerve) {
     m_cmd = cmd;
     m_swerve = swerve;
     System.out.println(Robot.reefLevel);
   }
 
-  // public static SequentialCommandGroup placeAt(Level rLevel) {
+  /**
+   * Arm is limited to 180 degree motion, and places at l2
+   * 
+   * WARNING MAY BE UNSAFE DUE TO NEW CHANGES :)
+   * 
+   * @return Sequential command for placing on L2
+   */
+  @Deprecated
+  public static SequentialCommandGroup placeL2() {
+    return new SequentialCommandGroup(
+        m_cmd.moveBoth(HeightLevels.LOW_PRE),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.LOW),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        new WaitCommand(2),
+        m_cmd.moveBoth(HeightLevels.INTAKE_UP),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos())
+      );
+  }
+
+  // test
+  public static SequentialCommandGroup placeL2ThenIntake(SequentialCommandGroup intakeCommand) {
+    return new SequentialCommandGroup(
+
+      intakeCommand,
+      m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN)
+      );
+  }
+
+  // // OLD
+  // public static SequentialCommandGroup placeL3() {
+  //   return new SequentialCommandGroup(
+  //       m_cmd.moveBoth(HeightLevels.Middle_PRE),
+  //       new WaitUntilCommand(m_cmd.isAtPos()),
+  //       m_cmd.moveBoth(HeightLevels.MIDDLE),
+  //       new WaitUntilCommand(m_cmd.isAtPos()),
+  //       new WaitCommand(2),
+  //       m_cmd.moveBoth(HeightLevels.ZERO),
+  //       new WaitUntilCommand(m_cmd.isAtPos())
+  //     );
+  // }
+
+  /**
+   * Arm is limited to 180 degree motion, and places at l3
+   * 
+   * WARNING MAY BE UNSAFE DUE TO NEW CHANGES :)
+   * 
+   * @return Sequential command for placing on L3
+   */
+  @Deprecated
+  public static SequentialCommandGroup placeL3() {
+    return new SequentialCommandGroup(
+        m_cmd.moveBoth(HeightLevels.Middle_PRE),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.MIDDLE),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        new WaitCommand(2),
+        m_cmd.moveBoth(HeightLevels.INTAKE_UP),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos())
+      );
+  }
+
+  /**
+   * Arm is limited to 180 degree motion, and places at l4
+   * 
+   * WARNING MAY BE UNSAFE DUE TO NEW CHANGES :)
+   * 
+   * @return Sequential command for placing on L4
+   */
+  @Deprecated
+  public static SequentialCommandGroup placeL4() {
+    return new SequentialCommandGroup(
+        m_cmd.moveBoth(HeightLevels.HIGH_PRE),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.HIGH),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        new WaitCommand(2),
+        m_cmd.moveBoth(HeightLevels.INTAKE_UP),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos())
+        // m_cmd.moveBoth(HeightLevels.ZERO),
+        // new WaitUntilCommand(m_cmd.isAtPos())
+      );
+  }
+  
+  /**
+   * placeL2, however the arm is allowed to move in a 360 degree moton
+   * 
+   * @return Sequential command for placing on L2
+   */
+  public static SequentialCommandGroup l2CommandFlip() {
+    return new SequentialCommandGroup(
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      new WaitCommand(0.1),
+      m_cmd.moveBoth(HeightLevels.LOW_PRE),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      m_cmd.moveBoth(HeightLevels.LOW),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      new WaitCommand(2),
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_TO_DOWN),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+      new WaitUntilCommand(m_cmd.isAtPos())
+      // m_cmd.moveBoth(HeightLevels.INTAKE_UP),
+      // new WaitUntilCommand(m_cmd.isAtPos()),
+      // m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+      // new WaitUntilCommand(m_cmd.isAtPos()),
+      // m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+      // new WaitUntilCommand(m_cmd.isAtPos())
+      );
+  }
+
+
+  /**
+   * placeL3, however the arm is allowed to move in a 360 degree moton
+   * 
+   * @return Sequential command for placing on L3
+   */
+  public static SequentialCommandGroup l3CommandFlip() {
+    return new SequentialCommandGroup(
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      new WaitCommand(0.1),
+        m_cmd.moveBoth(HeightLevels.Middle_PRE),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.MIDDLE),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        new WaitCommand(2),
+        m_cmd.moveBoth(HeightLevels.INTAKE_UP),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos())
+      );
+  }
+
+  /**
+   * placeL4, however the arm is allowed to move in a 360 degree moton
+   * 
+   * @return Sequential command for placing on l4
+   */
+  public static SequentialCommandGroup l4CommandFlip() {
+    return new SequentialCommandGroup(
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      new WaitCommand(0.1),
+
+      m_cmd.moveBoth(HeightLevels.HIGH_PRE),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.HIGH),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        new WaitCommand(2),
+        m_cmd.moveBoth(HeightLevels.INTAKE_UP),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos())
+    );
+  }
+
+  /**
+   * Safely resets the arm to it's 0 position safely.
+   * 
+   * @return Sequential command for placing on l4
+   */
+  public static SequentialCommandGroup resetArm() {
+    return new SequentialCommandGroup(
+        m_cmd.moveBoth(HeightLevels.INTAKE_UP),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos()),
+        m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+        new WaitUntilCommand(m_cmd.isAtPos())
+        // m_cmd.moveBoth(HeightLevels.ZERO),
+        // new WaitUntilCommand(m_cmd.isAtPos())
+      );
+  }
+
+    // public static SequentialCommandGroup placeAt(Level rLevel) {
   
   //   // System.out.println(RobotContainer.level);
 
@@ -69,41 +273,5 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
 
   // i'd rather kms then write this code again
 
-  public static SequentialCommandGroup placeL2() {
-    return new SequentialCommandGroup(
-        m_cmd.moveBoth(HeightLevels.LOW_PRE),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        m_cmd.moveBoth(HeightLevels.LOW),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        new WaitCommand(2),
-        m_cmd.moveBoth(HeightLevels.ZERO),
-        new WaitUntilCommand(m_cmd.isAtPos())
-        
-      );
-  }
-
-  public static SequentialCommandGroup placeL3() {
-    return new SequentialCommandGroup(
-        m_cmd.moveBoth(HeightLevels.Middle_PRE),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        m_cmd.moveBoth(HeightLevels.MIDDLE),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        new WaitCommand(2),
-        m_cmd.moveBoth(HeightLevels.ZERO),
-        new WaitUntilCommand(m_cmd.isAtPos())
-      );
-  }
-
-  public static SequentialCommandGroup placeL4() {
-    return new SequentialCommandGroup(
-        m_cmd.moveBoth(HeightLevels.HIGH_PRE),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        m_cmd.moveBoth(HeightLevels.HIGH),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        new WaitCommand(2),
-        m_cmd.moveBoth(HeightLevels.ZERO),
-        new WaitUntilCommand(m_cmd.isAtPos())
-      );
-  }
 
 }

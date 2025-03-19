@@ -14,6 +14,18 @@ import java.util.function.BooleanSupplier;
 import com.ctre.phoenix6.hardware.CANrange;
 import com.revrobotics.AbsoluteEncoder;
 
+/**
+ * This controls the Coral Intake device
+ * 
+ * This device has 2 portions to it: the angle of the device, and the intake wheels
+ * 
+ * The intake angle is set depending on where the robot is intaking from (human station, floor) or outtaking
+ * 
+ * The wheels are also based on a current position, where they will intake at different speeds.
+ * There is also a range sensor, which can allow us to detect half intake and other great things. this is so we can spit coral out and stuff like that
+ * 
+ * Overall, this subsystem is VITAL to our game plan, as it is our only intake
+ */
 public class CoralIntakeSubsystem extends SubsystemBase {
   /** Creates a new CoralIntakeSubsystem. */
   public static enum IntakePosition {
