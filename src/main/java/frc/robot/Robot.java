@@ -5,9 +5,12 @@
 package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -33,7 +36,12 @@ import edu.wpi.first.wpilibj.DataLogManager;
  */
 public class Robot extends TimedRobot
 {
-  public static Reef.Level reefLevel = Reef.Level.L2;
+  public static volatile Reef.Level reefLevel = Reef.Level.L2;
+
+  public static ShuffleboardTab reefTab;
+  private GenericEntry reefHeightTab;
+  private GenericEntry reefSideTab;
+
   private static Robot   instance;
   private        Command m_autonomousCommand;
   // public static DoubleSubscriber posSetter;
@@ -43,8 +51,6 @@ public class Robot extends TimedRobot
   private RobotContainer m_robotContainer;
 
   private Timer disabledTimer;
-
-  private SwerveIMU gyrogyro;
 
   BooleanLogEntry myBooleanLog;
   DoubleLogEntry myDoubleLog;
@@ -57,6 +63,10 @@ public class Robot extends TimedRobot
 
     DriverStation.startDataLog(DataLogManager.getLog());
     DriverStation.startDataLog(DataLogManager.getLog(), false);
+
+    reefTab = Shuffleboard.getTab("ReefSelector");
+    reefHeightTab = Robot.reefTab.add("level", Robot.reefLevel.toString()).getEntry();
+    reefSideTab = Robot.reefTab.add("side", RobotContainer.loc.toString()).getEntry();
     //DataLog log = DataLogManager.getLog();
     // myBooleanLog = new BooleanLogEntry(log, "/my/boolean");
     // myDoubleLog = new DoubleLogEntry(log, "/my/double");
@@ -83,12 +93,6 @@ public class Robot extends TimedRobot
 
     
     m_robotContainer.drivebase.getSwerveDrive().swerveController.lastAngleScalar = 0;
-    
-
-    
-
-
-    
 
     //m_robotContainer.drivebase.zeroGyroWithAlliance();
     
@@ -118,21 +122,8 @@ public class Robot extends TimedRobot
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    SmartDashboard.putBoolean("L2", reefLevel == Reef.Level.L2);
-    SmartDashboard.putBoolean("L3", reefLevel == Reef.Level.L3);
-    SmartDashboard.putBoolean("L4", reefLevel == Reef.Level.L4);
-    SmartDashboard.putBoolean("A", RobotContainer.loc == Reef.Location.A);
-    SmartDashboard.putBoolean("B", RobotContainer.loc == Reef.Location.B);
-    SmartDashboard.putBoolean("C", RobotContainer.loc == Reef.Location.C);
-    SmartDashboard.putBoolean("D", RobotContainer.loc == Reef.Location.D);
-    SmartDashboard.putBoolean("E", RobotContainer.loc == Reef.Location.E);
-    SmartDashboard.putBoolean("F", RobotContainer.loc == Reef.Location.F);
-    SmartDashboard.putBoolean("G", RobotContainer.loc == Reef.Location.G);
-    SmartDashboard.putBoolean("H", RobotContainer.loc == Reef.Location.H);
-    SmartDashboard.putBoolean("I", RobotContainer.loc == Reef.Location.I);
-    SmartDashboard.putBoolean("J", RobotContainer.loc == Reef.Location.J);
-    SmartDashboard.putBoolean("K", RobotContainer.loc == Reef.Location.K);
-    SmartDashboard.putBoolean("L", RobotContainer.loc == Reef.Location.L);
+    reefHeightTab.setString(reefLevel.toString());
+    reefSideTab.setString(RobotContainer.loc.toString());
   }
 
   /**

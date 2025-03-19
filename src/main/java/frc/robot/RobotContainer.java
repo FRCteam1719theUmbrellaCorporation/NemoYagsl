@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -29,8 +30,6 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
-import java.util.function.Supplier;
-
 import swervelib.SwerveInputStream;
 import utils.Reef.Level;
 import utils.Reef.Location;
@@ -72,9 +71,9 @@ public class RobotContainer
   private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
   private static final reefposes reefpose = new reefposes();
 
-  private boolean ismoving;
-
-  private Supplier<Command> currentMoveCommand;
+  // Shuffle board stuff
+  private GenericEntry reefHeightTab;
+  private GenericEntry reefSideTab;
 
   // Applies deadbands and inverts controls because joysticks
   // are back-right positive while robot
@@ -254,16 +253,16 @@ public class RobotContainer
         }
       }
 
-      Command placeAtSpot(Level lev) {
-        System.out.println("pos" + Reef.pos);
-        switch (lev) {
-          case L2: return PlaceCoralCommand.l2CommandFlip();
-          case L3: return PlaceCoralCommand.l3CommandFlip();
-          case L4: return PlaceCoralCommand.l4CommandFlip();
+      Command placeAtSpot() {
+
+        switch (reefHeightTab.getString(null)) {
+          case "L2": return PlaceCoralCommand.l2CommandFlip();
+          case "L3": return PlaceCoralCommand.l3CommandFlip();
+          case "L4": return PlaceCoralCommand.l4CommandFlip();
           default: return Commands.none();
         }
       }
-      public static Location loc = Location.A;
+      public static volatile Location loc = Location.A;
 
       Command selectorUp = new InstantCommand(() ->{
         switch (loc) {
@@ -442,6 +441,8 @@ public class RobotContainer
     );
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
+    reefHeightTab = Robot.reefTab.add("level", Robot.reefLevel.toString()).getEntry();
+    reefSideTab = Robot.reefTab.add("side", Robot.reefLevel.toString()).getEntry();
   }
 
 
