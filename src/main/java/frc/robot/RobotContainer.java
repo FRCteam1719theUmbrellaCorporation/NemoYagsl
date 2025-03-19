@@ -593,9 +593,13 @@ public class RobotContainer
 
       driverXbox.x().onTrue(
         new InstantCommand(()->{
-          double x = reefpose.getArrayfromKey("B", drivebase.isRedAlliance())[0]+(drivebase.isRedAlliance()?13.058902:4.489323);
-          double y = reefpose.getArrayfromKey("B", drivebase.isRedAlliance())[1]+4.0259;
-          double r = reefpose.getArrayfromKey("B", drivebase.isRedAlliance())[2];
+          String loca = SmartDashboard.getString("location", null);
+          Boolean redAlliance = drivebase.isRedAlliance();
+          if (loca==null) return ;
+          double x = reefpose.getArrayfromKey(loca, redAlliance)[0]+(drivebase.isRedAlliance()?13.058902:4.489323);
+          double y = reefpose.getArrayfromKey(loca, redAlliance)[1]+4.0259;
+          double r = reefpose.getArrayfromKey(loca, redAlliance)[2];
+
           drivebase.driveToPose(new Pose2d(new Translation2d(x,y), new Rotation2d(r))).schedule();
           // System.out.println(x);
           // System.out.println(y);
