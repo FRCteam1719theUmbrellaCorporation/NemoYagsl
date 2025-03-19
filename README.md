@@ -1,117 +1,92 @@
-[![CI](https://github.com/FRCteam1719theUmbrellaCorporation/NemoYagsl/actions/workflows/main.yml/badge.svg)](https://github.com/FRCteam1719theUmbrellaCorporation/NemoYagsl/actions/workflows/main.yml)
+# 1719Code2025
+Code for 1719's 2025 robot: Nessie!
 
-# Yet Another Generic Swerve Library (YAGSL) Example project
+## New things and Updates
+YASGL - We implemented YAGSL onto our robot. From faulty configuration files, to a horrible grinding sound, the beginning of the season was filled with challenges implementing our swerve drive.
 
-YAGSL is intended to be an easy implementation of a generic swerve drive that should work for most
-square swerve drives. The project is documented
-on [here](https://github.com/BroncBotz3481/YAGSL/wiki). The JSON documentation can also be
-found [here](docs/START.md)
+Commands - We knew it was critical to have a command that moved the robot to the reef to score consistently. We began using PathPlanner's "On the Fly" path planning to implement such a command with the readings from our limelight. Unfortunately, Pathplanner and our own custom commands could not produce a precise enough command to move the robot to the nearest April Tag. With a correctly functioning gyroscope, we used MegaTag 2's April Tag localizer on our Limelight 4's in coordination with AdvantageScope to precisely use poseEstimate to find our robot's location on the game field. With this, we were able to build accurate paths to the reef.
 
-This example is intended to be a starting place on how to use YAGSL. By no means is this intended to
-be the base of your robot project. YAGSL provides an easy way to generate a SwerveDrive which can be
-used in both TimedRobot and Command-Based Robot templates.
+Field-Oriented Driving - We also found an issue in our robot's field-oriented driving. Our Pigeon 2 was experiencing an issue called the Gimble Lock, which was due to a rotation in our gyro causing internal confusion to its internal Yaw and Roll readings. With this small fix, our field-oriented drive and our issues with precision were solved.
 
 
-# Overview
+## CAN IDs
 
-### Installation
-
-Vendor URL:
-
-```
-https://broncbotz3481.github.io/YAGSL-Lib/yagsl/yagsl.json
-```
-
-[Javadocs here](https://broncbotz3481.github.io/YAGSL/)  
-[Library here](https://github.com/BroncBotz3481/YAGSL/)  
-[Code here](https://github.com/BroncBotz3481/YAGSL/tree/main/swervelib)  
-[WIKI](https://github.com/BroncBotz3481/YAGSL/wiki)  
-[Config Generation](https://broncbotz3481.github.io/YAGSL-Example/)
-
-# Create an issue if there is any errors you find!
-
-We will be actively montoring this and fix any issues when we can!
-
-## Development
-
-* Development happens here on `YAGSL-Example`. `YAGSL` and `YAGSL-Lib` are updated on a nightly
-  basis.
-
-# Support our developers!
-<a href='https://ko-fi.com/yagsl' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Robot at ko-fi.com'></a>
-
-### TL;DR Generate and download your configuration [here](https://broncbotz3481.github.io/YAGSL-Example/) and unzip it so that it follows structure below:
-
-```text
-deploy
-└── swerve
-    ├── controllerproperties.json
-    ├── modules
-    │   ├── backleft.json
-    │   ├── backright.json
-    │   ├── frontleft.json
-    │   ├── frontright.json
-    │   ├── physicalproperties.json
-    │   └── pidfproperties.json
-    └── swervedrive.json
-```
-
-### Then create your SwerveDrive object like this.
-
-```java
-import java.io.File;
-import edu.wpi.first.wpilibj.Filesystem;
-import swervelib.parser.SwerveParser;
-import swervelib.SwerveDrive;
-import edu.wpi.first.math.util.Units;
+| Motor Label   | Motor Location | CAN ID |
+| ------------- | -------------- | ------ |
+| Motor #1      | Left Front Drive     | 11      |
+| Motor #2      | Left Front Rotation Motor    | 12      |
+| Motor #3      | Left Front CANCoder    | 10      |
+| Motor #4      | Right Front Drive    | 21      |
+| Motor #5      | Right Front Rotation Motor       | 22     |
+| Motor #6      | Right Front CANCoder       | 20      |
+| Motor #7      | Left Back Drive    | 31      |
+| Motor #8      | Left Back Rotation Motor | 32      |
+| Motor #9      | Left Back CANCoder | 30    |
+| Motor #10     | Right Back Drive |36      |
+| Motor #11     | Right Back Rotation Motor |37      |
+| Motor #12     | Right Back CANCoder |35      |
+| Gyro #13      | Gyro Port |2      |
+| Motor #14     | Intake/Outtake Motors |9      |
+| Motor #15     | Elevator |6     |
+| Motor #16     | End Effector Motor |24      |
+| Motor #17     | Intake Pivot Motor |23      |
 
 
-SwerveDrive swerveDrive=new SwerveParser(new File(Filesystem.getDeployDirectory(),"swerve")).createSwerveDrive(Units.feetToMeters(14.5));
-```
 
-# Migrating Old Configuration Files
+## Button Mappings:
+[Consult this document](https://docs.google.com/document/d/1tnhtNMz3D61-BR17y95493GGfkCHpqT0dgg2AZGWeoQ/edit?tab=t.0)
+      
 
-1. Delete `wheelDiamter`, `gearRatio`, `encoderPulsePerRotation` from `physicalproperties.json`
-2. Add `optimalVoltage` to `physicalproperties.json`
-3. Delete `maxSpeed` and `optimalVoltage` from `swervedrive.json`
-4. **IF** a swerve module doesn't have the same drive motor or steering motor as the rest of the
-   swerve drive you **MUST** specify a `conversionFactor` for BOTH the drive and steering motor in
-   the modules configuration JSON file. IF one of the motors is the same as the rest of the swerve
-   drive and you want to use that `conversionFactor`, set the `conversionFactor` in the module JSON
-   configuration to 0.
-5. You MUST specify the maximum speed when creating a `SwerveDrive`
-   through `new SwerveParser(directory).createSwerveDrive(maximumSpeed);`
-6. IF you do not want to set `conversionFactor` in `swervedrive.json`. You can pass it into the
-   constructor as a parameter like this
 
-```java
-double DriveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER), GEAR_RATIO, ENCODER_RESOLUTION);
-double SteeringConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(GEAR_RATIO, ENCODER_RESOLUTION);
-SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, SteeringConversionFactor, DriveConversionFactor);
-```
+## Instructions
 
-### Falcon Support would not have been possible without support from Team 1466 Webb Robotics!
+### Useful pages
+   Setup: https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/offline-installation-preparations.html
+   
+   WPILib Java Examples: https://docs.wpilib.org/en/stable/docs/software/examples-tutorials/wpilib-examples.html
+   
 
-# Configuration Tips
+### How to add a subsytem and commands
+   1. Define a subsystem class
+         1. Define components of the subsystem in the subsystem class - motors, motor groups, sensors
+         1. Define functions - at a basic level what can this subsystem do - shoot, drive, etc.
+         1. Publish telementry through NetworkTables
+   1. Define command classes
+         1. There can be more than one - collect balls, eject balls
+         2. Pass subsystem to the constructor
+   1. Wire up subsystems, commands and buttons in RobotContainer
+         1. Instance of subsystem
+         2. Wireup code
 
-### My Robot Spins around uncontrollably during autonomous or when attempting to set the heading!
+### Git commands    
 
-* Invert the gyro scope.
-* Invert the drive motors for every module. (If front and back become reversed when turning)
+Note: Just use the built in visual studio code git stuff, it's easiar. I'm leaving this here in case.
 
-### Angle motors are erratic.
+```git clone https://github.com/FRCTeam1719/2022Robot_3``` command to get brand new repository
 
-* Invert the angle motor.
+```git pull``` pull down any updates from github
 
-### My robot is heavy.
+```git add . ``` add all files that were added or modified to the local repo
 
-* Implement momentum velocity limitations in SwerveMath.
+```git commit -m "<message goes here>" ``` stage files to commit
 
-### Ensure the IMU is centered on the robot
+```git push``` push your commits to github
 
-# Maintainers
-- @thenetworkgrinch
-- @Technologyman00 
+```git checkout (-b) <branch goes here>``` Creates / pulls a branch from github. Use -b when checking out a new branch!
 
-# Special Thanks to Team 7900! Trial N' Terror
-Without the debugging and aid of Team 7900 the project could never be as stable or active as it is. 
+
+
+# Team 1719 is a Student-Run Team
+
+## Programmers:
+
+------------------------------------------------------
+Neel @realrealneel(Lead programmer 1)
+-------------------------------------------------------
+Harrison @Hbg1010(Cool deaL Programmer)
+_______________________________________________________
+Ian Borden @Ianborden
+_______________________________________________________
+Owen @owarr
+_______________________________________________________
+Cece @cece1233
