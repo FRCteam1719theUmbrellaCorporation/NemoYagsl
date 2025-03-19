@@ -34,23 +34,7 @@ Field-Oriented Driving - We also found an issue in our robot's field-oriented dr
 
 
 ## Button Mappings:
-### Driver Controller: 
-      Left Stick: Cardinal Directions
-      Right Stick: Rotation
-      
-### Operator Controller:
-      A Button: 
-      B Button:
-      X Button:
-      Y Button:
-      Start:
-      Select:
-      Left Trigger:
-      Right Trigger:
-      Left Bumper:
-      Right Bumper:
-      Dpad Up:
-      Dpad Down:
+[Consult this document](https://docs.google.com/document/d/1tnhtNMz3D61-BR17y95493GGfkCHpqT0dgg2AZGWeoQ/edit?tab=t.0)
       
 
 
