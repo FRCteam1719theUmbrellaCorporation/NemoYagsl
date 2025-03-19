@@ -9,6 +9,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -69,7 +70,7 @@ public class RobotContainer
   private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
   //private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
-  //private static final reefposes reefpose = new reefposes();
+  private final reefposes reefpose = new reefposes();
 
   // Shuffle board stuff
   // private GenericEntry reefHeightTab;
@@ -591,11 +592,22 @@ public class RobotContainer
         );
 
       driverXbox.x().onTrue(
-        new InstantCommand(()->
-           drivebase.constructPose(drivebase.constructTranslationPose(14.35, 3.79+Units.inchesToMeters(12.94)), drivebase.constructRotationPose(Units.degreesToRadians(90)))
+        new InstantCommand(()->{
+          String loca = SmartDashboard.getString("location", null);
+          Boolean redAlliance = drivebase.isRedAlliance();
+          if (loca==null) return ;
+          double x = reefpose.getArrayfromKey(loca, redAlliance)[0]+(drivebase.isRedAlliance()?13.058902:4.489323);
+          double y = reefpose.getArrayfromKey(loca, redAlliance)[1]+4.0259;
+          double r = reefpose.getArrayfromKey(loca, redAlliance)[2];
+
+          drivebase.driveToPose(new Pose2d(new Translation2d(x,y), new Rotation2d(r))).schedule();
+          // System.out.println(x);
+          // System.out.println(y);
+          // System.out.println(r);
+
+        }
         )
       );
-
 
       driverXbox2.povUp().onTrue(
         new InstantCommand(()->levelUpCommand())
