@@ -253,9 +253,7 @@ public class RobotContainer
       }
 
       Command placeAtSpot() {
-
-
-        switch (SmartDashboard.getString("level", null)) {
+        switch (SmartDashboard.getString("level", "")) {
           case "L2": return PlaceCoralCommand.l2CommandFlip();
           case "L3": return PlaceCoralCommand.l3CommandFlip();
           case "L4": return PlaceCoralCommand.l4CommandFlip();

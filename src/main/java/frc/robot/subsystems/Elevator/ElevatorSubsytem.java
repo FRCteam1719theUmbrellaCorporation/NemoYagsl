@@ -26,8 +26,8 @@ public class ElevatorSubsytem extends SubsystemBase {
         INTAKE_WITH_ARN_DOWN(30, .5), // this sets the arm hovering above the coral
         INTAKE_PRE_DOWN(60, .5),
         INTAKE_UP(60, 0.03),
-        INTAKE_FLIP_AROUND(ElevatorConstants.ARM_180_SPIN, 0.2),
-        INTAKE_FLIP_TO_DOWN(ElevatorConstants.ARM_180_SPIN+3, 0.5),
+        INTAKE_FLIP_AROUND(ElevatorConstants.ARM_180_SPIN, 0, false),
+        INTAKE_FLIP_TO_DOWN(ElevatorConstants.ARM_180_SPIN+3, 0.5, true),
 
         // REEFBASE(1, 0),
         LOW_PRE(8, 0.0), // Sets to the lowest 
@@ -35,7 +35,7 @@ public class ElevatorSubsytem extends SubsystemBase {
         Middle_PRE(30.5, 0.0),
         MIDDLE(30.75, 0.8), // 
         HIGH_PRE(58,0.0),
-        HIGH(58, 0.8),
+        HIGH(58, 0.8, false),
         MAX(ElevatorConstants.ELEVATOR_ROOM_MAX, 0); // If our elevator goes higher than the third stalk, this would allow us control. maybe we shouldnt use it 
 
         private final double value; // value held by each enum val
