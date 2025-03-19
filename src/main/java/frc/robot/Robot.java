@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import com.ctre.phoenix6.hardware.Pigeon2;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.GenericEntry;
@@ -14,6 +16,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.LimeLightExtra;
+import swervelib.imu.Pigeon2Swerve;
 import swervelib.imu.SwerveIMU;
 import utils.Reef;
 // import edu.wpi.first.networktables.DoubleSubscriber;
@@ -37,6 +41,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 public class Robot extends TimedRobot
 {
   public static volatile Reef.Level reefLevel = Reef.Level.L2;
+
 
   public static ShuffleboardTab reefTab;
   private GenericEntry reefHeightTab;
@@ -64,9 +69,13 @@ public class Robot extends TimedRobot
     DriverStation.startDataLog(DataLogManager.getLog());
     DriverStation.startDataLog(DataLogManager.getLog(), false);
 
-    reefTab = Shuffleboard.getTab("ReefSelector");
-    reefHeightTab = Robot.reefTab.add("level", Robot.reefLevel.toString()).getEntry();
-    reefSideTab = Robot.reefTab.add("side", RobotContainer.loc.toString()).getEntry();
+// <<<<<<< HEAD
+
+// =======
+//     reefTab = Shuffleboard.getTab("ReefSelector");
+//     reefHeightTab = Robot.reefTab.add("level", Robot.reefLevel.toString()).getEntry();
+//     reefSideTab = Robot.reefTab.add("side", RobotContainer.loc.toString()).getEntry();
+// >>>>>>> ccb7f8e3ae51dd538c4812497e7c64d1dcde1923
     //DataLog log = DataLogManager.getLog();
     // myBooleanLog = new BooleanLogEntry(log, "/my/boolean");
     // myDoubleLog = new DoubleLogEntry(log, "/my/double");
@@ -122,8 +131,8 @@ public class Robot extends TimedRobot
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    reefHeightTab.setString(reefLevel.toString());
-    reefSideTab.setString(RobotContainer.loc.toString());
+    // SmartDashboard.putString("level", reefLevel == Reef.Level.L4 ? "L4" : reefLevel == Reef.Level.L3 ? "L3" : reefLevel == Reef.Level.L2 ? "L2" : "");
+   
   }
 
   /**
@@ -133,6 +142,7 @@ public class Robot extends TimedRobot
   public void disabledInit()
   {
     m_robotContainer.setMotorBrake(true);
+    LimelightHelpers.SetIMUMode(null, 1);
     disabledTimer.reset();
     disabledTimer.start();
   }
@@ -154,7 +164,7 @@ public class Robot extends TimedRobot
   public void autonomousInit()
   {
     try {
-      LimelightHelpers.SetIMUMode(null, 2);
+      LimelightHelpers.SetIMUMode(null, 3);
     } catch (Exception e) {
       System.out.println("ll did not init. terror");
     }
@@ -178,6 +188,15 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousPeriodic()
   {
+    // LimelightHelpers.SetRobotOrientation(null, 
+    //   LimeLightExtra.m_gyro.getYaw().getValueAsDouble(), 
+    //   LimeLightExtra.m_gyro.getAngularVelocityZWorld().getValueAsDouble(), 
+    //   LimeLightExtra.m_gyro.getPitch().getValueAsDouble(), 
+    //   LimeLightExtra.m_gyro.getAngularVelocityXWorld().getValueAsDouble(), 
+    //   LimeLightExtra.m_gyro.getRoll().getValueAsDouble(), 
+    //   LimeLightExtra.m_gyro.getAngularVelocityYWorld().getValueAsDouble()
+    // );
+
   }
 
   @Override
@@ -187,7 +206,7 @@ public class Robot extends TimedRobot
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    LimelightHelpers.SetIMUMode(null, 2);
+    LimelightHelpers.SetIMUMode(null, 3);
     if (m_autonomousCommand != null)
     {
       m_autonomousCommand.cancel();
@@ -204,6 +223,15 @@ public class Robot extends TimedRobot
   public void teleopPeriodic()
   {
 
+    // LimelightHelpers.SetRobotOrientation(null, 
+    //   LimeLightExtra.m_gyro.getYaw().getValueAsDouble(), 
+    //   LimeLightExtra.m_gyro.getAngularVelocityZWorld().getValueAsDouble(), 
+    //   LimeLightExtra.m_gyro.getPitch().getValueAsDouble(), 
+    //   LimeLightExtra.m_gyro.getAngularVelocityXWorld().getValueAsDouble(), 
+    //   LimeLightExtra.m_gyro.getRoll().getValueAsDouble(), 
+    //   LimeLightExtra.m_gyro.getAngularVelocityYWorld().getValueAsDouble()
+    // );
+
     //myBooleanLog.append(); 
     //myDoubleLog.append(3);
 
@@ -214,7 +242,7 @@ public class Robot extends TimedRobot
   public void testInit()
   {
     // Cancels all running commands at the start of test mode.
-    LimelightHelpers.SetIMUMode(null, 2);
+    LimelightHelpers.SetIMUMode(null, 3);
     CommandScheduler.getInstance().cancelAll();
   }
 

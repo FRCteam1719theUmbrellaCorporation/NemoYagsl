@@ -69,7 +69,7 @@ public class RobotContainer
   private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
   //private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
-  private static final reefposes reefpose = new reefposes();
+  //private static final reefposes reefpose = new reefposes();
 
   // Shuffle board stuff
   private GenericEntry reefHeightTab;
@@ -102,7 +102,7 @@ public class RobotContainer
                                                                 () -> invert *driverXbox.getLeftX())
                                                             .withControllerRotationAxis(driverXbox::getRightX)
                                                             .deadband(OperatorConstants.DEADBAND)
-                                                            .scaleTranslation(0.8)
+                                                            .scaleTranslation(-0.8)
                                                             .allianceRelativeControl(true);
 
   /**
@@ -262,6 +262,7 @@ public class RobotContainer
           default: return Commands.none();
         }
       }
+
       public static volatile Location loc = Location.A;
 
       Command selectorUp = new InstantCommand(() ->{
@@ -420,7 +421,7 @@ public class RobotContainer
     new LimeLightExtra(drivebase);
 
     LimelightHelpers.SetRobotOrientation(null, drivebase.getHeading().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.SetIMUMode(null, 1);
+    LimelightHelpers.SetIMUMode(null, 4);
     // Configure the trigger bindings
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
@@ -492,9 +493,9 @@ public class RobotContainer
       // driverXbox.b().onTrue(new InstantCommand(()->drivebase.setMaxSpeed(.5)));
       // driverXbox.b().onTrue(new InstantCommand(()->drivebase.setMaxSpeed(1)));
 
-      driverXbox2.a().whileTrue(
-        HalfCoralFloor
-      );
+      // driverXbox2.a().whileTrue(
+      //   HalfCoralFloor
+      // );
       driverXbox2.a().onFalse(
         CoralDrive
       );
@@ -563,6 +564,9 @@ public class RobotContainer
         m_CoralIntakeSubsystem.setSetpoint(.1);
         })
        );
+       driverXbox2.x().onFalse(
+        CoralDrive
+      );
 
       // driverXbox2.x().whileTrue(
       //   CoralHumanPlayer
@@ -590,13 +594,19 @@ public class RobotContainer
         PlaceCoralCommand.resetArm()
         );
 
+      driverXbox.x().onTrue(
+        new InstantCommand(()->
+           drivebase.constructPose(drivebase.constructTranslationPose(14.35, 3.79+Units.inchesToMeters(12.94)), drivebase.constructRotationPose(Units.degreesToRadians(90)))
+        )
+      );
 
-      // driverXbox2.povUp().onTrue(
-      //   new InstantCommand(()->levelUpCommand())
-      // );
-      // driverXbox2.povDown().onTrue(
-      //   new InstantCommand(()->levelDownCommand())
-      // );
+
+      driverXbox2.povUp().onTrue(
+        new InstantCommand(()->levelUpCommand())
+      );
+      driverXbox2.povDown().onTrue(
+        new InstantCommand(()->levelDownCommand())
+      );
 
       new HighTrigger(driverXbox2.getHID(), XboxController.Axis.kRightY).onTrue(selectorDown);
       new LowTrigger(driverXbox2.getHID(), XboxController.Axis.kRightY).onTrue(selectorUp);
@@ -650,7 +660,8 @@ public class RobotContainer
         );
 
         driverXbox2.a().onTrue(
-          IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
+          placeAtSpot()
+          // IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
         );
 
         driverXbox2.rightBumper().onTrue(
