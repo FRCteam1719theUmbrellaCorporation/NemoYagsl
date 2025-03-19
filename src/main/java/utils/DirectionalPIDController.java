@@ -436,13 +436,13 @@ public class DirectionalPIDController implements Sendable, AutoCloseable {
    *
    * @param measurement The current measurement of the process variable.
    * @param setpoint The new setpoint of the controller.
-   * @param postiveDirection Whether the error will be positive or negative.
+   * @param postiveDirection Whether the error will be positive or negative. setting to null will ignore direction
    * @return The next controller output.
    */
-  public double calculate(double measurement, double setpoint, boolean postiveDirection) {
+  public double calculate(double measurement, double setpoint, Boolean postiveDirection) {
     m_setpoint = setpoint;
     m_haveSetpoint = true;
-    return calculate(measurement, true, postiveDirection);
+    return calculate(measurement, postiveDirection);
   }
 
 
@@ -454,18 +454,51 @@ public class DirectionalPIDController implements Sendable, AutoCloseable {
    * @return The next controller output.
    */
   public double calculate(double measurement) {
-    return calculate(measurement, false, false);
+    return calculate(measurement, null);
   }
 
   /**
    * Returns the next output of the PID controller.
    *
    * @param measurement The current measurement of the process variable.
-   * @param postiveDirection Whether the error will be positive or negative.
+   * @param postiveDirection Whether the error will be positive or negative. Null will c
    * @return The next controller output.
    */
-    public double calculate(double measurement, boolean postiveDirection) {
-        return calculate(measurement, true, postiveDirection);
+    public double calculate(double measurement, Boolean postiveDirection) {
+      m_measurement = measurement;
+      m_prevError = m_error;
+      m_haveMeasurement = true;
+  
+      if (m_continuous) {
+        double errorBound = (m_maximumInput - m_minimumInput) / 2.0;
+        if (postiveDirection != null) {
+          if (postiveDirection) {
+              m_error = MathUtil.inputModulus(m_setpoint - m_measurement, 0, 2*errorBound);
+          } else {
+            m_error = MathUtil.inputModulus(m_setpoint - m_measurement, -2*errorBound, 0);
+  
+          }
+        } else {
+          m_error = MathUtil.inputModulus(m_setpoint - m_measurement, -errorBound, errorBound);
+        }
+      } else {
+        m_error = m_setpoint - m_measurement;
+      }
+  
+      m_errorDerivative = (m_error - m_prevError) / m_period;
+  
+      // If the absolute value of the position error is greater than IZone, reset the total error
+      if (Math.abs(m_error) > m_iZone) {
+        m_totalError = 0;
+      } else if (m_ki != 0) {
+        m_totalError =
+            MathUtil.clamp(
+                m_totalError + m_error * m_period,
+                m_minimumIntegral / m_ki,
+                m_maximumIntegral / m_ki);
+      }
+  
+      return m_kp * m_error + m_ki * m_totalError + m_kd * m_errorDerivative;
     }
 
   /**
@@ -476,42 +509,9 @@ public class DirectionalPIDController implements Sendable, AutoCloseable {
    * @param postiveDirection Whether the error will be positive or negative.
    * @return The next controller output.
    */
-  private double calculate(double measurement, boolean hasDirection, boolean postiveDirection) {
-    m_measurement = measurement;
-    m_prevError = m_error;
-    m_haveMeasurement = true;
-
-    if (m_continuous) {
-      double errorBound = (m_maximumInput - m_minimumInput) / 2.0;
-      if (hasDirection) {
-        if (postiveDirection) {
-            m_error = MathUtil.inputModulus(m_setpoint - m_measurement, 0, 2*errorBound);
-        } else {
-          m_error = MathUtil.inputModulus(m_setpoint - m_measurement, -2*errorBound, 0);
-
-        }
-      } else {
-        m_error = MathUtil.inputModulus(m_setpoint - m_measurement, -errorBound, errorBound);
-      }
-    } else {
-      m_error = m_setpoint - m_measurement;
-    }
-
-    m_errorDerivative = (m_error - m_prevError) / m_period;
-
-    // If the absolute value of the position error is greater than IZone, reset the total error
-    if (Math.abs(m_error) > m_iZone) {
-      m_totalError = 0;
-    } else if (m_ki != 0) {
-      m_totalError =
-          MathUtil.clamp(
-              m_totalError + m_error * m_period,
-              m_minimumIntegral / m_ki,
-              m_maximumIntegral / m_ki);
-    }
-
-    return m_kp * m_error + m_ki * m_totalError + m_kd * m_errorDerivative;
-  }
+  // private double calculate(double measurement, boolean hasDirection, Boolean postiveDirection) {
+  
+  // }
 
   /** Resets the previous error and the integral term. */
   public void reset() {
