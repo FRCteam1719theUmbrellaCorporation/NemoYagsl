@@ -44,8 +44,8 @@ public class Robot extends TimedRobot
 
 
   public static ShuffleboardTab reefTab;
-  private GenericEntry reefHeightTab;
-  private GenericEntry reefSideTab;
+  // private GenericEntry reefHeightTab;
+  // private GenericEntry reefSideTab;
 
   private static Robot   instance;
   private        Command m_autonomousCommand;

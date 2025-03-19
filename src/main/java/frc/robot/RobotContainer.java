@@ -56,7 +56,7 @@ public class RobotContainer
   
   //Original port are driverXBox = 1, driverXBox2 = 0
 
-  int invert = 1;
+  public int invert = 1;
   final CommandXboxController driverXbox = new CommandXboxController(0);
 
   final CommandXboxController driverXbox2 = new CommandXboxController(1);
@@ -72,7 +72,7 @@ public class RobotContainer
   //private static final reefposes reefpose = new reefposes();
 
   // Shuffle board stuff
-  private GenericEntry reefHeightTab;
+  // private GenericEntry reefHeightTab;
   private GenericEntry reefSideTab;
 
   // Applies deadbands and inverts controls because joysticks
@@ -100,10 +100,10 @@ public class RobotContainer
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                                 () -> invert *driverXbox.getLeftY(),
                                                                 () -> invert *driverXbox.getLeftX())
-                                                            .withControllerRotationAxis(driverXbox::getRightX)
+                                                            .withControllerRotationAxis(() -> -1 * driverXbox.getRightX())
                                                             .deadband(OperatorConstants.DEADBAND)
-                                                            .scaleTranslation(-0.8)
-                                                            .allianceRelativeControl(true);
+                                                            .scaleTranslation(0.8)
+                                                            .allianceRelativeControl(false);
 
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
@@ -255,7 +255,7 @@ public class RobotContainer
 
       Command placeAtSpot() {
 
-        switch (reefHeightTab.getString(null)) {
+        switch ("hi") {
           case "L2": return PlaceCoralCommand.l2CommandFlip();
           case "L3": return PlaceCoralCommand.l3CommandFlip();
           case "L4": return PlaceCoralCommand.l4CommandFlip();
@@ -442,8 +442,8 @@ public class RobotContainer
     );
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    reefHeightTab = Robot.reefTab.add("level", Robot.reefLevel.toString()).getEntry();
-    reefSideTab = Robot.reefTab.add("side", Robot.reefLevel.toString()).getEntry();
+    // reefHeightTab = Robot.reefTab.add("level", Robot.reefLevel.toString()).getEntry();
+    // reefSideTab = Robot.reefTab.add("side", Robot.reefLevel.toString()).getEntry();
   }
 
 
