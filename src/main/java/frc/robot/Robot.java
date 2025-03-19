@@ -131,8 +131,9 @@ public class Robot extends TimedRobot
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    // SmartDashboard.putString("level", reefLevel == Reef.Level.L4 ? "L4" : reefLevel == Reef.Level.L3 ? "L3" : reefLevel == Reef.Level.L2 ? "L2" : "");
-   
+    SmartDashboard.putString("level", reefLevel.toString());
+    SmartDashboard.putString("location", RobotContainer.loc.toString());
+
   }
 
   /**

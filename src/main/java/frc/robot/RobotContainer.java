@@ -255,7 +255,7 @@ public class RobotContainer
 
       Command placeAtSpot() {
 
-        switch (reefHeightTab.getString(null)) {
+        switch (SmartDashboard.getString("level", null)) {
           case "L2": return PlaceCoralCommand.l2CommandFlip();
           case "L3": return PlaceCoralCommand.l3CommandFlip();
           case "L4": return PlaceCoralCommand.l4CommandFlip();
@@ -442,8 +442,6 @@ public class RobotContainer
     );
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    reefHeightTab = Robot.reefTab.add("level", Robot.reefLevel.toString()).getEntry();
-    reefSideTab = Robot.reefTab.add("side", Robot.reefLevel.toString()).getEntry();
   }
 
 
@@ -650,22 +648,22 @@ public class RobotContainer
         IntakeCoralEndeffector.quickIntakeToUp(endEffDefaultCmd)
         );
 
-        driverXbox2.leftTrigger().onTrue(
-          PlaceCoralCommand.l2CommandFlip()
-        );
+      //   driverXbox2.leftTrigger().onTrue(
+      //     PlaceCoralCommand.l2CommandFlip()
+      //   );
 
 
-        driverXbox2.rightTrigger().onTrue(
-          PlaceCoralCommand.l3CommandFlip()
-        );
+      //   driverXbox2.rightTrigger().onTrue(
+      //     PlaceCoralCommand.l3CommandFlip()
+      //   );
 
         driverXbox2.a().onTrue(
-          placeAtSpot()
+          IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
           // IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
         );
 
         driverXbox2.rightBumper().onTrue(
-          PlaceCoralCommand.l4CommandFlip()
+          placeAtSpot()
         );
     }
 
