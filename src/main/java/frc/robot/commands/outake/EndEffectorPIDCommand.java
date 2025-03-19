@@ -6,7 +6,6 @@ package frc.robot.commands.outake;
 
 import java.util.function.BooleanSupplier;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem;
@@ -19,7 +18,8 @@ public class EndEffectorPIDCommand extends Command {
   private boolean setElevator;
   private boolean ElevatorMovesFirst;
   ElevatorSubsytem m_ElevatorSubsytem;
-  PIDController m_endEffPID;
+  boolean setElevator;
+  boolean ElevatorMovesFirst;
   HeightLevels currentHeight;
 
   /** Creates a new ArmRotatePID. */
@@ -30,7 +30,6 @@ public class EndEffectorPIDCommand extends Command {
     m_ElevatorSubsytem = mElevatorSubsytem;
     setElevator = true;
     ElevatorMovesFirst = true;
-    m_endEffPID = endeff.getPID();
   }
 
   // Called when the command is initially scheduled.
@@ -58,13 +57,36 @@ public class EndEffectorPIDCommand extends Command {
   }
 
   /**
-   * Tells the the elevator and endeffector to move
-   * this method also handles the order at which the arm and elevator should move
+   * Allows the user to move the arm and the elevator at the same time. 
+   * The prefered direction of the arm will be determined by the enum attatched
    * 
-   * @param level: Height level to move to
-   * @return returns an instant command that updates the execute method
+   * @param level: height level that you want the elevator and arm to move to
+   * @return Command that begins the arm and elevator moving in different directions
    */
   public Command moveBoth(HeightLevels level) {
+    return moveBoth(level, level.preferedDirection());
+  }
+
+  /**
+   * Allows the user to move the arm and the elevator at the same time.
+   * This specific command allows the arm to move to the closest spot regaurdless of if the enum wants it to
+   * 
+   * @param level: height level that you want the elevator and arm to move to
+   * @return Command that begins the arm and elevator moving in different directions
+   */
+  public Command moveBothNoDirection(HeightLevels level) {
+    return moveBoth(level, null);
+  }
+
+  /**
+   * Allows the user to move the arm and the elevator at the same time. 
+   * A passed in value will be applied for the direction of the arm
+   * 
+   * @param level: height level that you want the elevator and arm to move to
+   * @param explicitDirection: Direction the endeffector will move in. + is left, - is right. null is whatever is closest
+   * @return Command that begins the arm and elevator moving in different directions
+   */
+  public Command moveBoth(HeightLevels level, Boolean explicitDirection) {
 
     return new InstantCommand(() -> {
       // elevator moves first when going up
@@ -79,7 +101,11 @@ public class EndEffectorPIDCommand extends Command {
         ElevatorMovesFirst = false;
       }
 
-      m_EndEffector.setHeight(level); // this will hold the data for the desired height level
+      // if (m_EndEffector.getHeight().numVal() < EndefectorConstants.INTAKE_POS_ELEVATORPOS_MAX && m_ElevatorSubsytem.doubleMeasurement() < EndefectorConstants.INTAKE_POS_ELEVATORPOS_MAX) {
+
+      // }
+      m_EndEffector.setHeight(level);
+      m_EndEffector.setDirection(explicitDirection);
     });
   }
   /**
