@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -62,7 +63,7 @@ public class RobotContainer
 
   final CommandXboxController driverXbox2 = new CommandXboxController(1);
   // The robot's subsystems and commands are defined here...
-  public final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+  public final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
                                                                             
   
@@ -205,8 +206,19 @@ public class RobotContainer
     new WaitUntilCommand(m_CoralIntakeSubsystem.hasCoral()),
     coralWheels.turnMotor(0)
     );
+
   // public static Level level = Level.L2;
-  Command drivetotag;// = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
+  Command drivetotag = 
+  new InstantCommand(()->{
+    String loca = SmartDashboard.getString("location", null);
+    Boolean redAlliance = drivebase.isRedAlliance();
+    if (loca==null) return ;
+    double xap = reefpose.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
+    double yap = reefpose.getArrayfromKey(loca, redAlliance)[1]+4.0259;
+    double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
+    drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
+  });
+
 
     void levelUpCommand() {
       switch (Robot.reefLevel) {
@@ -494,6 +506,7 @@ public class RobotContainer
       // driverXbox2.a().whileTrue(
       //   HalfCoralFloor
       // );
+
       driverXbox2.a().onFalse(
         CoralDrive
       );
@@ -595,25 +608,34 @@ public class RobotContainer
       driverXbox.x().onTrue(
         new SequentialCommandGroup(
         new InstantCommand(()->{
-          String loca = SmartDashboard.getString("location", null);
-          Boolean redAlliance = drivebase.isRedAlliance();
-          if (loca==null) return ;
-          double xap = reefpose.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
-          double yap = reefpose.getArrayfromKey(loca, redAlliance)[1]+4.0259;
-          double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
-          drivetotag = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
           if (!drivetotag.isScheduled()) drivetotag.schedule();
-        }
-        ), 
-        new InstantCommand(()->drivebase.lock())
+        }),
+
+        new InstantCommand(()->drivebase.lock()),
+        new InstantCommand(()->placeAtSpot().schedule()),
+        new WaitCommand(1)
+        // new InstantCommand(()->{
+        //   if (!drivetotagback.isScheduled()) drivetotagback.schedule();
+        // }
+        // )
         )
       );
 
       driverXbox.x().onFalse(
         new InstantCommand(()->{
           if (drivetotag.isScheduled()) drivetotag.cancel();
+          if (placeAtSpot().isScheduled()) placeAtSpot().cancel();
+          //if (drivetotagback.isScheduled()) drivetotagback.cancel();
           }
         )
+      );
+
+      driverXbox.b().whileTrue(
+        closedAbsoluteDriveAdv
+      );
+
+      driverXbox.b().onFalse(
+        driveFieldOrientedAnglularVelocity
       );
 
       driverXbox2.povUp().onTrue(
@@ -683,6 +705,9 @@ public class RobotContainer
         driverXbox2.rightBumper().onTrue(
           placeAtSpot()
         );
+
+
+      
     }
 
   }
