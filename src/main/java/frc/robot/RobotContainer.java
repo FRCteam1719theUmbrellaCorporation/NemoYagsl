@@ -647,13 +647,6 @@ public class RobotContainer
       driverXbox2.x().onFalse(
         CoralDrive
       );
-
-      driverXbox2.y().whileTrue(
-        coralWheels.fullIntake()
-      );
-      driverXbox2.y().onFalse(
-        CoralDrive
-      );
       
       //Coral move to reef l1
       driverXbox2.b().onTrue(
@@ -699,6 +692,10 @@ public class RobotContainer
             }
           })
         );
+
+        driverXbox2.leftTrigger().onTrue( 
+          IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
+        ); 
     }
 
   }
