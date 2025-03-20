@@ -208,16 +208,7 @@ public class RobotContainer
     );
 
   // public static Level level = Level.L2;
-  Command drivetotag = 
-  new InstantCommand(()->{
-    String loca = SmartDashboard.getString("location", null);
-    Boolean redAlliance = drivebase.isRedAlliance();
-    if (loca==null) return ;
-    double xap = reefpose.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
-    double yap = reefpose.getArrayfromKey(loca, redAlliance)[1]+4.0259;
-    double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
-    drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
-  });
+  Command drivetotag;
 
 
     void levelUpCommand() {
@@ -608,8 +599,15 @@ public class RobotContainer
       driverXbox.x().onTrue(
         new SequentialCommandGroup(
         new InstantCommand(()->{
+          String loca = SmartDashboard.getString("location", null);
+          Boolean redAlliance = drivebase.isRedAlliance();
+          if (loca==null) return ;
+          double xap = reefpose.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
+          double yap = reefpose.getArrayfromKey(loca, redAlliance)[1]+4.0259;
+          double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
+          drivetotag = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
           if (!drivetotag.isScheduled()) drivetotag.schedule();
-        }),
+        }).until(()->drivetotag.isFinished()),
 
         new InstantCommand(()->drivebase.lock()),
         new InstantCommand(()->placeAtSpot().schedule()),
