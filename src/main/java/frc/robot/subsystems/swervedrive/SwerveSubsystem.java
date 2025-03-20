@@ -32,9 +32,11 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
@@ -62,6 +64,7 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 import utils.ConvertAprilTag;
 import utils.Reef;
+import utils.reefposes;
 
 public class SwerveSubsystem extends SubsystemBase
 {
@@ -763,6 +766,19 @@ public class SwerveSubsystem extends SubsystemBase
   public SwerveDrive getSwerveDrive()
   {
     return swerveDrive;
+  }
+
+  public InstantCommand MoveWithReefPose(reefposes desiredPos) {
+    return new InstantCommand(()->{
+              String loca = SmartDashboard.getString("location", null);
+              Boolean redAlliance = this.isRedAlliance();
+              if (loca==null) return ;
+              double xap = desiredPos.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
+              double yap = desiredPos.getArrayfromKey(loca, redAlliance)[1]+4.0259;
+              double rap = desiredPos.getArrayfromKey(loca, redAlliance)[2];
+              RobotContainer.drivetotag = this.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
+              RobotContainer.drivetotag.schedule();
+          });
   }
 
 

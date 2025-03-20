@@ -6,9 +6,9 @@ import frc.robot.Constants;
 
 public class reefposes {
 
-    private static double d = 0.831596;
-    private static Hashtable<String, Double[]> redAlliance;
-    private static Hashtable<String, Double[]> blueAlliance;
+    private double d = 0.831596;
+    private Hashtable<String, Double[]> redAlliance;
+    private Hashtable<String, Double[]> blueAlliance;
 
     //private static double alpha = 0.459502;
 
