@@ -491,19 +491,6 @@ public class RobotContainer
       // driverXbox.b().onTrue(new InstantCommand(()->drivebase.setMaxSpeed(.5)));
       // driverXbox.b().onTrue(new InstantCommand(()->drivebase.setMaxSpeed(1)));
 
-      // driverXbox2.a().whileTrue(
-      //   HalfCoralFloor
-      // );
-      driverXbox2.a().onFalse(
-        CoralDrive
-      );
-
-      driverXbox2.y().whileTrue(
-        CoralFloor
-      );
-      driverXbox2.y().onFalse(
-        CoralDrive
-      );
      // driverXbox2.right
 
       //Algae move to setpoint
@@ -556,41 +543,12 @@ public class RobotContainer
         Constants.MAX_SPEED = Units.feetToMeters(14.5*Constants.SPEED_LIMITER);
       }));
 
-      //Coral move to setpoint
-       driverXbox2.x().whileTrue(
-        new InstantCommand(() -> {
-        m_CoralIntakeSubsystem.setSetpoint(.1);
-        })
-       );
-       driverXbox2.x().onFalse(
-        CoralDrive
-      );
-
       // driverXbox2.x().whileTrue(
       //   CoralHumanPlayer
       // );
       // driverXbox2.x().onFalse(
       //   CoralDrive
       // );
-
-      driverXbox2.y().whileTrue(
-        coralWheels.fullIntake()
-      );
-      driverXbox2.y().onFalse(
-        CoralDrive
-      );
-      
-      //Coral move to reef l1
-      driverXbox2.b().onTrue(
-        L1
-      );
-      driverXbox2.b().onFalse(
-        CoralDrive
-      );
-      
-      driverXbox2.start().onTrue(
-        PlaceCoralCommand.resetArm()
-        );
 
       driverXbox.x().onTrue(
         new SequentialCommandGroup(
@@ -614,14 +572,6 @@ public class RobotContainer
           if (drivetotag.isScheduled()) drivetotag.cancel();
           }
         )
-      );
-
-      driverXbox2.povUp().onTrue(
-        new InstantCommand(()->levelUpCommand())
-      );
-
-      driverXbox2.povDown().onTrue(
-        new InstantCommand(()->levelDownCommand())
       );
 
       new HighTrigger(driverXbox2.getHID(), XboxController.Axis.kRightY).onTrue(selectorDown);
@@ -661,28 +611,70 @@ public class RobotContainer
       //driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
       // driverXbox2.a().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
-      
-      driverXbox2.leftBumper().onTrue(
-        IntakeCoralEndeffector.quickIntakeToUp(endEffDefaultCmd)
+
+      driverXbox2.a().whileTrue(
+        HalfCoralFloor
+      );
+      driverXbox2.a().onFalse(
+        CoralDrive
+      );
+
+      driverXbox2.y().whileTrue(
+        CoralFloor
+      );
+      driverXbox2.y().onFalse(
+        CoralDrive
+      );
+
+      //Coral move to setpoint
+      driverXbox2.x().whileTrue(
+        new InstantCommand(() -> {
+        m_CoralIntakeSubsystem.setSetpoint(.1);
+        })
         );
+        driverXbox2.x().onFalse(
+        CoralDrive
+      );
 
-      //   driverXbox2.leftTrigger().onTrue(
-      //     PlaceCoralCommand.l2CommandFlip()
-      //   );
+      driverXbox2.y().whileTrue(
+        coralWheels.fullIntake()
+      );
+      driverXbox2.y().onFalse(
+        CoralDrive
+      );
+      
+      //Coral move to reef l1
+      driverXbox2.b().onTrue(
+        L1
+      );
+      driverXbox2.b().onFalse(
+        CoralDrive
+      );
 
+      driverXbox2.povUp().onTrue(
+        new InstantCommand(()->levelUpCommand())
+      );
 
-      //   driverXbox2.rightTrigger().onTrue(
-      //     PlaceCoralCommand.l3CommandFlip()
-      //   );
+      driverXbox2.povDown().onTrue(
+        new InstantCommand(()->levelDownCommand())
+      );
+
+      driverXbox2.leftBumper().onTrue(
+        PlaceCoralCommand.resetArm()
+      );
+      driverXbox2.rightBumper().onTrue(
+        placeAtSpot()
+      );
+
+      // sets arm to 0 pos if needed
+      driverXbox2.start().onTrue(
+        IntakeCoralEndeffector.quickIntakeToUp(endEffDefaultCmd)
+      );
 
         // driverXbox2.a().onTrue(
         //   IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
         //   // IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
         // );
-
-        driverXbox2.rightBumper().onTrue(
-          placeAtSpot()
-        );
     }
 
   }
