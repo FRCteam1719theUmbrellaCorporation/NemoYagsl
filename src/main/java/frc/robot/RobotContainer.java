@@ -40,6 +40,7 @@ import frc.robot.subsystems.Elevator.ElevatorSubsytem;
 import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem.IntakePosition;
+import frc.robot.commands.Controls.SelectReef;
 import frc.robot.commands.Intake.CoralIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralPivotPIDCommand;
 import frc.robot.commands.outake.EndEffectorPIDCommand;
@@ -65,6 +66,8 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   public final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
+
+  public static SelectReef reefSelector;
                                                                             
   
   private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
@@ -274,160 +277,95 @@ public class RobotContainer
 
       public static volatile Location loc = Location.A;
 
-      Command selectorUp = new InstantCommand(() ->{
+      void selectorClockwiseCommand() {
         switch (loc) {
           case A:
-          loc = Location.L;
-          break;
-          case B:
-          loc = Location.C;
-          break;
-          case C:
-          loc = Location.D;
-          break;
-          case D:
-          loc = Location.E;
-          break;
-          case E:
-          loc = Location.F;
-          break;
-          case F:
-          loc = Location.G;
-          break;
-          case G:
-          case H:
-          break;
-          case I:
-          loc = Location.H;
-          break;
-          case J:
-          loc = Location.I;
-          break;
-          case K:
-          loc = Location.J;
-          break;
-          case L:
-          loc = Location.K;
-          break;
-        }}
-        );
-        Command selectorDown = new InstantCommand(() ->{
-          switch (loc) {
-            case A:
-            case B:
-            break;
-            case C:
             loc = Location.B;
             break;
-            case D:
+          case B:
             loc = Location.C;
             break;
-            case E:
+          case C:
             loc = Location.D;
             break;
-            case F:
+          case D:
             loc = Location.E;
             break;
-            case G:
+          case E:
             loc = Location.F;
             break;
-            case H:
+          case F:
+            loc = Location.G;
+            break;
+          case G:
+            loc = Location.H;
+            break;
+          case H:
             loc = Location.I;
             break;
-            case I:
+          case I:
             loc = Location.J;
             break;
-            case J:
+          case J:
             loc = Location.K;
             break;
-            case K:
+          case K:
             loc = Location.L;
             break;
-            case L:
+          case L:
             loc = Location.A;
             break;
-          }}
-          );
-          Command selectorLeft = new InstantCommand(() ->{
-            switch (loc) {
-              case A:
-              loc = Location.L;
-              break;
-              case B:
-              loc = Location.A;
-              break;
-              case C:
-              loc = Location.B;
-              break;
-              case D:
-              loc = Location.C;
-              break;
-              case E:
-              loc = Location.F;
-              break;
-              case F:
-              loc = Location.G;
-              break;
-              case G:
-              loc = Location.H;
-              break;
-              case H:
-              loc = Location.I;
-              break;
-              case I:
-              loc = Location.J;
-              break;
-              case J:
-              case K:
-              break;
-              case L:
-              loc = Location.K;
-              break;
-            }}
-            );
-            Command selectorRight = new InstantCommand(() ->{
-              switch (loc) {
-                case A:
-                loc = Location.B;
-                break;
-                case B:
-                loc = Location.C;
-                break;
-                case C:
-                loc = Location.D;
-                break;
-                case D:
-                case E:
-                break;
-                case F:
-                loc = Location.E;
-                break;
-                case G:
-                loc = Location.F;
-                break;
-                case H:
-                loc = Location.G;
-                break;
-                case I:
-                loc = Location.H;
-                break;
-                case J:
-                loc = Location.I;
-                break;
-                case K:
-                loc = Location.L;
-                break;
-                                case L:
-                loc = Location.A;
-                break;
-              }}
-              );
+        }
+      }
+
+      public void selectorCounterClockwiseCommand() {
+        switch (loc) {
+          case A:
+            loc = Location.L;
+            break;
+          case B:
+            loc = Location.A;
+            break;
+          case C:
+            loc = Location.B;
+            break;
+          case D:
+            loc = Location.C;
+            break;
+          case E:
+            loc = Location.D;
+            break;
+          case F:
+            loc = Location.E;
+            break;
+          case G:
+            loc = Location.F;
+            break;
+          case H:
+            loc = Location.G;
+            break;
+          case I:
+            loc = Location.H;
+            break;
+          case J:
+            loc = Location.I;
+            break;
+          case K:
+            loc = Location.J;
+            break;
+          case L:
+            loc = Location.K;
+            break;
+        }
+      }
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */  
   
   public RobotContainer() { 
     new LimeLightExtra(drivebase);
+
+    reefSelector = new SelectReef(driverXbox2::getRightX, driverXbox2::getRightY);
 
     LimelightHelpers.SetRobotOrientation(null, drivebase.getHeading().getDegrees(), 0, 0, 0, 0, 0);
     LimelightHelpers.SetIMUMode(null, 3);
@@ -444,11 +382,7 @@ public class RobotContainer
     NamedCommands.registerCommand("HumanStationHalfIntake",HumanStationHalfIntake);
     
 
-    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
-      (stream) -> false
-        ? stream.filter(auto -> auto.getName().startsWith("comp"))
-        : stream
-    );
+    autoChooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
@@ -558,10 +492,6 @@ public class RobotContainer
           }
         )
       );
-      new HighTrigger(driverXbox2.getHID(), XboxController.Axis.kRightY).onTrue(selectorDown);
-      new LowTrigger(driverXbox2.getHID(), XboxController.Axis.kRightY).onTrue(selectorUp);
-      new LowTrigger(driverXbox2.getHID(), XboxController.Axis.kRightX).onTrue(selectorLeft);
-      new HighTrigger(driverXbox2.getHID(), XboxController.Axis.kRightX).onTrue(selectorRight);
 
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
@@ -587,6 +517,8 @@ public class RobotContainer
         CoralDrive
       );
 
+      driverXbox2.getRightX()
+
       //Coral move to setpoint
       driverXbox2.x().whileTrue(
         // new InstantCommand(() -> {
@@ -606,6 +538,14 @@ public class RobotContainer
 
       driverXbox2.povDown().onTrue(
         new InstantCommand(()->levelDownCommand())
+      );
+
+      driverXbox2.povRight().onTrue(
+        new InstantCommand(()->selectorClockwiseCommand())
+      );
+
+      driverXbox2.povLeft().onTrue(
+        new InstantCommand(()->selectorCounterClockwiseCommand())
       );
 
       driverXbox2.leftBumper().onTrue(
