@@ -133,6 +133,7 @@ public class Robot extends TimedRobot
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("level", reefLevel.toString());
     SmartDashboard.putString("location", RobotContainer.loc.toString());
+    System.out.println(SmartDashboard.getString("level", "L3"));
 
   }
 
@@ -143,7 +144,7 @@ public class Robot extends TimedRobot
   public void disabledInit()
   {
     m_robotContainer.setMotorBrake(true);
-    LimelightHelpers.SetIMUMode(null, 1);
+    LimelightHelpers.SetIMUMode(null, 3);
     disabledTimer.reset();
     disabledTimer.start();
   }

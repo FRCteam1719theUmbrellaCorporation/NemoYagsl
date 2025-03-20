@@ -471,7 +471,7 @@ public class DirectionalPIDController implements Sendable, AutoCloseable {
   
       if (m_continuous) {
         double errorBound = (m_maximumInput - m_minimumInput) / 2.0;
-        if (postiveDirection != null) {
+        if (postiveDirection != null && Math.abs(m_setpoint - m_measurement) > 0.20) {
           if (postiveDirection) {
               m_error = MathUtil.inputModulus(m_setpoint - m_measurement, 0, 2*errorBound);
           } else {

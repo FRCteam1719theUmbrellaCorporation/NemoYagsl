@@ -72,10 +72,11 @@ public class LimeLightExtra {
         if(Math.abs(m_gyro.getRate()) > 180) // if our angular velocity is greater than 90 degrees per second, ignore vision updates
         {
           doRejectUpdate = true;
-        }
-        if(mt2.tagCount == 0)
+        } else if(mt2.tagCount == 0)
         {
           doRejectUpdate = true;
+        } else if (mt2.pose.getX() == 0 && mt2.pose.getY() == 0) {
+            doRejectUpdate = true;
         }
         if(!doRejectUpdate)
         {
