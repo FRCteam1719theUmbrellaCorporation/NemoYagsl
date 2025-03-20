@@ -18,7 +18,11 @@ public class reefposes {
         redAlliance = new Hashtable<>();
         blueAlliance = new Hashtable<>();
         
-        Double[][] calc = calculatedAprilTagPos(0.459502+0.02, -0.2359);
+        
+    }
+
+    public void add(double xx, double yy) {
+        Double[][] calc = calculatedAprilTagPos(xx, yy);
         redAlliance.put(
             "A", 
             calc[2]
