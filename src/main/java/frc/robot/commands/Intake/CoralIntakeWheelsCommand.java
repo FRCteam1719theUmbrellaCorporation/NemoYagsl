@@ -39,9 +39,9 @@ public class CoralIntakeWheelsCommand extends Command {
      */
     public SequentialCommandGroup halfIntake() {
         return new SequentialCommandGroup(
-            turnMotor(CoralArmConstants.coral_intake_floor_speed)
-            .until(m_CoralIntakeSubsystem.hasCoral())
-            .andThen(stopMotors())
+            turnMotor(CoralArmConstants.coral_intake_floor_speed),
+            new WaitUntilCommand(m_CoralIntakeSubsystem.hasCoral()),
+            stopMotors()
             // new WaitUntilCommand(),
             // turnMotor(0)
             );

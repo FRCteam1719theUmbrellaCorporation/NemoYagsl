@@ -178,7 +178,7 @@ public class RobotContainer
   Command CoralFloor = new SequentialCommandGroup(
     new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.FLOOR)),
     new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_floorintake_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
-    coralWheels.fullIntake());
+    coralWheels.turnMotor(CoralArmConstants.coral_intake_floor_speed));
 
   Command HalfCoralFloor = new SequentialCommandGroup(
     new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.FLOOR)),
@@ -199,11 +199,13 @@ public class RobotContainer
   
   Command L1 = new SequentialCommandGroup(
     new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.REEF)),
-    new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
-    coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed));
+    //new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
+    coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed)
+  );
 
   Command HumanStationHalfIntake =  new SequentialCommandGroup(
-    coralWheels.turnMotor(CoralArmConstants.coral_humanstatione_pos),
+    new InstantCommand(()-> m_CoralIntakeSubsystem.setPosition(IntakePosition.HUMAN_STATION)),
+    coralWheels.turnMotor(CoralArmConstants.coral_intake_humanStation_speed),
     new WaitUntilCommand(m_CoralIntakeSubsystem.hasCoral()),
     coralWheels.turnMotor(0)
     );
@@ -555,6 +557,14 @@ public class RobotContainer
 
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
+      //Coral move to reef l1
+      driverXbox2.b().whileTrue(
+        L1
+      );
+      driverXbox2.b().onFalse(
+        CoralDrive
+      );
+
       driverXbox2.a().whileTrue(
         HalfCoralFloor
       );
@@ -562,32 +572,25 @@ public class RobotContainer
         CoralDrive
       );
 
-      // driverXbox2.y().whileTrue(
-      //   CoralFloor
-      // );
-      // driverXbox2.y().onFalse(
-      //   CoralDrive
-      // );
+      driverXbox2.y().whileTrue(
+        CoralFloor
+      );
+      driverXbox2.y().onFalse(
+        CoralDrive
+      );
 
-      // //Coral move to setpoint
-      // driverXbox2.x().whileTrue(
-      //   // new InstantCommand(() -> {
-      //   // m_CoralIntakeSubsystem.setSetpoint(.1);
-      //   //   })
-      //   HumanStationHalfIntake
-      //   );
+      //Coral move to setpoint
+      driverXbox2.x().whileTrue(
+        // new InstantCommand(() -> {
+        // m_CoralIntakeSubsystem.setSetpoint(.1);
+        //   })
+        HumanStationHalfIntake
+        );
       
-      // driverXbox2.x().onFalse(
-      //   CoralDrive
-      // );
+      driverXbox2.x().onFalse(
+        CoralDrive
+      );
       
-      // //Coral move to reef l1
-      // driverXbox2.b().whileTrue(
-      //   L1
-      // );
-      // driverXbox2.b().onFalse(
-      //   CoralDrive
-      // );
 
       driverXbox2.povUp().onTrue(
         new InstantCommand(()->levelUpCommand())
