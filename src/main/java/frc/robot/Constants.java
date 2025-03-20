@@ -114,9 +114,9 @@ public final class Constants
   }
 
   public static class EndefectorConstants{
-    public static final double Endefector_kP = 5; //10
+    public static final double Endefector_kP = 7.5; //10
     public static final double Endefector_kI = 0.1;
-    public static final double Endefector_kD = 0;//0.75
+    public static final double Endefector_kD = 0.5;//0.75
 
     //Imb- dont know if we need both of these
     public static final double Endefector_startPos = 0;

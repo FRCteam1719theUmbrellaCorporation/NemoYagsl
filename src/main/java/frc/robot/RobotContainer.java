@@ -490,7 +490,7 @@ public class RobotContainer
     {
 
       driverXbox.start().onTrue(new InstantCommand(()->invert = invert *-1));
-      driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      //driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
       // driverXbox.b().onTrue(new InstantCommand(()->drivebase.setMaxSpeed(.5)));
       // driverXbox.b().onTrue(new InstantCommand(()->drivebase.setMaxSpeed(1)));
