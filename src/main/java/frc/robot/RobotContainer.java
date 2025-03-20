@@ -258,6 +258,7 @@ public class RobotContainer
       }
 
       Command placeAtSpot() {
+        // System.out.println(SmartDashboard.getString("level", "L3"));
         switch (SmartDashboard.getString("level", "")) {
           case "L2": return PlaceCoralCommand.l2CommandFlip();
           case "L3": return PlaceCoralCommand.l3CommandFlip();
@@ -702,7 +703,19 @@ public class RobotContainer
         // );
 
         driverXbox2.rightBumper().onTrue(
-          placeAtSpot()
+          new InstantCommand(() -> {
+
+            String dave = SmartDashboard.getString("level", "");
+
+            // if (dave.equals("L2")) {
+            //   PlaceCoralCommand.l2CommandFlip().schedule();
+            // } 
+            if (dave.equals("L3")) {
+              PlaceCoralCommand.l3CommandFlip().schedule();
+            } else if (dave.equals("L4")) {
+              PlaceCoralCommand.l4CommandFlip().schedule();
+            }
+          })
         );
 
 

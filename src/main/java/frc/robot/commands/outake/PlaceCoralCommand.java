@@ -150,7 +150,7 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
       m_cmd.moveBoth(HeightLevels.LOW),
       new WaitUntilCommand(m_cmd.isAtPos()),
       new WaitCommand(2),
-      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_BACK),
       new WaitUntilCommand(m_cmd.isAtPos()),
       m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_TO_DOWN),
       new WaitUntilCommand(m_cmd.isAtPos()),
@@ -216,15 +216,15 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
   }
 
   /**
-   * Safely resets the arm to it's 0 position safely.
+   * Safely resets the arm to it's Pre intake position
    * 
-   * @return Sequential command for placing on l4
+   * @return Sequential Command for moving itself to correct spot
    */
   public static SequentialCommandGroup resetArm() {
     return new SequentialCommandGroup(
-        m_cmd.moveBoth(HeightLevels.INTAKE_UP),
+        m_cmd.moveBothNoDirection(HeightLevels.INTAKE_FLIP_AROUND),
         new WaitUntilCommand(m_cmd.isAtPos()),
-        m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+        m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_TO_DOWN),
         new WaitUntilCommand(m_cmd.isAtPos()),
         m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
         new WaitUntilCommand(m_cmd.isAtPos())
