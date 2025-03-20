@@ -71,8 +71,7 @@ public class RobotContainer
   private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
   //private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
-  private final reefposes reefposen = new reefposes();
-  private final reefposes reefposeb = new reefposes();
+  private final reefposes reefpose = new reefposes();
 
   // Shuffle board stuff
   // private GenericEntry reefHeightTab;
@@ -211,27 +210,9 @@ public class RobotContainer
     );
 
   // public static Level level = Level.L2;
-  Command drivetotag = new InstantCommand(()->{
-    String loca = SmartDashboard.getString("location", null);
-    Boolean redAlliance = drivebase.isRedAlliance();
-    if (loca==null) return ;
-    double xap = reefposen.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
-    double yap = reefposen.getArrayfromKey(loca, redAlliance)[1]+4.0259;
-    double rap = reefposen.getArrayfromKey(loca, redAlliance)[2];
-    drivetotag = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
-  }
-  );
+  Command drivetotag;
 
-  Command drivetotagback = new InstantCommand(()->{
-    String loca = SmartDashboard.getString("location", null);
-    Boolean redAlliance = drivebase.isRedAlliance();
-    if (loca==null) return ;
-    double xap = reefposeb.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
-    double yap = reefposeb.getArrayfromKey(loca, redAlliance)[1]+4.0259;
-    double rap = reefposeb.getArrayfromKey(loca, redAlliance)[2];
-    drivetotag = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
-  }
-  );
+  Command drivetotagback;
 
 
     void levelUpCommand() {
@@ -484,8 +465,8 @@ public class RobotContainer
   {
     System.out.println("pos" + Reef.pos
     );
-    reefposen.add(0.459502+0.02, -0.2359);
-    reefposeb.add(0.459502+0.02+0.25, -0.2359);
+    reefpose.add(0.459502+0.02, -0.2359);
+    //reefposeb.add(0.459502+0.02+0.25, -0.2359);
    
     drivebase.setDefaultCommand(!RobotBase.isSimulation() ?
     driveFieldOrientedAnglularVelocity:
@@ -528,17 +509,33 @@ public class RobotContainer
       driverXbox.x().onTrue(
         new SequentialCommandGroup(
           new InstantCommand(()->{
-            if (!drivetotag.isScheduled()) drivetotag.schedule();
+              String loca = SmartDashboard.getString("location", null);
+              Boolean redAlliance = drivebase.isRedAlliance();
+              if (loca==null) return ;
+              double xap = reefpose.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
+              double yap = reefpose.getArrayfromKey(loca, redAlliance)[1]+4.0259;
+              double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
+              drivetotag = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
+              drivetotag.schedule();
           }),
           new WaitUntilCommand(()->drivetotag.isFinished()),
 
           new InstantCommand(()->drivebase.lock()),
           new InstantCommand(()->placeAtSpot().schedule()),
-          new WaitCommand(1),
-          new InstantCommand(()->{
-            if (!drivetotagback.isScheduled()) drivetotagback.schedule();
-          }
-          )
+          new WaitCommand(1)
+          // new InstantCommand(()->{
+          //   if (placeAtSpot().isFinished()) {
+          //     String loca = SmartDashboard.getString("location", null);
+          //     Boolean redAlliance = drivebase.isRedAlliance();
+          //     if (loca==null) return ;
+          //     double xap = reefposeb.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
+          //     double yap = reefposeb.getArrayfromKey(loca, redAlliance)[1]+4.0259;
+          //     double rap = reefposeb.getArrayfromKey(loca, redAlliance)[2];
+          //     drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
+          //     drivetotagback.schedule();
+          //   }
+          // }
+          // )
         )
       );
 
@@ -546,7 +543,7 @@ public class RobotContainer
         new InstantCommand(()->{
           if (drivetotag.isScheduled()) drivetotag.cancel();
           if (placeAtSpot().isScheduled()) placeAtSpot().cancel();
-          if (drivetotagback.isScheduled()) drivetotagback.cancel();
+          //if (drivetotagback.isScheduled()) drivetotagback.cancel();
           }
         )
       );

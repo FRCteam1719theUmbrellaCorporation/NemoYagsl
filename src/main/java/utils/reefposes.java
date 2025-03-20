@@ -17,8 +17,6 @@ public class reefposes {
     public reefposes() {
         redAlliance = new Hashtable<>();
         blueAlliance = new Hashtable<>();
-        
-        
     }
 
     public void add(double xx, double yy) {
