@@ -678,9 +678,10 @@ public class RobotContainer
 
             String dave = SmartDashboard.getString("level", "");
 
-            if (dave.equals("L2")) {
-              PlaceCoralCommand.l2CommandFlip().schedule();
-            } else if (dave.equals("L3")) {
+            // if (dave.equals("L2")) {
+            //   PlaceCoralCommand.l2CommandFlip().schedule();
+            // } 
+            if (dave.equals("L3")) {
               PlaceCoralCommand.l3CommandFlip().schedule();
             } else if (dave.equals("L4")) {
               PlaceCoralCommand.l4CommandFlip().schedule();
