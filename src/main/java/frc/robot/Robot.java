@@ -224,7 +224,7 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic()
   {
-
+    RobotContainer.reefSelector.execute();
     // LimelightHelpers.SetRobotOrientation(null, 
     //   LimeLightExtra.m_gyro.getYaw().getValueAsDouble(), 
     //   LimeLightExtra.m_gyro.getAngularVelocityZWorld().getValueAsDouble(), 
