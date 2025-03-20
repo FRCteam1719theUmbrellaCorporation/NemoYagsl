@@ -515,52 +515,6 @@ public class RobotContainer
       driverXbox.start().onTrue(new InstantCommand(()->invert = invert *-1));
       //driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
-      // driverXbox.b().onTrue(new InstantCommand(()->drivebase.setMaxSpeed(.5)));
-      // driverXbox.b().onTrue(new InstantCommand(()->drivebase.setMaxSpeed(1)));
-     // driverXbox2.right
-
-      //Algae move to setpoint
-      // driverXbox2.y().whileTrue(
-      //   new SequentialCommandGroup(
-      //     new InstantCommand(()->
-      //     m_CoralIntakeSubsystem.setPosition(IntakePosition.HUMAN_STATION)
-      //     ),
-      //     new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_humanstatione_pos, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
-      //     coralWheels.turnMotor(CoralArmConstants.coral_intake_humanStation_speed)
-      //   )
-      // );
-
-      // driverXbox2.y().onFalse(
-      //   new ParallelCommandGroup(
-      //     new InstantCommand(()->
-      //     m_CoralIntakeSubsystem.setPosition(IntakePosition.DRIVING)),
-      //     coralWheels.stopMotors()
-      //   )
-      // );
-      
-      // //Coral move to reef l1
-      // driverXbox2.x().onTrue(
-      //   new SequentialCommandGroup(
-      //     new InstantCommand(()->
-      //     m_CoralIntakeSubsystem.setPosition(IntakePosition.REEF)
-      //     ),
-      //     new WaitUntilCommand(()->MathUtil.isNear(CoralArmConstants.coral_reef_l1, m_CoralIntakeSubsystem.doubleMeasurement(), 0.005)),
-      //     coralWheels.turnMotor(CoralArmConstants.coral_outtake_reef_speed)
-      //   )
-      // );
-      // driverXbox2.y().onTrue(
-      //   new InstantCommand(() -> {
-      //     m_ElevatorSubsytem.setSetpoint(20);
-
-      //   })
-      // );
-
-      // driverXbox2.y().onFalse(
-      //   new InstantCommand(()->
-      //   m_ElevatorSubsytem.setSetpoint(50)
-      //   )
-      // );
-
       driverXbox.a().whileTrue(new InstantCommand(()-> {
         Constants.MAX_SPEED = Units.feetToMeters(14.5*0.35);
       }));
@@ -568,13 +522,6 @@ public class RobotContainer
       driverXbox.a().onFalse(new InstantCommand(()-> {
         Constants.MAX_SPEED = Units.feetToMeters(14.5*Constants.SPEED_LIMITER);
       }));
-
-      // driverXbox2.x().whileTrue(
-      //   CoralHumanPlayer
-      // );
-      // driverXbox2.x().onFalse(
-      //   CoralDrive
-      // );
 
       driverXbox.x().onTrue(
         new SequentialCommandGroup(
@@ -606,38 +553,7 @@ public class RobotContainer
       new LowTrigger(driverXbox2.getHID(), XboxController.Axis.kRightX).onTrue(selectorLeft);
       new HighTrigger(driverXbox2.getHID(), XboxController.Axis.kRightX).onTrue(selectorRight);
 
-      // driverXbox2.b().whileTrue(
-      //   new InstantCommand(() -> {
-      //     m_AlgaeIntakeSubsystem.setSetpoint(0.2);
-      //   })
-      // );
-      // driverXbox2.b().onFalse(
-      //   new InstantCommand(() -> {
-      //     m_AlgaeIntakeSubsystem.setSetpoint(0.1);
-      //   })
-      // );
-
-      // driverXbox.leftBumper().onTrue(
-      //   new InstantCommand(()->currentMoveCommand = ()->drivebase.returnPose())
-      //   );
-
-      // driverXbox.leftBumper().onFalse(
-      //   currentMoveCommand.get() != null ? new InstantCommand(()->currentMoveCommand.get().cancel()) : Commands.none()
-      // );
-
-
-      // driverXbox.leftBumper().onFalse( 
-      //   ismoving ? new SequentialCommandGroup(Commands.runOnce(drivebase::lock, drivebase), new InstantCommand(()->ismoving = true)) : Commands.none()
-      // );
-
-      //driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      // driverXbox.b().whileTrue(
-      //     drivebase.driveToPose(
-      //         new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-      //                         );
-      //driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-
-      // driverXbox2.a().onTrue(PlaceCoralCommand.placeAt(endEffDefaultCmd, HeightLevels.MIDDLE));
+      driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
       driverXbox2.a().whileTrue(
         HalfCoralFloor
@@ -716,9 +632,6 @@ public class RobotContainer
     }
 
   }
-
-      
-//       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
