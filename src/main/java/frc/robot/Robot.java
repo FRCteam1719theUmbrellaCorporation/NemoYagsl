@@ -143,7 +143,7 @@ public class Robot extends TimedRobot
   public void disabledInit()
   {
     m_robotContainer.setMotorBrake(true);
-    LimelightHelpers.SetIMUMode(null, 1);
+    LimelightHelpers.SetIMUMode(null, 3);
     disabledTimer.reset();
     disabledTimer.start();
   }

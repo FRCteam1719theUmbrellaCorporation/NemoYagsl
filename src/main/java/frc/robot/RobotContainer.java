@@ -424,7 +424,7 @@ public class RobotContainer
     new LimeLightExtra(drivebase);
 
     LimelightHelpers.SetRobotOrientation(null, drivebase.getHeading().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.SetIMUMode(null, 4);
+    LimelightHelpers.SetIMUMode(null, 3);
     // Configure the trigger bindings
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
@@ -607,7 +607,8 @@ public class RobotContainer
           double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
           drivetotag = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
           if (!drivetotag.isScheduled()) drivetotag.schedule();
-        }).until(()->drivetotag.isFinished()),
+        }),
+        new WaitUntilCommand(()->drivetotag.isFinished()),
 
         new InstantCommand(()->drivebase.lock()),
         new InstantCommand(()->placeAtSpot().schedule()),
