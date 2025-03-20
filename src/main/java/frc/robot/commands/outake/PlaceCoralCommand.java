@@ -222,9 +222,9 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
    */
   public static SequentialCommandGroup resetArm() {
     return new SequentialCommandGroup(
-        m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
+        m_cmd.moveBothNoDirection(HeightLevels.INTAKE_FLIP_AROUND),
         new WaitUntilCommand(m_cmd.isAtPos()),
-        m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_BACK),
+        m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_TO_DOWN),
         new WaitUntilCommand(m_cmd.isAtPos()),
         m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
         new WaitUntilCommand(m_cmd.isAtPos())

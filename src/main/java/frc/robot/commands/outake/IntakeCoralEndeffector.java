@@ -63,7 +63,7 @@ public class IntakeCoralEndeffector extends SequentialCommandGroup {
       new WaitUntilCommand(cmd.isAtPos()),
       cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
       new WaitUntilCommand(cmd.isAtPos()),
-      cmd.moveBoth(HeightLevels.ZERO),
+      cmd.moveBoth(HeightLevels.ZERO, false),
       new WaitUntilCommand(cmd.isAtPos())
     );
   }
