@@ -6,12 +6,15 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.epilogue.logging.NTEpilogueBackend;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -73,6 +76,7 @@ public class RobotContainer
   private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
   private final reefposes reefpose = new reefposes();
   private final reefposes reefpose2 = new reefposes();
+  private NTEpilogueBackend epilogue;
 
   // Shuffle board stuff
   // private GenericEntry reefHeightTab;
@@ -429,6 +433,8 @@ public class RobotContainer
   public RobotContainer() { 
     new LimeLightExtra(drivebase);
 
+    epilogue = new NTEpilogueBackend(NetworkTableInstance.getDefault());
+
     LimelightHelpers.SetRobotOrientation(null, drivebase.getHeading().getDegrees(), 0, 0, 0, 0, 0);
     LimelightHelpers.SetIMUMode(null, 3);
     // Configure the trigger bindings
@@ -655,5 +661,25 @@ public class RobotContainer
   public void setMotorBrake(boolean brake)
   {
     drivebase.setMotorBrake(brake);
+  }
+
+  public void publishVisuals() {
+    // Needs elevator distance constant
+    double elevatorBaseHeight = m_ElevatorSubsytem.doubleMeasurement() * 1;
+
+    // Needs intake angle offset constant
+    double intakeAngle = m_CoralIntakeSubsystem.doubleMeasurement() * Math.PI/2 + 0.11;
+
+    // May need offset constant
+    double endEffectorAngle = m_EndEffectorSubsytem.doubleMeasurement() * Math.PI/2;
+
+    // Constants based on subsystem positioning and robot dimensions from CAD
+      epilogue.log("visuals/internalpose", new Pose3d[] {
+        new Pose3d(0.184150, -0.295, 0.247650, new Rotation3d(0, intakeAngle, 0)),
+        new Pose3d(0, 0, elevatorBaseHeight, new Rotation3d(0, 0, 0)),
+        new Pose3d(0, 0, elevatorBaseHeight * 2, new Rotation3d(0, 0, 0)),
+        new Pose3d(0, 0, elevatorBaseHeight * 3, new Rotation3d(0, 0, 0)),
+        new Pose3d(0.038092, 0, 0.273050 + elevatorBaseHeight * 3, new Rotation3d(endEffectorAngle, 0, 0))
+    }, Pose3d.struct);
   }
 }
