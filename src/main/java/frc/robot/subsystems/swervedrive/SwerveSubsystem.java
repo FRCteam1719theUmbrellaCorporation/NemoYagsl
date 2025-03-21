@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
@@ -779,6 +780,14 @@ public class SwerveSubsystem extends SubsystemBase
               RobotContainer.drivetotag = this.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
               RobotContainer.drivetotag.schedule();
           });
+  }
+
+  public BooleanSupplier within() {
+    Pose2d autop = AutoBuilder.getCurrentPose();
+    Pose2d robop = swerveDrive.getPose();
+    return ()-> (Math.sqrt(
+      Math.pow(autop.getX()-robop.getX(), 2)+ Math.pow(autop.getY()-robop.getY(), 2)) < 0.25)
+      && (Math.abs(autop.getRotation().getDegrees()-robop.getRotation().getDegrees()) < 5);
   }
 
 

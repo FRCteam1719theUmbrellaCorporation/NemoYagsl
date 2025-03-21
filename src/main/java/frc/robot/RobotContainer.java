@@ -509,45 +509,54 @@ public class RobotContainer
       }));
 
       driverXbox.x().onTrue(
-        new SequentialCommandGroup(
-          // new InstantCommand(()->{
-          //     String loca = SmartDashboard.getString("location", null);
-          //     Boolean redAlliance = drivebase.isRedAlliance();
-          //     if (loca==null) return ;
-          //     double xap = reefpose2.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
-          //     double yap = reefpose2.getArrayfromKey(loca, redAlliance)[1]+4.0259;
-          //     double rap = reefpose2.getArrayfromKey(loca, redAlliance)[2];
-          //     drivetotag = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
-          //     drivetotag.schedule();
-          // }),
-          drivebase.MoveWithReefPose(reefpose2),
-          // new WaitUntilCommand(()->drivetotag.isFinished()),
+        // new SequentialCommandGroup(
+        //   // new InstantCommand(()->{
+        //   //     String loca = SmartDashboard.getString("location", null);
+        //   //     Boolean redAlliance = drivebase.isRedAlliance();
+        //   //     if (loca==null) return ;
+        //   //     double xap = reefpose2.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
+        //   //     double yap = reefpose2.getArrayfromKey(loca, redAlliance)[1]+4.0259;
+        //   //     double rap = reefpose2.getArrayfromKey(loca, redAlliance)[2];
+        //   //     drivetotag = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
+        //   //     drivetotag.schedule();
+        //   // }),
+        //   drivebase.MoveWithReefPose(reefpose2),
+        //   // new WaitUntilCommand(()->drivetotag.isFinished()),
 
-          // new InstantCommand(()->drivebase.lock()),
-          // new InstantCommand(()->placeAtSpot().schedule()),
-          // new WaitUntilCommand(()->drivetotag.isFinished()), 
-          new WaitCommand(7),
-          new InstantCommand(()->Robot.reefLevel = Level.L4),
-          drivebase.MoveWithReefPose(reefpose)
+        //   // new InstantCommand(()->drivebase.lock()),
+        //   // new InstantCommand(()->placeAtSpot().schedule()),
+        //   // new WaitUntilCommand(()->drivetotag.isFinished()), 
+        //   new WaitCommand(7),
+        //   new InstantCommand(()->Robot.reefLevel = Level.L4),
+        //   drivebase.MoveWithReefPose(reefpose)
           
 
 
 
-          // new InstantCommand(()->{
-          //   if (placeAtSpot().isFinished()) {
-          //     String loca = SmartDashboard.getString("location", null);
-          //     Boolean redAlliance = drivebase.isRedAlliance();
-          //     if (loca==null) return ;
-          //     double xap = reefpose2.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
-          //     double yap = reefpose2.getArrayfromKey(loca, redAlliance)[1]+4.0259;
-          //     double rap = reefpose2.getArrayfromKey(loca, redAlliance)[2];
-          //     drivetotagback = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
-          //     drivetotagback.schedule();
+        //   // new InstantCommand(()->{
+        //   //   if (placeAtSpot().isFinished()) {
+        //   //     String loca = SmartDashboard.getString("location", null);
+        //   //     Boolean redAlliance = drivebase.isRedAlliance();
+        //   //     if (loca==null) return ;
+        //   //     double xap = reefpose2.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
+        //   //     double yap = reefpose2.getArrayfromKey(loca, redAlliance)[1]+4.0259;
+        //   //     double rap = reefpose2.getArrayfromKey(loca, redAlliance)[2];
+        //   //     drivetotagback = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
+        //   //     drivetotagback.schedule();
               
-          //   }
-          // }
-          // )
-        )
+        //   //   }
+        //   // }
+        //   // )
+        // )
+        new ParallelCommandGroup(
+          drivebase.MoveWithReefPose(reefpose),
+          new WaitUntilCommand(drivebase.within()).andThen(new InstantCommand(()->placeAtSpot().schedule()))
+        ).andThen(
+          new SequentialCommandGroup(
+            new WaitUntilCommand(()->placeAtSpot().isFinished()),
+            drivebase.MoveWithReefPose(reefpose2)
+          )
+      )
       );
 
       driverXbox.x().onFalse(
