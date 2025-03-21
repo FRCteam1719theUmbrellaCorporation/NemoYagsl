@@ -579,8 +579,8 @@ public class RobotContainer
               double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
               driveback = drivebase.driveToPose(new Pose2d(new Translation2d(drivebase.getPose().getX()+Math.sin(rap)*0.25, drivebase.getPose().getY()+Math.cos(rap)*0.25), drivebase.getPose().getRotation()));
               driveback.schedule();
-        }),
-            new WaitUntilCommand(()->driveback.isFinished()).andThen(PlaceCoralCommand.returnAfterPlacing())
+        })//,
+            //new WaitUntilCommand(()->driveback.isFinished()).andThen(PlaceCoralCommand.returnAfterPlacing())
           )
       )
       );
