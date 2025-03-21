@@ -67,7 +67,7 @@ public class Robot extends TimedRobot
     DataLogManager.start();
 
     DriverStation.startDataLog(DataLogManager.getLog());
-    DriverStation.startDataLog(DataLogManager.getLog(), false);
+    DriverStation.startDataLog(DataLogManager.getLog(), true);
 
 // <<<<<<< HEAD
 
@@ -135,6 +135,8 @@ public class Robot extends TimedRobot
     SmartDashboard.putString("location", RobotContainer.loc.toString());
     System.out.println(SmartDashboard.getString("level", "L3"));
 
+    // Send visual data to Networktables for AdvantageScope
+    m_robotContainer.publishVisuals();
   }
 
   /**
