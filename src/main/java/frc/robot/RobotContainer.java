@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -23,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -646,16 +644,7 @@ public class RobotContainer
         // );
         driverXbox2.rightBumper().onTrue(
           new InstantCommand(() -> {
-
-            String dave = SmartDashboard.getString("level", "");
-
-            if (dave.equals("L2")) {
-              PlaceCoralCommand.l2CommandFlip().schedule();
-            } else if (dave.equals("L3")) {
-              PlaceCoralCommand.l3CommandFlip().schedule();
-            } else if (dave.equals("L4")) {
-              PlaceCoralCommand.l4CommandFlip().schedule();
-            }
+            PlaceCoralCommand.manualPlacement().schedule();
           })
         );
 

@@ -4,6 +4,9 @@
 
 package frc.robot.commands.outake;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -148,13 +151,6 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
       m_cmd.moveBoth(HeightLevels.LOW_PRE),
       new WaitUntilCommand(m_cmd.isAtPos()),
       m_cmd.moveBoth(HeightLevels.LOW),
-      new WaitUntilCommand(m_cmd.isAtPos()),
-      new WaitCommand(2),
-      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_BACK),
-      new WaitUntilCommand(m_cmd.isAtPos()),
-      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_TO_DOWN),
-      new WaitUntilCommand(m_cmd.isAtPos()),
-      m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
       new WaitUntilCommand(m_cmd.isAtPos())
       // m_cmd.moveBoth(HeightLevels.INTAKE_UP),
       // new WaitUntilCommand(m_cmd.isAtPos()),
@@ -179,14 +175,14 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
         m_cmd.moveBoth(HeightLevels.Middle_PRE),
         new WaitUntilCommand(m_cmd.isAtPos()),
         m_cmd.moveBoth(HeightLevels.MIDDLE),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        new WaitCommand(2),
-        m_cmd.moveBoth(HeightLevels.INTAKE_UP),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
-        new WaitUntilCommand(m_cmd.isAtPos())
+        new WaitUntilCommand(m_cmd.isAtPos())//,
+        // new WaitCommand(2),
+        // m_cmd.moveBoth(HeightLevels.INTAKE_UP),
+        // new WaitUntilCommand(m_cmd.isAtPos()),
+        // m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
+        // new WaitUntilCommand(m_cmd.isAtPos()),
+        // m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+        // new WaitUntilCommand(m_cmd.isAtPos())
       );
   }
 
@@ -200,19 +196,70 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
       m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
       new WaitUntilCommand(m_cmd.isAtPos()),
       new WaitCommand(0.1),
-
       m_cmd.moveBoth(HeightLevels.HIGH_PRE),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        m_cmd.moveBoth(HeightLevels.HIGH),
-        new WaitUntilCommand(m_cmd.isAtPos()),
-        new WaitCommand(2),
-        m_cmd.moveBoth(HeightLevels.INTAKE_UP),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      m_cmd.moveBoth(HeightLevels.HIGH),
+      new WaitUntilCommand(m_cmd.isAtPos())
+    );
+  }
+
+  //
+  public static SequentialCommandGroup LowerAfterPlacing() {
+    return new SequentialCommandGroup(
+      m_cmd.moveBoth(HeightLevels.INTAKE_UP),
         new WaitUntilCommand(m_cmd.isAtPos()),
         m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN),
         new WaitUntilCommand(m_cmd.isAtPos()),
         m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
         new WaitUntilCommand(m_cmd.isAtPos())
     );
+  }
+
+  public static SequentialCommandGroup LowerAfterPlacingL2() {
+    return new SequentialCommandGroup(
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_BACK),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_TO_DOWN),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+      new WaitUntilCommand(m_cmd.isAtPos())
+    );
+  }
+
+  // returns manual placement like we used to do it; like the good ol days
+  public static Command manualPlacement() {
+    switch (SmartDashboard.getString("level", "")) {
+      case "L2":
+        return new SequentialCommandGroup(
+          l2CommandFlip(),
+          new WaitCommand(2),
+          LowerAfterPlacingL2()
+        );
+      case "L3":
+        return new SequentialCommandGroup(
+          l3CommandFlip(),
+          new WaitCommand(2),
+          LowerAfterPlacing()
+        );
+      case "L4":
+        return new SequentialCommandGroup(
+          l4CommandFlip(),
+          new WaitCommand(2),
+          LowerAfterPlacing()
+        ); 
+      default:
+        return Commands.none();
+    }
+  }
+
+  // goes to correct position after placing
+  // :) i just wanna put a smiley face here, im so bored.
+  public static Command returnAfterPlacing() {
+    if (SmartDashboard.getString("level", "").equals("L2")) {
+      return LowerAfterPlacingL2();
+    } else {
+      return LowerAfterPlacing();
+    }
   }
 
   /**
