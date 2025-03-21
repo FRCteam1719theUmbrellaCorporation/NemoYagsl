@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -558,11 +559,12 @@ public class RobotContainer
             double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
             drivetotag = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
             drivetotag.schedule();
-        }),
-          new WaitUntilCommand(drivebase.within()).andThen(new InstantCommand(()->placeAtSpot().schedule()))
+        })//,
+          //new WaitUntilCommand(drivebase.within()).andThen(new InstantCommand(()->placeAtSpot().schedule()))
         ).andThen(
           new SequentialCommandGroup(
-            new WaitUntilCommand(()->placeAtSpot().isFinished()),
+            new WaitCommand(1),
+            //new WaitUntilCommand(()->placeAtSpot().isFinished()),
             new InstantCommand(()->{
               String loca = SmartDashboard.getString("location", null);
               Boolean redAlliance = drivebase.isRedAlliance();
