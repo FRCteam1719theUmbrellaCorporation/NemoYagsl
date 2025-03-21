@@ -665,10 +665,10 @@ public class RobotContainer
 
   public void publishVisuals() {
     // Needs elevator distance constant
-    double elevatorBaseHeight = m_ElevatorSubsytem.doubleMeasurement() * 1;
+    double elevatorBaseHeight = m_ElevatorSubsytem.doubleMeasurement() * 0.0096;
 
     // Needs intake angle offset constant
-    double intakeAngle = m_CoralIntakeSubsystem.doubleMeasurement() * Math.PI/2 + 0.11;
+    double intakeAngle = (m_CoralIntakeSubsystem.doubleMeasurement()-0.113) * Math.PI/2;
 
     // May need offset constant
     double endEffectorAngle = m_EndEffectorSubsytem.doubleMeasurement() * Math.PI/2;
