@@ -71,7 +71,7 @@ public class RobotContainer
   private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
   //private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
-  private final reefposes reefpose = new reefposes();
+  private final reefposes reefpose = drivebase.calculatedposes;
   private final reefposes reefpose2 = new reefposes();
 
   // Shuffle board stuff
@@ -549,12 +549,26 @@ public class RobotContainer
         //   // )
         // )
         new ParallelCommandGroup(
-          drivebase.MoveWithReefPose(reefpose),
+          new InstantCommand(()->{
+            String loca = SmartDashboard.getString("location", null);
+            Boolean redAlliance = drivebase.isRedAlliance();
+            if (loca==null) return ;
+            double xap = reefpose.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
+            double yap = reefpose.getArrayfromKey(loca, redAlliance)[1]+4.0259;
+            double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
+            drivetotag = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
+            drivetotag.schedule();
+        }),
           new WaitUntilCommand(drivebase.within()).andThen(new InstantCommand(()->placeAtSpot().schedule()))
         ).andThen(
           new SequentialCommandGroup(
             new WaitUntilCommand(()->placeAtSpot().isFinished()),
-            drivebase.MoveWithReefPose(reefpose2)
+            new InstantCommand(()->{
+              String loca = SmartDashboard.getString("location", null);
+              Boolean redAlliance = drivebase.isRedAlliance();
+              double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
+              drivebase.driveToPose(new Pose2d(new Translation2d(drivebase.getPose().getX()+Math.sin(rap)*0.25, drivebase.getPose().getY()+Math.cos(rap)*0.25), drivebase.getPose().getRotation())).schedule();
+        })
           )
       )
       );

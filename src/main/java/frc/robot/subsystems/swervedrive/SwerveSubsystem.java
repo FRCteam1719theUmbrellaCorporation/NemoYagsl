@@ -20,6 +20,7 @@ import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.hal.simulation.RoboRioDataJNI;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -85,6 +86,7 @@ public class SwerveSubsystem extends SubsystemBase
    * Enable vision odometry updates while driving.
    */
   private final boolean visionDriveTest     = false;
+  public final reefposes calculatedposes = new reefposes();
   // public static boolean slowSpeed = true;
   /**
    * PhotonVision class to keep an accurate odometry.
@@ -98,6 +100,7 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public SwerveSubsystem(File directory)
   {
+
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
@@ -782,12 +785,22 @@ public class SwerveSubsystem extends SubsystemBase
           });
   }
 
+  
+
   public BooleanSupplier within() {
-    Pose2d autop = AutoBuilder.getCurrentPose();
+    Double[] tagxyr = calculatedposes.getArrayfromKey(SmartDashboard.getString("location", null), isRedAlliance());
+    Pose2d targetp = new Pose2d(
+      new Translation2d(
+        tagxyr[0],
+        tagxyr[1]
+      ), 
+      new Rotation2d(
+        tagxyr[2]
+      ));
     Pose2d robop = swerveDrive.getPose();
     return ()-> (Math.sqrt(
-      Math.pow(autop.getX()-robop.getX(), 2)+ Math.pow(autop.getY()-robop.getY(), 2)) < 0.25)
-      && (Math.abs(autop.getRotation().getDegrees()-robop.getRotation().getDegrees()) < 5);
+      Math.pow(targetp.getX()-robop.getX(), 2)+ Math.pow(targetp.getY()-robop.getY(), 2)) < 0.25)
+      && (Math.abs(targetp.getRotation().getDegrees()-robop.getRotation().getDegrees()) < 5);
   }
 
 
