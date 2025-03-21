@@ -210,6 +210,8 @@ public class RobotContainer
 
   // public static Level level = Level.L2;
   public static volatile Command drivetotag;
+  public static volatile Command driveback;
+
 
   Command drivetotagback;
 
@@ -565,8 +567,10 @@ public class RobotContainer
               String loca = SmartDashboard.getString("location", null);
               Boolean redAlliance = drivebase.isRedAlliance();
               double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
-              drivebase.driveToPose(new Pose2d(new Translation2d(drivebase.getPose().getX()+Math.sin(rap)*0.25, drivebase.getPose().getY()+Math.cos(rap)*0.25), drivebase.getPose().getRotation())).schedule();
-        })
+              driveback = drivebase.driveToPose(new Pose2d(new Translation2d(drivebase.getPose().getX()+Math.sin(rap)*0.25, drivebase.getPose().getY()+Math.cos(rap)*0.25), drivebase.getPose().getRotation()));
+              driveback.schedule();
+        }),
+            new WaitUntilCommand(()->driveback.isFinished()).andThen(PlaceCoralCommand.returnAfterPlacing())
           )
       )
       );
