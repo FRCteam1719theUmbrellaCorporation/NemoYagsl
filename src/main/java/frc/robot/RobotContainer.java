@@ -41,6 +41,7 @@ import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem.IntakePosition;
 import frc.robot.commands.Controls.SelectReef;
+import frc.robot.commands.Controls.SelectReef;
 import frc.robot.commands.Intake.CoralIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralPivotPIDCommand;
 import frc.robot.commands.outake.EndEffectorPIDCommand;
@@ -66,6 +67,8 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   public final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
+
+  public static SelectReef reefSelector;
 
   public static SelectReef reefSelector;
                                                                             
@@ -278,43 +281,105 @@ public class RobotContainer
       public static volatile Location loc = Location.A;
 
       void selectorClockwiseCommand() {
+      void selectorClockwiseCommand() {
         switch (loc) {
           case A:
+            loc = Location.B;
+            break;
             loc = Location.B;
             break;
           case B:
             loc = Location.C;
             break;
+            loc = Location.C;
+            break;
           case C:
+            loc = Location.D;
+            break;
             loc = Location.D;
             break;
           case D:
             loc = Location.E;
             break;
+            loc = Location.E;
+            break;
           case E:
+            loc = Location.F;
+            break;
             loc = Location.F;
             break;
           case F:
             loc = Location.G;
             break;
+            loc = Location.G;
+            break;
           case G:
             loc = Location.H;
+            loc = Location.H;
             break;
+          case H:
           case H:
             loc = Location.I;
             break;
           case I:
+          case I:
             loc = Location.J;
             break;
+          case J:
           case J:
             loc = Location.K;
             break;
           case K:
+          case K:
             loc = Location.L;
             break;
           case L:
+          case L:
             loc = Location.A;
             break;
+        }
+      }
+
+      public void selectorCounterClockwiseCommand() {
+        switch (loc) {
+          case A:
+            loc = Location.L;
+            break;
+          case B:
+            loc = Location.A;
+            break;
+          case C:
+            loc = Location.B;
+            break;
+          case D:
+            loc = Location.C;
+            break;
+          case E:
+            loc = Location.D;
+            break;
+          case F:
+            loc = Location.E;
+            break;
+          case G:
+            loc = Location.F;
+            break;
+          case H:
+            loc = Location.G;
+            break;
+          case I:
+            loc = Location.H;
+            break;
+          case J:
+            loc = Location.I;
+            break;
+          case K:
+            loc = Location.J;
+            break;
+          case L:
+            loc = Location.K;
+            break;
+        }
+      }
         }
       }
 
@@ -367,6 +432,8 @@ public class RobotContainer
 
     reefSelector = new SelectReef(driverXbox2::getRightX, driverXbox2::getRightY);
 
+    reefSelector = new SelectReef(driverXbox2::getRightX, driverXbox2::getRightY);
+
     LimelightHelpers.SetRobotOrientation(null, drivebase.getHeading().getDegrees(), 0, 0, 0, 0, 0);
     LimelightHelpers.SetIMUMode(null, 3);
     // Configure the trigger bindings
@@ -382,6 +449,7 @@ public class RobotContainer
     NamedCommands.registerCommand("HumanStationHalfIntake",HumanStationHalfIntake);
     
 
+    autoChooser = AutoBuilder.buildAutoChooser();
     autoChooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -538,6 +606,14 @@ public class RobotContainer
 
       driverXbox2.povDown().onTrue(
         new InstantCommand(()->levelDownCommand())
+      );
+
+      driverXbox2.povRight().onTrue(
+        new InstantCommand(()->selectorClockwiseCommand())
+      );
+
+      driverXbox2.povLeft().onTrue(
+        new InstantCommand(()->selectorCounterClockwiseCommand())
       );
 
       driverXbox2.povRight().onTrue(
