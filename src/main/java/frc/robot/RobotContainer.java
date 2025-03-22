@@ -219,10 +219,6 @@ public class RobotContainer
   public static volatile Command drivetotag;
   public static volatile Command driveback;
 
-
-  Command drivetotagback;
-
-
     void levelUpCommand() {
       switch (Robot.reefLevel) {
         case L2:
@@ -451,6 +447,7 @@ public class RobotContainer
     NamedCommands.registerCommand("CoralL1", L1);
     NamedCommands.registerCommand("StopMotors",coralWheels.stopMotors());
     NamedCommands.registerCommand("HumanStationHalfIntake",HumanStationHalfIntake);
+    NamedCommands.registerCommand("scorel4",new SequentialCommandGroup(PlaceCoralCommand.l4CommandFlip(), PlaceCoralCommand.returnAfterPlacing()));
     
 
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
@@ -589,7 +586,7 @@ public class RobotContainer
         new InstantCommand(()->{
           if (drivetotag.isScheduled()) drivetotag.cancel();
           if (placeAtSpot().isScheduled()) placeAtSpot().cancel();
-          //if (drivetotagback.isScheduled()) drivetotagback.cancel();
+          if (driveback.isScheduled()) driveback.cancel();
           }
         )
       );

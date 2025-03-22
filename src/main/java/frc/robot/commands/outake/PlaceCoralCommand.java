@@ -280,45 +280,15 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
       );
   }
 
-    // public static SequentialCommandGroup placeAt(Level rLevel) {
-  
-  //   // System.out.println(RobotContainer.level);
+  // i cant BELIEVE owen didnt finish this command... :(
+  // L programmer for sure
+  // public static SequentialCommandGroup algaeHitter() {
+  //   if (SmartDashboard.getString("level", "")) {
+  //     return new SequentialCommandGroup(
+  //       // todo :)
+  //     )
+  //   } else {
 
-  //   if (height1 == null) {
-  //     PlaceCoralCommand.height1 = HeightLevels.LOW_PRE;
-  //     PlaceCoralCommand.height2 = HeightLevels.LOW;
   //   }
-    
-  //   // switch(rLevel) {
-  //   //   case L2:
-  //   //     PlaceCoralCommand.height1 = HeightLevels.LOW_PRE;
-  //   //     PlaceCoralCommand.height2 = HeightLevels.LOW;
-
-  //   //     break;
-  //   //   case L3:
-  //   //     PlaceCoralCommand.height1 = HeightLevels.Middle_PRE;
-  //   //     PlaceCoralCommand.height2 = HeightLevels.MIDDLE;
-  //   //     break;
-  //   //   default:
-  //   //     PlaceCoralCommand.height1 = HeightLevels.HIGH_PRE;
-  //   //     PlaceCoralCommand.height2 = HeightLevels.HIGH;
-  //   //     break;
-  //   // }
-
-  //   return new SequentialCommandGroup(
-  //       m_cmd.moveBoth(PlaceCoralCommand.height1),
-  //       new WaitUntilCommand(m_cmd.isAtPos()),
-  //       m_cmd.moveBoth(PlaceCoralCommand.height2),
-  //       new WaitUntilCommand(m_cmd.isAtPos()),
-  //       new WaitCommand(2),
-
-  //       m_cmd.moveBoth(HeightLevels.ZERO),
-  //       new WaitUntilCommand(m_cmd.isAtPos())
-        
-  //     );
-  // } 
-
-  // i'd rather kms then write this code again
-
-
+  // }
 }
