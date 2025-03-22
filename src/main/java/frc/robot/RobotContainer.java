@@ -44,6 +44,8 @@ import frc.robot.subsystems.Elevator.ElevatorSubsytem;
 import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem.IntakePosition;
+import frc.robot.commands.Controls.SelectReef;
+import frc.robot.commands.Controls.SelectReef;
 import frc.robot.commands.Intake.CoralIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralPivotPIDCommand;
 import frc.robot.commands.outake.EndEffectorPIDCommand;
@@ -69,6 +71,8 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   public final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
+
+  public static SelectReef reefSelector;
                                                                             
   
   private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
@@ -277,154 +281,90 @@ public class RobotContainer
 
       public static volatile Location loc = Location.A;
 
-      Command selectorUp = new InstantCommand(() ->{
+      
+      void selectorClockwiseCommand() {
         switch (loc) {
           case A:
-          loc = Location.L;
-          break;
-          case B:
-          loc = Location.C;
-          break;
-          case C:
-          loc = Location.D;
-          break;
-          case D:
-          loc = Location.E;
-          break;
-          case E:
-          loc = Location.F;
-          break;
-          case F:
-          loc = Location.G;
-          break;
-          case G:
-          case H:
-          break;
-          case I:
-          loc = Location.H;
-          break;
-          case J:
-          loc = Location.I;
-          break;
-          case K:
-          loc = Location.J;
-          break;
-          case L:
-          loc = Location.K;
-          break;
-        }}
-        );
-        Command selectorDown = new InstantCommand(() ->{
-          switch (loc) {
-            case A:
-            case B:
-            break;
-            case C:
             loc = Location.B;
             break;
-            case D:
+          case B:
             loc = Location.C;
             break;
-            case E:
+          case C:
             loc = Location.D;
             break;
-            case F:
+          case D:
             loc = Location.E;
             break;
-            case G:
+          case E:
             loc = Location.F;
             break;
-            case H:
+          case F:
+            loc = Location.G;
+            break;
+          case G:
+            loc = Location.H;
+            break;
+          case H:
             loc = Location.I;
             break;
-            case I:
+          case I:
             loc = Location.J;
             break;
-            case J:
+          case J:
             loc = Location.K;
             break;
-            case K:
+          case K:
             loc = Location.L;
             break;
-            case L:
+          case L:
             loc = Location.A;
             break;
-          }}
-          );
-          Command selectorLeft = new InstantCommand(() ->{
-            switch (loc) {
-              case A:
-              loc = Location.L;
-              break;
-              case B:
-              loc = Location.A;
-              break;
-              case C:
-              loc = Location.B;
-              break;
-              case D:
-              loc = Location.C;
-              break;
-              case E:
-              loc = Location.F;
-              break;
-              case F:
-              loc = Location.G;
-              break;
-              case G:
-              loc = Location.H;
-              break;
-              case H:
-              loc = Location.I;
-              break;
-              case I:
-              loc = Location.J;
-              break;
-              case J:
-              case K:
-              break;
-              case L:
-              loc = Location.K;
-              break;
-            }}
-            );
-            Command selectorRight = new InstantCommand(() ->{
-              switch (loc) {
-                case A:
-                loc = Location.B;
-                break;
-                case B:
-                loc = Location.C;
-                break;
-                case C:
-                loc = Location.D;
-                break;
-                case D:
-                case E:
-                break;
-                case F:
-                loc = Location.E;
-                break;
-                case G:
-                loc = Location.F;
-                break;
-                case H:
-                loc = Location.G;
-                break;
-                case I:
-                loc = Location.H;
-                break;
-                case J:
-                loc = Location.I;
-                break;
-                case K:
-                loc = Location.L;
-                break;
-                                case L:
-                loc = Location.A;
-                break;
-              }}
-              );
+        }
+      }
+      
+
+
+      public void selectorCounterClockwiseCommand() {
+        switch (loc) {
+          case A:
+            loc = Location.L;
+            break;
+          case B:
+            loc = Location.A;
+            break;
+          case C:
+            loc = Location.B;
+            break;
+          case D:
+            loc = Location.C;
+            break;
+          case E:
+            loc = Location.D;
+            break;
+          case F:
+            loc = Location.E;
+            break;
+          case G:
+            loc = Location.F;
+            break;
+          case H:
+            loc = Location.G;
+            break;
+          case I:
+            loc = Location.H;
+            break;
+          case J:
+            loc = Location.I;
+            break;
+          case K:
+            loc = Location.J;
+            break;
+          case L:
+            loc = Location.K;
+            break;
+        }
+      }
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */  
@@ -433,6 +373,7 @@ public class RobotContainer
     new LimeLightExtra(drivebase);
 
     epilogue = new NTEpilogueBackend(NetworkTableInstance.getDefault());
+    reefSelector = new SelectReef(driverXbox2::getRightX, () -> -driverXbox2.getRightY());
 
     LimelightHelpers.SetRobotOrientation(null, drivebase.getHeading().getDegrees(), 0, 0, 0, 0, 0);
     LimelightHelpers.SetIMUMode(null, 3);
@@ -451,11 +392,7 @@ public class RobotContainer
     NamedCommands.registerCommand("cha-chink", IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd));
     
 
-    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
-      (stream) -> false
-        ? stream.filter(auto -> auto.getName().startsWith("comp"))
-        : stream
-    );
+    autoChooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
@@ -516,85 +453,85 @@ public class RobotContainer
       }));
 
       driverXbox.x().onTrue(
-        // new SequentialCommandGroup(
-        //   // new InstantCommand(()->{
-        //   //     String loca = SmartDashboard.getString("location", null);
-        //   //     Boolean redAlliance = drivebase.isRedAlliance();
-        //   //     if (loca==null) return ;
-        //   //     double xap = reefpose2.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
-        //   //     double yap = reefpose2.getArrayfromKey(loca, redAlliance)[1]+4.0259;
-        //   //     double rap = reefpose2.getArrayfromKey(loca, redAlliance)[2];
-        //   //     drivetotag = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
-        //   //     drivetotag.schedule();
-        //   // }),
-        //   drivebase.MoveWithReefPose(reefpose2),
-        //   // new WaitUntilCommand(()->drivetotag.isFinished()),
+        new SequentialCommandGroup(
+          new InstantCommand(()->{
+              String loca = SmartDashboard.getString("location", null);
+              Boolean redAlliance = drivebase.isRedAlliance();
+              if (loca==null) return ;
+              double xap = reefpose.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
+              double yap = reefpose.getArrayfromKey(loca, redAlliance)[1]+4.0259;
+              double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
+              drivetotag = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
+              drivetotag.schedule();
+          }),
 
-        //   // new InstantCommand(()->drivebase.lock()),
-        //   // new InstantCommand(()->placeAtSpot().schedule()),
-        //   // new WaitUntilCommand(()->drivetotag.isFinished()), 
-        //   new WaitCommand(7),
-        //   new InstantCommand(()->Robot.reefLevel = Level.L4),
-        //   drivebase.MoveWithReefPose(reefpose)
+          //drivebase.MoveWithReefPose(reefpose2)
+          
+          new WaitUntilCommand(()->drivetotag.isFinished()),
+
+          new InstantCommand(()->drivebase.lock()),
+          new InstantCommand(()->placeAtSpot().schedule()),
+          new WaitUntilCommand(()->placeAtSpot().isFinished()),
+          new InstantCommand(()->PlaceCoralCommand.returnAfterPlacing().schedule())
+        )
+          //new WaitUntilCommand(()->drivetotag.isFinished()), 
+          //new WaitCommand(7),
+          //new InstantCommand(()->Robot.reefLevel = Level.L4),
+          //drivebase.MoveWithReefPose(reefpose)
           
 
 
 
-        //   // new InstantCommand(()->{
-        //   //   if (placeAtSpot().isFinished()) {
-        //   //     String loca = SmartDashboard.getString("location", null);
-        //   //     Boolean redAlliance = drivebase.isRedAlliance();
-        //   //     if (loca==null) return ;
-        //   //     double xap = reefpose2.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
-        //   //     double yap = reefpose2.getArrayfromKey(loca, redAlliance)[1]+4.0259;
-        //   //     double rap = reefpose2.getArrayfromKey(loca, redAlliance)[2];
-        //   //     drivetotagback = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
-        //   //     drivetotagback.schedule();
+          // new InstantCommand(()->{
+          //   if (placeAtSpot().isFinished()) {
+          //     String loca = SmartDashboard.getString("location", null);
+          //     Boolean redAlliance = drivebase.isRedAlliance();
+          //     if (loca==null) return ;
+          //     double xap = reefpose2.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
+          //     double yap = reefpose2.getArrayfromKey(loca, redAlliance)[1]+4.0259;
+          //     double rap = reefpose2.getArrayfromKey(loca, redAlliance)[2];
+          //     drivetotagback = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
+          //     drivetotagback.schedule();
               
-        //   //   }
-        //   // }
-        //   // )
-        // )
-        new ParallelCommandGroup(
-          new InstantCommand(()->{
-            String loca = SmartDashboard.getString("location", null);
-            Boolean redAlliance = drivebase.isRedAlliance();
-            if (loca==null) return ;
-            double xap = reefpose.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
-            double yap = reefpose.getArrayfromKey(loca, redAlliance)[1]+4.0259;
-            double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
-            drivetotag = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
-            drivetotag.schedule();
-        })//,
-          //new WaitUntilCommand(drivebase.within()).andThen(new InstantCommand(()->placeAtSpot().schedule()))
-        ).andThen(
-          new SequentialCommandGroup(
-            new WaitCommand(1),
-            //new WaitUntilCommand(()->placeAtSpot().isFinished()),
-            new InstantCommand(()->{
-              String loca = SmartDashboard.getString("location", null);
-              Boolean redAlliance = drivebase.isRedAlliance();
-              double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
-              driveback = drivebase.driveToPose(new Pose2d(new Translation2d(drivebase.getPose().getX()+Math.sin(rap)*0.25, drivebase.getPose().getY()+Math.cos(rap)*0.25), drivebase.getPose().getRotation()));
-              driveback.schedule();
-        })//,
-            //new WaitUntilCommand(()->driveback.isFinished()).andThen(PlaceCoralCommand.returnAfterPlacing())
-          )
-      )
+          //   }
+          // }
+          // )
+        
+      //   new ParallelCommandGroup(
+      //     new InstantCommand(()->{
+      //       String loca = SmartDashboard.getString("location", null);
+      //       Boolean redAlliance = drivebase.isRedAlliance();
+      //       if (loca==null) return ;
+      //       double xap = reefpose.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
+      //       double yap = reefpose.getArrayfromKey(loca, redAlliance)[1]+4.0259;
+      //       double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
+      //       drivetotag = drivebase.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
+      //       drivetotag.schedule();
+      //   }),
+      //     new WaitUntilCommand(drivebase.within()).andThen(new InstantCommand(()->placeAtSpot().schedule()))
+      //   ).andThen(
+      //     new SequentialCommandGroup(
+      //       new WaitCommand(1),
+      //       //new WaitUntilCommand(()->placeAtSpot().isFinished()),
+      //       new InstantCommand(()->{
+      //         String loca = SmartDashboard.getString("location", null);
+      //         Boolean redAlliance = drivebase.isRedAlliance();
+      //         double rap = reefpose.getArrayfromKey(loca, redAlliance)[2];
+      //         driveback = drivebase.driveToPose(new Pose2d(new Translation2d(drivebase.getPose().getX()+Math.sin(rap)*0.25, drivebase.getPose().getY()+Math.cos(rap)*0.25), drivebase.getPose().getRotation()));
+      //         driveback.schedule();
+      //   })//,
+      //       //new WaitUntilCommand(()->driveback.isFinished()).andThen(PlaceCoralCommand.returnAfterPlacing())
+      //     )
+      // )
       );
 
       driverXbox.x().onFalse(
         new InstantCommand(()->{
           if (drivetotag.isScheduled()) drivetotag.cancel();
-          if (placeAtSpot().isScheduled()) placeAtSpot().cancel();
-          if (driveback.isScheduled()) driveback.cancel();
+          //if (driveback.isScheduled()) driveback.cancel();
           }
         )
       );
-      new HighTrigger(driverXbox2.getHID(), XboxController.Axis.kRightY).onTrue(selectorDown);
-      new LowTrigger(driverXbox2.getHID(), XboxController.Axis.kRightY).onTrue(selectorUp);
-      new LowTrigger(driverXbox2.getHID(), XboxController.Axis.kRightX).onTrue(selectorLeft);
-      new HighTrigger(driverXbox2.getHID(), XboxController.Axis.kRightX).onTrue(selectorRight);
 
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
@@ -620,6 +557,8 @@ public class RobotContainer
         CoralDrive
       );
 
+      driverXbox2.getRightX();
+
       //Coral move to setpoint
       driverXbox2.x().whileTrue(
         // new InstantCommand(() -> {
@@ -639,6 +578,14 @@ public class RobotContainer
 
       driverXbox2.povDown().onTrue(
         new InstantCommand(()->levelDownCommand())
+      );
+
+      driverXbox2.povRight().onTrue(
+        new InstantCommand(()->selectorClockwiseCommand())
+      );
+
+      driverXbox2.povLeft().onTrue(
+        new InstantCommand(()->selectorCounterClockwiseCommand())
       );
 
       driverXbox2.leftBumper().onTrue(
@@ -686,10 +633,10 @@ public class RobotContainer
     double elevatorBaseHeight = m_ElevatorSubsytem.doubleMeasurement() * 0.0096;
 
     // Needs intake angle offset constant
-    double intakeAngle = (m_CoralIntakeSubsystem.doubleMeasurement()-0.113) * Math.PI/2;
+    double intakeAngle = (m_CoralIntakeSubsystem.doubleMeasurement()-0.113) * Math.PI*2;
 
     // May need offset constant
-    double endEffectorAngle = m_EndEffectorSubsytem.doubleMeasurement() * Math.PI/2;
+    double endEffectorAngle = m_EndEffectorSubsytem.doubleMeasurement() * Math.PI*2;
 
     // Constants based on subsystem positioning and robot dimensions from CAD
       epilogue.log("visuals/internalpose", new Pose3d[] {
