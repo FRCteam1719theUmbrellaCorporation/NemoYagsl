@@ -443,11 +443,12 @@ public class RobotContainer
     NamedCommands.registerCommand("center", drivebase.centerModulesCommand().withTimeout(0.5));
     NamedCommands.registerCommand("CoralDrive", CoralDrive);
     NamedCommands.registerCommand("CoralFloor", CoralFloor);
-    NamedCommands.registerCommand("CoralHumanPlayer", CoralHumanPlayer);
+    NamedCommands.registerCommand("HumanStation", CoralHumanPlayer);
     NamedCommands.registerCommand("CoralL1", L1);
     NamedCommands.registerCommand("StopMotors",coralWheels.stopMotors());
     NamedCommands.registerCommand("HumanStationHalfIntake",HumanStationHalfIntake);
-    NamedCommands.registerCommand("scorel4",new SequentialCommandGroup(PlaceCoralCommand.l4CommandFlip(), PlaceCoralCommand.returnAfterPlacing()));
+    NamedCommands.registerCommand("scorel4", new SequentialCommandGroup(PlaceCoralCommand.l4CommandFlip(), PlaceCoralCommand.returnAfterPlacing()));
+    NamedCommands.registerCommand("cha-chink", IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd));
     
 
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
