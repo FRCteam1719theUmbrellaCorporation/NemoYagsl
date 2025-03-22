@@ -662,6 +662,11 @@ public class RobotContainer
         driverXbox2.leftTrigger().onTrue( 
           IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
         ); 
+
+        // hits the highest algae 
+        driverXbox2.rightTrigger().onTrue( 
+          PlaceCoralCommand.algaeHitter()
+        ); 
     }
 
   }
