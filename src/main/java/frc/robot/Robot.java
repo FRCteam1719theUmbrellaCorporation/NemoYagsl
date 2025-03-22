@@ -172,7 +172,7 @@ public class Robot extends TimedRobot
     inAuto = true;
     try {
       LimelightHelpers.SetIMUMode(null, 4);
-      LimelightHelpers.SetIMUAssistAlpha(null, 0.01);
+      //LimelightHelpers.SetIMUAssistAlpha(null, 0.01);
       LimelightHelpers.SetFiducialIDFiltersOverride(null, new int[] {100});
     } catch (Exception e) {
       System.out.println("ll did not init. terror");
@@ -197,14 +197,14 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousPeriodic()
   {
-    // LimelightHelpers.SetRobotOrientation(null, 
-    //   LimeLightExtra.m_gyro.getYaw().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getAngularVelocityZWorld().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getPitch().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getAngularVelocityXWorld().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getRoll().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getAngularVelocityYWorld().getValueAsDouble()
-    // );
+    LimelightHelpers.SetRobotOrientation(null, 
+      LimeLightExtra.m_gyro.getYaw().getValueAsDouble(), 
+      LimeLightExtra.m_gyro.getAngularVelocityZWorld().getValueAsDouble(), 
+      LimeLightExtra.m_gyro.getPitch().getValueAsDouble(), 
+      LimeLightExtra.m_gyro.getAngularVelocityXWorld().getValueAsDouble(), 
+      LimeLightExtra.m_gyro.getRoll().getValueAsDouble(), 
+      LimeLightExtra.m_gyro.getAngularVelocityYWorld().getValueAsDouble()
+    );
 
   }
 
@@ -234,14 +234,14 @@ public class Robot extends TimedRobot
   public void teleopPeriodic()
   {
     RobotContainer.reefSelector.execute();
-    // LimelightHelpers.SetRobotOrientation(null, 
-    //   LimeLightExtra.m_gyro.getYaw().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getAngularVelocityZWorld().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getPitch().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getAngularVelocityXWorld().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getRoll().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getAngularVelocityYWorld().getValueAsDouble()
-    // );
+    LimelightHelpers.SetRobotOrientation(null, 
+      LimeLightExtra.m_gyro.getYaw().getValueAsDouble(), 
+      LimeLightExtra.m_gyro.getAngularVelocityZDevice().getValueAsDouble(), 
+      LimeLightExtra.m_gyro.getPitch().getValueAsDouble(), 
+      LimeLightExtra.m_gyro.getAngularVelocityXDevice().getValueAsDouble(), 
+      LimeLightExtra.m_gyro.getRoll().getValueAsDouble(), 
+      LimeLightExtra.m_gyro.getAngularVelocityYDevice().getValueAsDouble()
+    );
 
     //myBooleanLog.append(); 
     //myDoubleLog.append(3);

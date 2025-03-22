@@ -46,7 +46,7 @@ public class EndEffectorSubsytem extends SubsystemBase {
     setPoint = 0;
     EndEffectorPIDController.setSetpoint(setPoint);
     EndEffectorPIDController.enableContinuousInput(0,1);
-    EndEffectorPIDController.setTolerance(.025);
+    EndEffectorPIDController.setTolerance(.01);
     heightLevels = HeightLevels.ZERO;
     moveDirection = null;
   }

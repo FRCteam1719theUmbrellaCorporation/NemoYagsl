@@ -273,7 +273,7 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
         new WaitUntilCommand(m_cmd.isAtPos()),
         m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_TO_DOWN),
         new WaitUntilCommand(m_cmd.isAtPos()),
-        m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+        m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN).withTimeout(2),
         new WaitUntilCommand(m_cmd.isAtPos())
         // m_cmd.moveBoth(HeightLevels.ZERO),
         // new WaitUntilCommand(m_cmd.isAtPos())

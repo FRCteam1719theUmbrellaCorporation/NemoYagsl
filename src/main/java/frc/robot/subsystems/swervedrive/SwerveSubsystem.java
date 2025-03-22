@@ -25,6 +25,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -41,6 +42,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.LimeLightExtra;
@@ -743,9 +745,11 @@ public class SwerveSubsystem extends SubsystemBase
     if (isRedAlliance()) {
     //m_robotContainer.drivebase.getSwerveDrive().resetOdometry(new Pose2d(m_robotContainer.drivebase.getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
     getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
+    swerveDrive.setGyroOffset(swerveDrive.getGyro().getRawRotation3d());
     // gyrogyro.setOffset(new Rotation3d(0,0,Math.PI));
   } else {
-    getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+    getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(180)));    swerveDrive.setGyroOffset(swerveDrive.getGyro().getRawRotation3d());
+    swerveDrive.setGyroOffset(swerveDrive.getGyro().getRawRotation3d());
     }
   }
 

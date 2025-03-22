@@ -39,6 +39,24 @@
           "data": {
             "name": "CoralL1"
           }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "movebackmid"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralDrive"
+          }
         }
       ]
     }
