@@ -171,7 +171,9 @@ public class Robot extends TimedRobot
   {
     inAuto = true;
     try {
-      LimelightHelpers.SetIMUMode(null, 2);
+      LimelightHelpers.SetIMUMode(null, 4);
+      LimelightHelpers.SetIMUAssistAlpha(null, 0.01);
+      LimelightHelpers.SetFiducialIDFiltersOverride(null, new int[] {100});
     } catch (Exception e) {
       System.out.println("ll did not init. terror");
     }
@@ -214,7 +216,8 @@ public class Robot extends TimedRobot
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    LimelightHelpers.SetIMUMode(null, 2);
+    LimelightHelpers.SetIMUMode(null, 4);
+    LimelightHelpers.SetFiducialIDFiltersOverride(null, new int[] {6,7,8,9,10,11,17,18,19,20,21,22});
     if (m_autonomousCommand != null)
     {
       m_autonomousCommand.cancel();
@@ -250,7 +253,7 @@ public class Robot extends TimedRobot
   public void testInit()
   {
     // Cancels all running commands at the start of test mode.
-    LimelightHelpers.SetIMUMode(null, 2);
+    LimelightHelpers.SetIMUMode(null, 4);
     CommandScheduler.getInstance().cancelAll();
   }
 
