@@ -61,6 +61,8 @@ public class Robot extends TimedRobot
   DoubleLogEntry myDoubleLog;
   StringLogEntry myStringLog;
 
+  public static boolean inAuto;
+
   public Robot()
   {
     instance = this;
@@ -167,6 +169,7 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit()
   {
+    inAuto = true;
     try {
       LimelightHelpers.SetIMUMode(null, 3);
     } catch (Exception e) {
@@ -206,6 +209,7 @@ public class Robot extends TimedRobot
   @Override
   public void teleopInit()
   {
+    inAuto = false;
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.LimeLightExtra;
 
@@ -163,10 +164,11 @@ public class SwerveSubsystem extends SubsystemBase
   public void periodic()
   {
     // When vision is enabled we must manually update odometry in SwerveDrive
-    swerveDrive.updateOdometry(); // TODO: UNCOMMENT AFTER TESTING. MUST BE UPDATED FOR POSE ESTIMATION
+    if (!Robot.inAuto) {swerveDrive.updateOdometry(); // TODO: UNCOMMENT AFTER TESTING. MUST BE UPDATED FOR POSE ESTIMATION
     try {
       LimeLightExtra.updatePoseEstimation();
     } catch (Exception e) {
+    }
     }
   }
 
