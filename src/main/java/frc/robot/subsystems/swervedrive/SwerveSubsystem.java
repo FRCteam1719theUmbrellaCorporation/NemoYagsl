@@ -20,6 +20,7 @@ import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.hal.simulation.RoboRioDataJNI;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -32,9 +33,11 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
@@ -47,6 +50,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
@@ -62,6 +66,7 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 import utils.ConvertAprilTag;
 import utils.Reef;
+import utils.reefposes;
 
 public class SwerveSubsystem extends SubsystemBase
 {
@@ -81,6 +86,7 @@ public class SwerveSubsystem extends SubsystemBase
    * Enable vision odometry updates while driving.
    */
   private final boolean visionDriveTest     = false;
+  public final reefposes calculatedposes = new reefposes();
   // public static boolean slowSpeed = true;
   /**
    * PhotonVision class to keep an accurate odometry.
@@ -94,6 +100,7 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public SwerveSubsystem(File directory)
   {
+
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
@@ -135,7 +142,7 @@ public class SwerveSubsystem extends SubsystemBase
   {
     swerveDrive = new SwerveDrive(driveCfg,
                                   controllerCfg,
-                                  Constants.MAX_SPEED,
+                                  Constants.MAX_SPEED,  
                                   new Pose2d(new Translation2d(Meter.of(1), Meter.of(1)),
                                              Rotation2d.fromDegrees(0)));
   }
@@ -730,155 +737,15 @@ public class SwerveSubsystem extends SubsystemBase
     return swerveDrive.getPitch();
   }
 
-  //ADDED FOR APRIL TAG POSES
-
-  public Translation2d constructTranslationPose(double x, double y) {
-        return new Translation2d(x,y);
+  public void newzeroGyro() {
+    if (isRedAlliance()) {
+    //m_robotContainer.drivebase.getSwerveDrive().resetOdometry(new Pose2d(m_robotContainer.drivebase.getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
+    getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
+    // gyrogyro.setOffset(new Rotation3d(0,0,Math.PI));
+  } else {
+    getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(180)));
     }
-
-    public Rotation2d constructRotationPose(double angle) {
-        return new Rotation2d(angle);
-    }
-
-    public Command constructPose(Translation2d t, Rotation2d r) {
-      Command x = driveToPose(new Pose2d(t, r));
-      x.schedule();
-      return x;
-    }
-
-    public Command returnPose() {
-
-      int tag = ConvertAprilTag.getTag(RobotContainer.loc, isRedAlliance());
-      boolean left = ConvertAprilTag.leftSide(RobotContainer.loc);
-      
-      if (tag == 6 && left) {
-        //ID 6 left
-        return constructPose(constructTranslationPose(13.55, 2.81), constructRotationPose(-150));
-      }
-      else if (tag == 6 && !left) {
-        //ID 6 right
-        return constructPose(constructTranslationPose(13.89, 2.97), constructRotationPose(-150));
-      }
-      else if (tag == 7 && left) {
-        //ID 7 left
-        return constructPose(constructTranslationPose(14.32, 3.91), constructRotationPose(-90));
-      }
-      else if (tag == 7 && !left) {
-        //ID 7 right
-        return constructPose(constructTranslationPose(14.32,4.24), constructRotationPose(-90));
-      }
-      else if (tag == 8 && left) {
-        //ID 8 left
-        return constructPose(constructTranslationPose(13.81, 5.07), constructRotationPose(-30));
-      }
-      else if (tag == 8 && !left) {
-        //ID 8 right
-        return constructPose(constructTranslationPose(13.49, 5.22), constructRotationPose(-30));
-      }
-
-
-      
-      else if (tag == 9 && left) {
-        //ID 9 left
-        return constructPose(constructTranslationPose(12.59, 5.19), constructRotationPose(30));
-      }
-      else if (tag == 9 && !left) {
-        //ID 9 right
-        return constructPose(constructTranslationPose(12.29, 5.02), constructRotationPose(30));
-      }
-      
-      else if (tag == 10 && left) {
-        //ID 10 left
-        return constructPose(constructTranslationPose(11.8, 4.19), constructRotationPose(90));
-      }
-      else if (tag == 10 && !left) {
-        //ID 10 right
-        return constructPose(constructTranslationPose(11.8, 3.82), constructRotationPose(90));
-      }
-
-      else if (tag == 11 && left) {
-        //ID 11 left
-        return constructPose(constructTranslationPose(12.31, 3.01), constructRotationPose(150));
-      }
-      else if (tag == 11 && !left) {
-        //ID 11 right
-        return constructPose(constructTranslationPose(12.61, 2.86), constructRotationPose(150));
-      }
-
-
-
-      else if (tag == 17 && left) {
-        //ID 17 left
-        return constructPose(constructTranslationPose(3.69, 3.02), constructRotationPose(150));
-      }
-      else if (tag == 17 && !left) {
-        //ID 17 right
-        return constructPose(constructTranslationPose(4.00, 2.86), constructRotationPose(150));
-      }
-      
-     else if (tag == 18 && left) {
-        //ID 18 left
-        return constructPose(constructTranslationPose(3.18, 4.17), constructRotationPose(90));
-      }
-      if (tag ==18 &&!left) {
-        //ID 18 right
-        return constructPose(constructTranslationPose(3.20, 3.84), constructRotationPose(90));
-      }
-      if (tag == 19 && left) {
-        //ID 19 left
-        return constructPose(constructTranslationPose(3.96, 5.13), constructRotationPose(30));
-      }
-      else if (tag == 19 && !left) {
-        //ID 19 right
-        return constructPose(constructTranslationPose(3.68, 5.01), constructRotationPose(30));
-      }
-
-
-      
-      else if (tag == 22 && left) {
-        //ID 22 left
-        return constructPose(constructTranslationPose(4.92, 2.79), constructRotationPose(-150));
-      }
-      else if (tag == 22 && !left) {
-        //ID 22 right
-        return constructPose(constructTranslationPose(5.27, 2.95), constructRotationPose(-150));
-      }
-      else if (tag == 21 && left) {
-        //ID 21 left
-        return constructPose(constructTranslationPose(5.75, 3.9), constructRotationPose(-90));
-      }
-      else if (tag == 21 && !left) {
-        //ID 21 right
-        return constructPose(constructTranslationPose(5.75, 4.28), constructRotationPose(-90));
-      }
-      else if (tag == 20 && left) {
-        //ID 20 left
-        return constructPose(constructTranslationPose(5.27, 5.03), constructRotationPose(-30));
-      }
-      else if (tag == 20 && !left) {
-        //ID 20 right
-        return constructPose(constructTranslationPose(4.96,5.23), constructRotationPose(-30));
-      }
-      
-      return constructPose(getPose().getTranslation(), getHeading());
-    }
-
-
-
-    public void newzeroGyro() {
-      if (isRedAlliance())
-    {
-      //m_robotContainer.drivebase.getSwerveDrive().resetOdometry(new Pose2d(m_robotContainer.drivebase.getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
-      getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
-
-      // gyrogyro.setOffset(new Rotation3d(0,0,Math.PI));
-      
-      
-    } else
-    {
-      getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(180)));
-    }
-    }
+  }
 
 
 
@@ -903,6 +770,37 @@ public class SwerveSubsystem extends SubsystemBase
   public SwerveDrive getSwerveDrive()
   {
     return swerveDrive;
+  }
+
+  public InstantCommand MoveWithReefPose(reefposes desiredPos) {
+    return new InstantCommand(()->{
+              String loca = SmartDashboard.getString("location", null);
+              Boolean redAlliance = this.isRedAlliance();
+              if (loca==null) return ;
+              double xap = desiredPos.getArrayfromKey(loca, redAlliance)[0]+(redAlliance?13.058902:4.489323);
+              double yap = desiredPos.getArrayfromKey(loca, redAlliance)[1]+4.0259;
+              double rap = desiredPos.getArrayfromKey(loca, redAlliance)[2];
+              RobotContainer.drivetotag = this.driveToPose(new Pose2d(new Translation2d(xap,yap), new Rotation2d(rap)));
+              RobotContainer.drivetotag.schedule();
+          });
+  }
+
+  
+
+  public BooleanSupplier within() {
+    Double[] tagxyr = calculatedposes.getArrayfromKey(SmartDashboard.getString("location", null), isRedAlliance());
+    Pose2d targetp = new Pose2d(
+      new Translation2d(
+        tagxyr[0],
+        tagxyr[1]
+      ), 
+      new Rotation2d(
+        tagxyr[2]
+      ));
+    Pose2d robop = swerveDrive.getPose();
+    return ()-> (Math.sqrt(
+      Math.pow(targetp.getX()-robop.getX(), 2)+ Math.pow(targetp.getY()-robop.getY(), 2)) < 0.25)
+      && (Math.abs(targetp.getRotation().getDegrees()-robop.getRotation().getDegrees()) < 5);
   }
 
 

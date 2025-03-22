@@ -19,27 +19,42 @@ import frc.robot.Constants.ElevatorConstants;
 public class ElevatorSubsytem extends SubsystemBase {
 
     //Constant list of heights represented by english. YAY
+    //Side note: this is gods ugliested enum.. :(
     public enum HeightLevels {
         ZERO(5, 0.03), // Sets to the bottom
-        INTAKE(20.75, .5), //TODO: fix :( 20.75 IS INTAKE
-        INTAKE_PRE_DOWN(60, .47), //TODO: fix :( 20.75 IS INTAKE
+        INTAKE(21., .5), 
+        INTAKE_WITH_ARN_DOWN(30, .5), // this sets the arm hovering above the coral
+        INTAKE_PRE_DOWN(60, .5),
         INTAKE_UP(60, 0.03),
+        INTAKE_FLIP_AROUND(ElevatorConstants.ARM_180_SPIN, 0, false), // goes from down to around negativly
+        INTAKE_FLIP_BACK(ElevatorConstants.ARM_180_SPIN, 0), // opposite way of above?
+        INTAKE_FLIP_TO_DOWN(ElevatorConstants.ARM_180_SPIN, 0.5, true),
+
         // REEFBASE(1, 0),
-        LOW_PRE(8, 0.03), // Sets to the lowest 
-        LOW(8, .2), // Sets to the lowest 
-        Middle_PRE(27.5, 0.03),
-        MIDDLE(27.75, 0.2), // 
-        HIGH_PRE(58,0.03),
-        HIGH(58, 0.2),
+        LOW_PRE(8, 0.0), // Sets to the lowest 
+        LOW(10f, .8), // Sets to the lowest 
+        Middle_PRE(30.5, 0.0),
+        MIDDLE(30.75, 0.8), // 
+        HIGH_PRE(58,0.0),
+        HIGH(58, 0.8, false),
         MAX(ElevatorConstants.ELEVATOR_ROOM_MAX, 0); // If our elevator goes higher than the third stalk, this would allow us control. maybe we shouldnt use it 
 
         private final double value; // value held by each enum val
         private final double armSetpoints; // value held by each enum val
+        private final Boolean direction; // value held by each enum val
+
 
         HeightLevels(double value, double arm) {
             this.value = value;
             this.armSetpoints = arm;
+            this.direction = null;
         }
+
+        HeightLevels(double value, double arm, Boolean explicitDirection) {
+          this.value = value;
+          this.armSetpoints = arm;
+          this.direction = explicitDirection;
+      }
 
         /**
          * This is the setpoint associated with the elevator
@@ -57,6 +72,15 @@ public class ElevatorSubsytem extends SubsystemBase {
          */
         public double armVal() {
           return armSetpoints;
+        }
+
+        /**
+         * Gets prefered direction of the endeffector in this position
+         * 
+         * @return Boolean associated with it's prefered direction
+         */
+        public Boolean preferedDirection() {
+          return direction;
         }
 
         /**

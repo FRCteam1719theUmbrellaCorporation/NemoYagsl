@@ -101,28 +101,28 @@ public final class Constants
 
     public static final double MIN_SPEED = -.5f;
     public static final double MAX_SPEED = .5f;
-    public static final double coral_floorintake_pos = 0.36;
-    public static final double coral_armdriving_pos = 0.15;
+    public static final double coral_floorintake_pos = 0.32;
+    public static final double coral_armdriving_pos = 0.14;
     public static final double coral_humanstatione_pos = 0.10;
-    public static final double coral_reef_l1 = 0.2;
+    public static final double coral_reef_l1 = 0.14;
 
-    public static final double coral_intake_floor_speed = 0.65f;
-    public static final double coral_intake_floor_speed_limited = 0.4f;
-    public static final double coral_intake_humanStation_speed = 0.1f;
-    public static final double coral_outtake_reef_speed = -0.35f;
+    public static final double coral_intake_floor_speed = 1f;
+    public static final double coral_intake_floor_speed_limited = 0.7f;
+    public static final double coral_intake_humanStation_speed = 0.7f;
+    public static final double coral_outtake_reef_speed = -0.6f;
 
   }
 
   public static class EndefectorConstants{
-    public static final double Endefector_kP = 5;
-    public static final double Endefector_kI = 0;
-    public static final double Endefector_kD = 0.5;
+    public static final double Endefector_kP = 7; //10
+    public static final double Endefector_kI = 0.1;
+    public static final double Endefector_kD = 0.4;//0.75
 
     //Imb- dont know if we need both of these
     public static final double Endefector_startPos = 0;
     public static final double Endefector_startAngle = 0;
-    public static final double MIN_SPEED = -.5f;
-    public static final double MAX_SPEED = .5f;
+    public static final double MIN_SPEED = -.6f;
+    public static final double MAX_SPEED = .6f;
 
     // if the height is LESS than 48, the arm should NOT move to / from it's intake position
     public static final double INTAKE_POS_ELEVATORPOS_MAX = 48.f;
@@ -132,7 +132,7 @@ public final class Constants
 public static class ElevatorConstants{
 
    public static final double ElevatorkP = 0.2;
-    public static final double ElevatorkI = 0;
+    public static final double ElevatorkI = 0.000;
     public static final double ElevatorkD = 0.008;
     public static final double MaxVelocity = Meters.of(4).per(Second).in(MetersPerSecond);
     public static final double MaxAcceleration = Meters.of(6).per(Second).per(Second).in(MetersPerSecondPerSecond);
@@ -144,8 +144,10 @@ public static class ElevatorConstants{
 
     public static final double ELEVATOR_ROOM_MAX = 84;
 
-    public static final double MIN_SPEED = -.5f;
-    public static final double MAX_SPEED = .5f;
+    public static final double MIN_SPEED = -.65f;
+    public static final double MAX_SPEED = .65f;
+
+    public static final double ARM_180_SPIN = 49.5;
   }
 
   public static double CORALPIVITMAXAMOUNT = 235;
