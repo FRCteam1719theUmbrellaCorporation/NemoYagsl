@@ -552,14 +552,6 @@ public class RobotContainer
         new InstantCommand(()->selectorCounterClockwiseCommand())
       );
 
-      driverXbox2.povRight().onTrue(
-        new InstantCommand(()->selectorClockwiseCommand())
-      );
-
-      driverXbox2.povLeft().onTrue(
-        new InstantCommand(()->selectorCounterClockwiseCommand())
-      );
-
       driverXbox2.leftBumper().onTrue(
         PlaceCoralCommand.resetArm()
       );

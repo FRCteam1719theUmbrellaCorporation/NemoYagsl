@@ -20,17 +20,7 @@ public class SelectReef {
         double magnitude = Math.sqrt(x * x + y * y);
         if (magnitude < 0.7) return;
         double angle = Math.toDegrees(Math.atan2(y, x));
-        if (angle >= 300) {
-            RobotContainer.loc = Location.D;
-        } else if (angle >= 270) {
-            RobotContainer.loc = Location.C;
-        } else if (angle >= 240) {
-            RobotContainer.loc = Location.B;
-        } else if (angle >= 210) {
-            RobotContainer.loc = Location.A;
-        } else if (angle >= 180) {
-            RobotContainer.loc = Location.J;
-        } else if (angle >= 150) {
+        if (angle >= 150) {
             RobotContainer.loc = Location.J;
         } else if (angle >=  120) {
             RobotContainer.loc = Location.I;
@@ -42,6 +32,18 @@ public class SelectReef {
             RobotContainer.loc = Location.F;
         } else if (angle >= 0) {
             RobotContainer.loc = Location.E;
+        } else if (angle >= -30) {
+            RobotContainer.loc = Location.D;
+        } else if (angle >= -60) {
+            RobotContainer.loc = Location.C;
+        } else if (angle >= -90) {
+            RobotContainer.loc = Location.B;
+        } else if (angle >= -120) {
+            RobotContainer.loc = Location.A;
+        } else if (angle >= -150) {
+            RobotContainer.loc = Location.L;
+        } else if (angle >= -180) {
+            RobotContainer.loc = Location.K;
         }
     }
 }
