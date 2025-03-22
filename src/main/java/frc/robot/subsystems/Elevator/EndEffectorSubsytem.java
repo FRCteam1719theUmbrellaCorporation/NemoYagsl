@@ -125,7 +125,7 @@ public class EndEffectorSubsytem extends SubsystemBase {
   @Override
   public void periodic() {
     double output = MathUtil.clamp(EndEffectorPIDController.calculate(doubleMeasurement(), moveDirection),EndefectorConstants.MIN_SPEED, EndefectorConstants.MAX_SPEED);
-    System.out.println("endeff output: " + output);
+    //System.out.println("endeff output: " + output);
     setRotation(output);
   }
 }

@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 3.464446721311475,
-        "y": 3.0
+        "x": 3.512397540983606,
+        "y": 2.9640881147540985
       },
       "prevControl": {
-        "x": 2.948975409836066,
-        "y": 2.4605532786885242
+        "x": 2.9969262295081966,
+        "y": 2.4246413934426227
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 8.0,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -56,7 +56,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 49.398705354995535
+    "rotation": 56.66225102159492
   },
   "reversed": false,
   "folder": "2corall1",

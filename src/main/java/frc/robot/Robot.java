@@ -135,7 +135,7 @@ public class Robot extends TimedRobot
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("level", reefLevel.toString());
     SmartDashboard.putString("location", RobotContainer.loc.toString());
-    System.out.println(SmartDashboard.getString("level", "L3"));
+    //System.out.println(SmartDashboard.getString("level", "L3"));
 
     // Send visual data to Networktables for AdvantageScope
     m_robotContainer.publishVisuals();
