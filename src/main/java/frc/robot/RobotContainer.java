@@ -272,7 +272,7 @@ public class RobotContainer
       Command placeAtSpot() {
         // System.out.println(SmartDashboard.getString("level", "L3"));
         switch (SmartDashboard.getString("level", "")) {
-          case "L2": return PlaceCoralCommand.l2CommandFlip();
+          // case "L2": return PlaceCoralCommand.l2CommandFlip();
           case "L3": return PlaceCoralCommand.l3CommandFlip();
           case "L4": return PlaceCoralCommand.l4CommandFlip();
           default: return Commands.none();
@@ -376,7 +376,7 @@ public class RobotContainer
     reefSelector = new SelectReef(driverXbox2::getRightX, () -> -driverXbox2.getRightY());
 
     LimelightHelpers.SetRobotOrientation(null, drivebase.getHeading().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.SetIMUMode(null, 3);
+    LimelightHelpers.SetIMUMode(null, 1);
     // Configure the trigger bindings
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
@@ -386,6 +386,7 @@ public class RobotContainer
     NamedCommands.registerCommand("CoralFloor", CoralFloor);
     NamedCommands.registerCommand("HumanStation", CoralHumanPlayer);
     NamedCommands.registerCommand("CoralL1", L1);
+    NamedCommands.registerCommand("resetarm", PlaceCoralCommand.resetArm());
     NamedCommands.registerCommand("StopMotors",coralWheels.stopMotors());
     NamedCommands.registerCommand("HumanStationHalfIntake",HumanStationHalfIntake);
     NamedCommands.registerCommand("scorel4", new SequentialCommandGroup(PlaceCoralCommand.l4CommandFlip(), PlaceCoralCommand.returnAfterPlacing()));
@@ -471,7 +472,7 @@ public class RobotContainer
 
           new InstantCommand(()->drivebase.lock()),
           new InstantCommand(()->placeAtSpot().schedule()),
-          new WaitUntilCommand(()->placeAtSpot().isFinished()),
+          new WaitCommand(3),
           new InstantCommand(()->PlaceCoralCommand.returnAfterPlacing().schedule())
         )
           //new WaitUntilCommand(()->drivetotag.isFinished()), 

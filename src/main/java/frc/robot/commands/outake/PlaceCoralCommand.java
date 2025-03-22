@@ -145,7 +145,7 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
    */
   public static SequentialCommandGroup l2CommandFlip() {
     return new SequentialCommandGroup(
-      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND, false),
       new WaitUntilCommand(m_cmd.isAtPos()),
       new WaitCommand(0.1),
       m_cmd.moveBoth(HeightLevels.LOW_PRE),
@@ -169,7 +169,7 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
    */
   public static SequentialCommandGroup l3CommandFlip() {
     return new SequentialCommandGroup(
-      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND, false),
       new WaitUntilCommand(m_cmd.isAtPos()),
       new WaitCommand(0.1),
         m_cmd.moveBoth(HeightLevels.Middle_PRE),
@@ -193,7 +193,7 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
    */
   public static SequentialCommandGroup l4CommandFlip() {
     return new SequentialCommandGroup(
-      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND, false),
       new WaitUntilCommand(m_cmd.isAtPos()),
       new WaitCommand(0.1),
       m_cmd.moveBoth(HeightLevels.HIGH_PRE),

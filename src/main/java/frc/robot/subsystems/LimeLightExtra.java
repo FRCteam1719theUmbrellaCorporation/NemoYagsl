@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import frc.robot.LimelightHelpers;
+import frc.robot.Robot;
 import frc.robot.LimelightHelpers.RawFiducial;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.imu.Pigeon2Swerve;
@@ -76,6 +77,8 @@ public class LimeLightExtra {
         {
           doRejectUpdate = true;
         } else if (mt2.pose.getX() == 0. && mt2.pose.getY() == 0.) {
+            doRejectUpdate = true;
+        } else if (Robot.inAuto) {
             doRejectUpdate = true;
         }
         if(!doRejectUpdate)
