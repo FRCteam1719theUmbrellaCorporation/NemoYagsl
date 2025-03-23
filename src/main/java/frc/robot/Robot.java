@@ -101,9 +101,11 @@ public class Robot extends TimedRobot
     //gyrogyro = m_robotContainer.drivebase.getSwerveDrive().getGyro();
     //m_robotContainer.drivebase.newzeroGyro();
 
+    m_robotContainer.drivebase.zeroGyroWithAlliance();
+
 
     
-    m_robotContainer.drivebase.getSwerveDrive().swerveController.lastAngleScalar = 0;
+    //m_robotContainer.drivebase.getSwerveDrive().swerveController.lastAngleScalar = 0;
 
     //m_robotContainer.drivebase.zeroGyroWithAlliance();
     
