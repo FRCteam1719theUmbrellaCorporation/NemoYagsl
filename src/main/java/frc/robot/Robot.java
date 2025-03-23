@@ -139,6 +139,16 @@ public class Robot extends TimedRobot
 
     // Send visual data to Networktables for AdvantageScope
     m_robotContainer.publishVisuals();
+
+    LimelightHelpers.SetRobotOrientation(null, 
+      LimeLightExtra.m_gyro.getYaw().getValueAsDouble(), 
+      LimeLightExtra.m_gyro.getAngularVelocityZDevice().getValueAsDouble(), 
+      LimeLightExtra.m_gyro.getPitch().getValueAsDouble(), 
+      LimeLightExtra.m_gyro.getAngularVelocityXDevice().getValueAsDouble(), 
+      LimeLightExtra.m_gyro.getRoll().getValueAsDouble(), 
+      LimeLightExtra.m_gyro.getAngularVelocityYDevice().getValueAsDouble()
+    );
+
   }
 
   /**
@@ -180,7 +190,7 @@ public class Robot extends TimedRobot
     m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    m_robotContainer.drivebase.newzeroGyro();
+    m_robotContainer.drivebase.zeroGyroWithAlliance();
 
     //m_robotContainer.drivebase.zeroGyroWithAlliance();
 
@@ -197,14 +207,7 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousPeriodic()
   {
-    LimelightHelpers.SetRobotOrientation(null, 
-      LimeLightExtra.m_gyro.getYaw().getValueAsDouble(), 
-      LimeLightExtra.m_gyro.getAngularVelocityZWorld().getValueAsDouble(), 
-      LimeLightExtra.m_gyro.getPitch().getValueAsDouble(), 
-      LimeLightExtra.m_gyro.getAngularVelocityXWorld().getValueAsDouble(), 
-      LimeLightExtra.m_gyro.getRoll().getValueAsDouble(), 
-      LimeLightExtra.m_gyro.getAngularVelocityYWorld().getValueAsDouble()
-    );
+    
 
   }
 
@@ -234,15 +237,6 @@ public class Robot extends TimedRobot
   public void teleopPeriodic()
   {
     RobotContainer.reefSelector.execute();
-    LimelightHelpers.SetRobotOrientation(null, 
-      LimeLightExtra.m_gyro.getYaw().getValueAsDouble(), 
-      LimeLightExtra.m_gyro.getAngularVelocityZDevice().getValueAsDouble(), 
-      LimeLightExtra.m_gyro.getPitch().getValueAsDouble(), 
-      LimeLightExtra.m_gyro.getAngularVelocityXDevice().getValueAsDouble(), 
-      LimeLightExtra.m_gyro.getRoll().getValueAsDouble(), 
-      LimeLightExtra.m_gyro.getAngularVelocityYDevice().getValueAsDouble()
-    );
-
     //myBooleanLog.append(); 
     //myDoubleLog.append(3);
 

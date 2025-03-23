@@ -517,7 +517,7 @@ public class SwerveSubsystem extends SubsystemBase
   public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity)
   {
     return run(() -> {
-      swerveDrive.driveFieldOriented(velocity.get());
+      if (!RobotContainer.drivetotag.isScheduled()) swerveDrive.driveFieldOriented(velocity.get());
     });
   }
 
@@ -614,10 +614,10 @@ public class SwerveSubsystem extends SubsystemBase
     {
       zeroGyro();
       //Set the pose 180 degrees
-      resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
     } else
     {
       zeroGyro();
+      resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
     }
   }
 
@@ -742,14 +742,15 @@ public class SwerveSubsystem extends SubsystemBase
   }
 
   public void newzeroGyro() {
+    //
     if (isRedAlliance()) {
     //m_robotContainer.drivebase.getSwerveDrive().resetOdometry(new Pose2d(m_robotContainer.drivebase.getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
-    getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
-    swerveDrive.setGyroOffset(swerveDrive.getGyro().getRawRotation3d());
+      getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(0)));
+      //swerveDrive.setGyroOffset(swerveDrive.getGyro().getRawRotation3d());
     // gyrogyro.setOffset(new Rotation3d(0,0,Math.PI));
   } else {
-    getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(180)));    swerveDrive.setGyroOffset(swerveDrive.getGyro().getRawRotation3d());
-    swerveDrive.setGyroOffset(swerveDrive.getGyro().getRawRotation3d());
+      getSwerveDrive().resetOdometry(new Pose2d(getSwerveDrive().getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+      //swerveDrive.setGyroOffset(swerveDrive.getGyro().getRawRotation3d());
     }
   }
 
