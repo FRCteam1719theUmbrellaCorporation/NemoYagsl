@@ -51,6 +51,7 @@ import frc.robot.subsystems.LimeLightExtra;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BooleanSupplier;
@@ -517,7 +518,7 @@ public class SwerveSubsystem extends SubsystemBase
   public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity)
   {
     return run(() -> {
-      if (!RobotContainer.drivetotag.isScheduled()) swerveDrive.driveFieldOriented(velocity.get());
+      if (Objects.isNull(RobotContainer.drivetotag) || !RobotContainer.drivetotag.isScheduled() ) swerveDrive.driveFieldOriented(velocity.get());
     });
   }
 

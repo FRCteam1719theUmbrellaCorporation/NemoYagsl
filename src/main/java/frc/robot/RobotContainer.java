@@ -376,7 +376,7 @@ public class RobotContainer
     reefSelector = new SelectReef(driverXbox2::getRightX, () -> -driverXbox2.getRightY());
 
     LimelightHelpers.SetRobotOrientation(null, drivebase.getHeading().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.SetIMUMode(null, 1);
+    LimelightHelpers.SetIMUMode(null, 0);
     // Configure the trigger bindings
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);

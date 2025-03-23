@@ -3,11 +3,15 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.units.AngularVelocityUnit;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -102,6 +106,7 @@ public class Robot extends TimedRobot
     //m_robotContainer.drivebase.newzeroGyro();
 
     m_robotContainer.drivebase.zeroGyroWithAlliance();
+    LimelightHelpers.SetIMUAssistAlpha(null, 0.01);
 
 
     
@@ -143,12 +148,9 @@ public class Robot extends TimedRobot
     m_robotContainer.publishVisuals();
 
     LimelightHelpers.SetRobotOrientation(null, 
-      LimeLightExtra.m_gyro.getYaw().getValueAsDouble(), 
-      LimeLightExtra.m_gyro.getAngularVelocityZDevice().getValueAsDouble(), 
-      LimeLightExtra.m_gyro.getPitch().getValueAsDouble(), 
-      LimeLightExtra.m_gyro.getAngularVelocityXDevice().getValueAsDouble(), 
-      LimeLightExtra.m_gyro.getRoll().getValueAsDouble(), 
-      LimeLightExtra.m_gyro.getAngularVelocityYDevice().getValueAsDouble()
+      Units.radiansToDegrees(m_robotContainer.drivebase.getSwerveDrive().getGyro().getRotation3d().getZ()),
+      m_robotContainer.drivebase.getSwerveDrive().getGyro().getYawAngularVelocity().in(DegreesPerSecond),
+      0.0,0.0,0.0,0.0
     );
 
   }
@@ -160,7 +162,7 @@ public class Robot extends TimedRobot
   public void disabledInit()
   {
     m_robotContainer.setMotorBrake(true);
-    LimelightHelpers.SetIMUMode(null, 1);
+    LimelightHelpers.SetIMUMode(null, 0);
     disabledTimer.reset();
     disabledTimer.start();
   }
@@ -183,8 +185,8 @@ public class Robot extends TimedRobot
   {
     inAuto = true;
     try {
-      LimelightHelpers.SetIMUMode(null, 4);
-      //LimelightHelpers.SetIMUAssistAlpha(null, 0.01);
+      LimelightHelpers.SetIMUMode(null, 0);
+      LimelightHelpers.SetIMUAssistAlpha(null, 0.01);
       LimelightHelpers.SetFiducialIDFiltersOverride(null, new int[] {100});
     } catch (Exception e) {
       System.out.println("ll did not init. terror");
@@ -221,7 +223,7 @@ public class Robot extends TimedRobot
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    LimelightHelpers.SetIMUMode(null, 4);
+    LimelightHelpers.SetIMUMode(null, 0);
     LimelightHelpers.SetFiducialIDFiltersOverride(null, new int[] {6,7,8,9,10,11,17,18,19,20,21,22});
     if (m_autonomousCommand != null)
     {
@@ -249,7 +251,7 @@ public class Robot extends TimedRobot
   public void testInit()
   {
     // Cancels all running commands at the start of test mode.
-    LimelightHelpers.SetIMUMode(null, 4);
+    LimelightHelpers.SetIMUMode(null, 0);
     CommandScheduler.getInstance().cancelAll();
   }
 

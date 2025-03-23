@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
 import frc.robot.LimelightHelpers.RawFiducial;
@@ -68,7 +69,7 @@ public class LimeLightExtra {
      */
     public static void updatePoseEstimation() {
         boolean doRejectUpdate = false;
-        LimelightHelpers.SetRobotOrientation("limelight", SWERVE.getHeading().getDegrees(), 0, 0, 0, 0, 0);
+        //LimelightHelpers.SetRobotOrientation("limelight", SWERVE.getHeading().getDegrees(), 0, 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
         if(Math.abs(m_gyro.getRate()) > 180) // if our angular velocity is greater than 90 degrees per second, ignore vision updates
         {
@@ -83,6 +84,9 @@ public class LimeLightExtra {
         }
         if(!doRejectUpdate)
         {
+            Pose2d newPose = mt2.pose;
+            newPose.rotateBy(SWERVE.getSwerveDrive().getYaw().minus(newPose.getRotation()));
+            //newPose.
             // SWERVE.getSwerveDrive().setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
             SWERVE.getSwerveDrive().addVisionMeasurement(
               mt2.pose,
