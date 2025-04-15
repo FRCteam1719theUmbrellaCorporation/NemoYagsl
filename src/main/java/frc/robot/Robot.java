@@ -5,38 +5,20 @@
 package frc.robot;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 
-import com.ctre.phoenix6.hardware.Pigeon2;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.units.AngularVelocityUnit;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.LimeLightExtra;
-import swervelib.imu.Pigeon2Swerve;
-import swervelib.imu.SwerveIMU;
 import utils.Reef;
-// import edu.wpi.first.networktables.DoubleSubscriber;
-// import edu.wpi.first.networktables.NetworkTable;
-// import edu.wpi.first.networktables.NetworkTableInstance;
-// import utils.Reef.Level;
-
-import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
-
-
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
@@ -46,20 +28,13 @@ import edu.wpi.first.wpilibj.DataLogManager;
 public class Robot extends TimedRobot
 {
   public static volatile Reef.Level reefLevel = Reef.Level.L2;
-
-
   public static ShuffleboardTab reefTab;
-  // private GenericEntry reefHeightTab;
-  // private GenericEntry reefSideTab;
 
-  private static Robot   instance;
-  private        Command m_autonomousCommand;
-  // public static DoubleSubscriber posSetter;
-  // public static DoubleSubscriber posGetter;
+  private static Robot instance;
+  private Command m_autonomousCommand;
 
   
   private RobotContainer m_robotContainer;
-
   private Timer disabledTimer;
 
   BooleanLogEntry myBooleanLog;
@@ -103,19 +78,10 @@ public class Robot extends TimedRobot
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    //gyrogyro = m_robotContainer.drivebase.getSwerveDrive().getGyro();
-    //m_robotContainer.drivebase.newzeroGyro();
-
+  
     m_robotContainer.drivebase.zeroGyroWithAlliance();
     LimelightHelpers.SetIMUAssistAlpha(null, 0.01);
-
-
     
-    //m_robotContainer.drivebase.getSwerveDrive().swerveController.lastAngleScalar = 0;
-
-    //m_robotContainer.drivebase.zeroGyroWithAlliance();
-    
-
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
     // immediately when disabled, but then also let it be pushed more 
     disabledTimer = new Timer();
@@ -202,8 +168,6 @@ public class Robot extends TimedRobot
 
     m_robotContainer.drivebase.zeroGyroWithAlliance();
 
-    //m_robotContainer.drivebase.zeroGyroWithAlliance();
-
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null)
     {
@@ -225,7 +189,7 @@ public class Robot extends TimedRobot
   public void teleopInit()
   {
     inAuto = false;
-    // This makes sure t\hat the autonomous stops running when
+    // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
@@ -244,13 +208,8 @@ public class Robot extends TimedRobot
    * This function is called periodically during operator control.
    */
   @Override
-  public void teleopPeriodic()
-  {
+  public void teleopPeriodic() {
     RobotContainer.reefSelector.execute();
-    //myBooleanLog.append(); 
-    //myDoubleLog.append(3);
-
-
   }
 
   @Override
@@ -273,15 +232,13 @@ public class Robot extends TimedRobot
    * This function is called once when the robot is first started up.
    */
   @Override
-  public void simulationInit()
-  {
+  public void simulationInit() {
   }
 
   /**
    * This function is called periodically whilst in simulation.
    */
   @Override
-  public void simulationPeriodic()
-  {
+  public void simulationPeriodic() {
   }
 }

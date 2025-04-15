@@ -5,9 +5,6 @@
 package frc.robot.subsystems.Elevator;
 
 import com.revrobotics.RelativeEncoder;
-
-// import java.security.PublicKey;
-
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.Constants;
@@ -39,10 +36,15 @@ public class ElevatorSubsytem extends SubsystemBase {
         HIGH(58, 0.8, false),
         MAX(ElevatorConstants.ELEVATOR_ROOM_MAX, 0); // If our elevator goes higher than the third stalk, this would allow us control. maybe we shouldnt use it 
 
-        private final double value; // value held by each enum val
-        private final double armSetpoints; // value held by each enum val
-        private final Boolean direction; // value held by each enum val
+        // values held by each enum val
+        private final double value; 
+        private final double armSetpoints; 
+        private final Boolean direction;
 
+        /**
+         * The following constructors construct objects differently based on if a Boolean is passed as 3rd param
+         * If Boolean is not added, it will default to null
+         */
 
         HeightLevels(double value, double arm) {
             this.value = value;
@@ -54,7 +56,7 @@ public class ElevatorSubsytem extends SubsystemBase {
           this.value = value;
           this.armSetpoints = arm;
           this.direction = explicitDirection;
-      }
+        }
 
         /**
          * This is the setpoint associated with the elevator
@@ -116,7 +118,7 @@ public class ElevatorSubsytem extends SubsystemBase {
   
   public ElevatorSubsytem() {
     //defines motors
-    ELEVATOR_MOTOR_ONE = new SparkMax(Constants.ELEVATOR_PIN_ONE, MotorType.kBrushless);
+    ELEVATOR_MOTOR_ONE = new SparkMax(ElevatorConstants.ELEVATOR_PIN_ONE, MotorType.kBrushless);
     ELEVATOR_ENCODER = ELEVATOR_MOTOR_ONE.getEncoder();
 
     // setpoints

@@ -562,13 +562,9 @@ public class RobotContainer
 
       driverXbox2.getRightX();
 
-      //Coral move to setpoint
       driverXbox2.x().whileTrue(
-        // new InstantCommand(() -> {
-        // m_CoralIntakeSubsystem.setSetpoint(.1);
-        //   })
         HumanStationHalfIntake
-        );
+      );
       
       driverXbox2.x().onFalse(
         CoralDrive
@@ -600,10 +596,7 @@ public class RobotContainer
         IntakeCoralEndeffector.quickIntakeToUp(endEffDefaultCmd)
       );
 
-        // driverXbox2.a().onTrue(
-        //   IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
-        //   // IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
-        // );
+
         driverXbox2.rightBumper().onTrue(
           new InstantCommand(() -> {
             PlaceCoralCommand.manualPlacement().schedule();
@@ -648,7 +641,6 @@ public class RobotContainer
 
     // Constants based on subsystem positioning and robot dimensions from CAD
       //epilogue.log("visuals/aprilstags", LimelightHelpers);
-
       
       epilogue.log("visuals/internalpose", new Pose3d[] {
         new Pose3d(0.184150, -0.295, 0.247650, new Rotation3d(0, intakeAngle, 0)),

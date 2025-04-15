@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems.intake;
-import frc.robot.Constants;
 import frc.robot.Constants.CoralArmConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -65,10 +64,10 @@ public class CoralIntakeSubsystem extends SubsystemBase {
 
   public CoralIntakeSubsystem() {
     // defines hardware
-    CORAL_ARM_TURNMOTOR = new SparkMax(Constants.CORAL_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
-    CORAL_ARM_ANGLEMOTOR = new SparkMax(Constants.CORAL_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
+    CORAL_ARM_TURNMOTOR = new SparkMax(CoralArmConstants.CORAL_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
+    CORAL_ARM_ANGLEMOTOR = new SparkMax(CoralArmConstants.CORAL_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
     CORAL_ARM_ENCODER = CORAL_ARM_ANGLEMOTOR.getAbsoluteEncoder();
-    m_rangeSensor = new CANrange(Constants.CORAL_ARM_RANGE_SENSOR);
+    m_rangeSensor = new CANrange(CoralArmConstants.CORAL_ARM_RANGE_SENSOR);
 
     // updates the PID 
     coralArmPIDController.enableContinuousInput(0,1); 
