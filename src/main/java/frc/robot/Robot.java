@@ -3,11 +3,16 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.units.AngularVelocityUnit;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -61,6 +66,8 @@ public class Robot extends TimedRobot
   DoubleLogEntry myDoubleLog;
   StringLogEntry myStringLog;
 
+  public static boolean inAuto;
+
   public Robot()
   {
     instance = this;
@@ -99,9 +106,12 @@ public class Robot extends TimedRobot
     //gyrogyro = m_robotContainer.drivebase.getSwerveDrive().getGyro();
     //m_robotContainer.drivebase.newzeroGyro();
 
+    m_robotContainer.drivebase.zeroGyroWithAlliance();
+    LimelightHelpers.SetIMUAssistAlpha(null, 0.01);
+
 
     
-    m_robotContainer.drivebase.getSwerveDrive().swerveController.lastAngleScalar = 0;
+    //m_robotContainer.drivebase.getSwerveDrive().swerveController.lastAngleScalar = 0;
 
     //m_robotContainer.drivebase.zeroGyroWithAlliance();
     
@@ -133,10 +143,22 @@ public class Robot extends TimedRobot
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("level", reefLevel.toString());
     SmartDashboard.putString("location", RobotContainer.loc.toString());
-    System.out.println(SmartDashboard.getString("level", "L3"));
+    //System.out.println(SmartDashboard.getString("level", "L3"));
 
     // Send visual data to Networktables for AdvantageScope
     m_robotContainer.publishVisuals();
+    
+    if (m_robotContainer.drivebase.isRedAlliance()) LimelightHelpers.SetRobotOrientation(null, 
+      Units.radiansToDegrees(m_robotContainer.drivebase.getSwerveDrive().getGyro().getRotation3d().getZ()),
+      m_robotContainer.drivebase.getSwerveDrive().getGyro().getYawAngularVelocity().in(DegreesPerSecond),
+      0.0,0.0,0.0,0.0
+    ); 
+    else LimelightHelpers.SetRobotOrientation(null, 
+    Units.radiansToDegrees(m_robotContainer.drivebase.getSwerveDrive().getGyro().getRotation3d().plus(new Rotation3d(0,0,Math.PI)).getZ()),
+    m_robotContainer.drivebase.getSwerveDrive().getGyro().getYawAngularVelocity().in(DegreesPerSecond),
+    0.0,0.0,0.0,0.0
+    );
+
   }
 
   /**
@@ -146,7 +168,7 @@ public class Robot extends TimedRobot
   public void disabledInit()
   {
     m_robotContainer.setMotorBrake(true);
-    LimelightHelpers.SetIMUMode(null, 3);
+    LimelightHelpers.SetIMUMode(null, 0);
     disabledTimer.reset();
     disabledTimer.start();
   }
@@ -167,15 +189,18 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit()
   {
+    inAuto = true;
     try {
-      LimelightHelpers.SetIMUMode(null, 3);
+      LimelightHelpers.SetIMUMode(null, 0);
+      LimelightHelpers.SetIMUAssistAlpha(null, 0.01);
+      LimelightHelpers.SetFiducialIDFiltersOverride(null, new int[] {100});
     } catch (Exception e) {
       System.out.println("ll did not init. terror");
     }
     m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    m_robotContainer.drivebase.newzeroGyro();
+    m_robotContainer.drivebase.zeroGyroWithAlliance();
 
     //m_robotContainer.drivebase.zeroGyroWithAlliance();
 
@@ -192,25 +217,20 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousPeriodic()
   {
-    // LimelightHelpers.SetRobotOrientation(null, 
-    //   LimeLightExtra.m_gyro.getYaw().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getAngularVelocityZWorld().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getPitch().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getAngularVelocityXWorld().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getRoll().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getAngularVelocityYWorld().getValueAsDouble()
-    // );
+    
 
   }
 
   @Override
   public void teleopInit()
   {
-    // This makes sure that the autonomous stops running when
+    inAuto = false;
+    // This makes sure t\hat the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    LimelightHelpers.SetIMUMode(null, 3);
+    LimelightHelpers.SetIMUMode(null, 0);
+    LimelightHelpers.SetFiducialIDFiltersOverride(null, new int[] {6,7,8,9,10,11,17,18,19,20,21,22});
     if (m_autonomousCommand != null)
     {
       m_autonomousCommand.cancel();
@@ -226,16 +246,7 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic()
   {
-
-    // LimelightHelpers.SetRobotOrientation(null, 
-    //   LimeLightExtra.m_gyro.getYaw().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getAngularVelocityZWorld().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getPitch().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getAngularVelocityXWorld().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getRoll().getValueAsDouble(), 
-    //   LimeLightExtra.m_gyro.getAngularVelocityYWorld().getValueAsDouble()
-    // );
-
+    RobotContainer.reefSelector.execute();
     //myBooleanLog.append(); 
     //myDoubleLog.append(3);
 
@@ -246,7 +257,7 @@ public class Robot extends TimedRobot
   public void testInit()
   {
     // Cancels all running commands at the start of test mode.
-    LimelightHelpers.SetIMUMode(null, 3);
+    LimelightHelpers.SetIMUMode(null, 0);
     CommandScheduler.getInstance().cancelAll();
   }
 

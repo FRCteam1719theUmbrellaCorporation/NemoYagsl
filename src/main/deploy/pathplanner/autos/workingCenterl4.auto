@@ -11,27 +11,21 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.25
+            "pathName": "centerl4"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "CoralDrive"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Emergency path lower"
+            "name": "scorel4"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "emergency autos",
+  "folder": "1l41coral",
   "choreoAuto": false
 }

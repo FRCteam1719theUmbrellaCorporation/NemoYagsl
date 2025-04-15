@@ -11,12 +11,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "CoralDrive"
@@ -25,13 +19,44 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue 3"
+            "pathName": "rightl4p1"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.25
+            "name": "scorel4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "rightl4p2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HumanStationHalfIntake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "rightl1p3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CoralDrive"
+                }
+              }
+            ]
           }
         },
         {
@@ -39,29 +64,11 @@
           "data": {
             "name": "CoralL1"
           }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 5.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "movebackleft"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CoralDrive"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "1coral",
+  "folder": "1l41coral",
   "choreoAuto": false
 }

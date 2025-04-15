@@ -41,7 +41,7 @@ public class EndEffectorPIDCommand extends Command {
   public void execute() {
     
     // sets the elevator when the arm is near it's setpoint
-    if (setElevator && MathUtil.isNear(m_EndEffector.getSetpoint(), m_EndEffector.doubleMeasurement(), 0.1)) {
+    if (setElevator && MathUtil.isNear(m_EndEffector.getSetpoint(), m_EndEffector.doubleMeasurement(), 0.05)) {
       m_ElevatorSubsytem.setHeightWithEnum(m_EndEffector.getHeight());
       setElevator = false;
     } 
@@ -114,7 +114,7 @@ public class EndEffectorPIDCommand extends Command {
    * @return boolean supplier that asserts that both elevator and endeffector are at that currentpos
    */
   public BooleanSupplier isAtPos() {
-    return () -> MathUtil.isNear(m_EndEffector.getSetpoint(), m_EndEffector.doubleMeasurement(), 0.1) && MathUtil.isNear(m_ElevatorSubsytem.getSetPoint(), m_ElevatorSubsytem.doubleMeasurement(), 1);
+    return () -> MathUtil.isNear(m_EndEffector.getSetpoint(), m_EndEffector.doubleMeasurement(), 0.05) && MathUtil.isNear(m_ElevatorSubsytem.getSetPoint(), m_ElevatorSubsytem.doubleMeasurement(), 1);
   }
 
   /**

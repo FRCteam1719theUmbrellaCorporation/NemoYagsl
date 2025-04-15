@@ -46,7 +46,7 @@ public class EndEffectorSubsytem extends SubsystemBase {
     setPoint = 0;
     EndEffectorPIDController.setSetpoint(setPoint);
     EndEffectorPIDController.enableContinuousInput(0,1);
-    EndEffectorPIDController.setTolerance(.025);
+    EndEffectorPIDController.setTolerance(.01);
     heightLevels = HeightLevels.ZERO;
     moveDirection = null;
   }
@@ -125,7 +125,7 @@ public class EndEffectorSubsytem extends SubsystemBase {
   @Override
   public void periodic() {
     double output = MathUtil.clamp(EndEffectorPIDController.calculate(doubleMeasurement(), moveDirection),EndefectorConstants.MIN_SPEED, EndefectorConstants.MAX_SPEED);
-    System.out.println("endeff output: " + output);
+    //System.out.println("endeff output: " + output);
     setRotation(output);
   }
 }
