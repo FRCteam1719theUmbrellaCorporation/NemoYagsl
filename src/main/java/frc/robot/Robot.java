@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.AngularVelocityUnit;
@@ -146,11 +147,16 @@ public class Robot extends TimedRobot
 
     // Send visual data to Networktables for AdvantageScope
     m_robotContainer.publishVisuals();
-
-    LimelightHelpers.SetRobotOrientation(null, 
+    
+    if (m_robotContainer.drivebase.isRedAlliance()) LimelightHelpers.SetRobotOrientation(null, 
       Units.radiansToDegrees(m_robotContainer.drivebase.getSwerveDrive().getGyro().getRotation3d().getZ()),
       m_robotContainer.drivebase.getSwerveDrive().getGyro().getYawAngularVelocity().in(DegreesPerSecond),
       0.0,0.0,0.0,0.0
+    ); 
+    else LimelightHelpers.SetRobotOrientation(null, 
+    Units.radiansToDegrees(m_robotContainer.drivebase.getSwerveDrive().getGyro().getRotation3d().plus(new Rotation3d(0,0,Math.PI)).getZ()),
+    m_robotContainer.drivebase.getSwerveDrive().getGyro().getYawAngularVelocity().in(DegreesPerSecond),
+    0.0,0.0,0.0,0.0
     );
 
   }

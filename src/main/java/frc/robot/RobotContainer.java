@@ -36,6 +36,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
+import java.util.Objects;
+
 import swervelib.SwerveInputStream;
 import utils.Reef.Level;
 import utils.Reef.Location;
@@ -528,7 +530,7 @@ public class RobotContainer
 
       driverXbox.x().onFalse(
         new InstantCommand(()->{
-          if (drivetotag.isScheduled()) drivetotag.cancel();
+          if (Objects.nonNull(drivetotag) || drivetotag.isScheduled()) drivetotag.cancel();
           //if (driveback.isScheduled()) driveback.cancel();
           }
         )
