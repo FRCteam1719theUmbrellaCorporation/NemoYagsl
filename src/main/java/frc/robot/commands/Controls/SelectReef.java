@@ -1,25 +1,30 @@
 package frc.robot.commands.Controls;
 
 import java.util.function.DoubleSupplier;
-
 import frc.robot.RobotContainer;
 import utils.Reef.Location;
 
+// reef selector positions
 public class SelectReef {
     private DoubleSupplier x;
     private DoubleSupplier y;
 
+    // constructor
     public SelectReef(DoubleSupplier x, DoubleSupplier y) {
         this.x = x;
         this.y = y;
     }
 
+    // 
     public void execute() {
         double x = this.x.getAsDouble();
         double y = this.y.getAsDouble();
-        double magnitude = Math.sqrt(x * x + y * y);
-        if (magnitude < 0.7) return;
+
+        // early return
+        if (Math.sqrt(x * x + y * y) < 0.7) return;
+
         double angle = Math.toDegrees(Math.atan2(y, x));
+
         if (angle >= 150) {
             RobotContainer.loc = Location.J;
         } else if (angle >=  120) {

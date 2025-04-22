@@ -1,13 +1,10 @@
 package utils;
 
 public class ConvertAprilTag {
-    
-    
+    // empty constructor
+    public ConvertAprilTag() {}
 
-    public ConvertAprilTag() {
-
-    }
-
+    //
     public static int getTag(Reef.Location loc, boolean isRedAlliance) {
         if (isRedAlliance) {
         switch (loc) {
@@ -29,7 +26,8 @@ public class ConvertAprilTag {
             case K,L:
             return 6;
             
-        }} else {
+        }
+    } else {
         switch (loc) {
             case A,B:
             return 18;
@@ -54,7 +52,7 @@ public class ConvertAprilTag {
         return 0;
     }
 
-
+    // returns if the the robot is on the left side
     public static boolean leftSide(Reef.Location loc) {
         switch (loc) {
             case A,C,E,G,I,K:

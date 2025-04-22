@@ -37,9 +37,6 @@ public class IntakeCoralEndeffector extends SequentialCommandGroup {
    * @return Sequential command
    */
   public static SequentialCommandGroup quickIntakeFacingDown(EndEffectorPIDCommand cmd) {
-    // doesnt move if it isnt in the right position
-    // if (!cmd.comparePosition(HeightLevels.INTAKE_WITH_ARN_DOWN).getAsBoolean()) return emptyCommand;
-
     return new SequentialCommandGroup(
       cmd.moveBoth(HeightLevels.INTAKE),
       new WaitUntilCommand(cmd.isAtPos()),
@@ -55,9 +52,6 @@ public class IntakeCoralEndeffector extends SequentialCommandGroup {
    * @return Sequential command
    */
   public static SequentialCommandGroup quickIntakeToUp(EndEffectorPIDCommand cmd) {
-    // doesnt move if it isnt in the right position
-    // if (!cmd.comparePosition(HeightLevels.INTAKE_WITH_ARN_DOWN).getAsBoolean()) return emptyCommand;
-
     return new SequentialCommandGroup(
       cmd.moveBoth(HeightLevels.INTAKE),
       new WaitUntilCommand(cmd.isAtPos()),
@@ -67,7 +61,6 @@ public class IntakeCoralEndeffector extends SequentialCommandGroup {
       new WaitUntilCommand(cmd.isAtPos())
     );
   }
-
 
   /**
    * Intakes from a low positon, to then move the elevator to its 0 pos. may help with driving
