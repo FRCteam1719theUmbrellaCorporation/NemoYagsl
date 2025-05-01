@@ -1,0 +1,129 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralDrive"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "leftl4p1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "scorel4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "leftl4p2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HumanStationHalfIntake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "leftl4p3righttag"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CoralFloor"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "cha-chink"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "scorel4"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "invertleftl4p3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HumanStationHalfIntake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "leftl4p3lefttag"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "CoralFloor"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "cha-chink"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "scorel4"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "1l41coral",
+  "choreoAuto": false
+}

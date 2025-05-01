@@ -145,7 +145,7 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
    */
   public static SequentialCommandGroup l2CommandFlip() {
     return new SequentialCommandGroup(
-      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND, false),
       new WaitUntilCommand(m_cmd.isAtPos()),
       new WaitCommand(0.1),
       m_cmd.moveBoth(HeightLevels.LOW_PRE),
@@ -169,7 +169,7 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
    */
   public static SequentialCommandGroup l3CommandFlip() {
     return new SequentialCommandGroup(
-      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND, false),
       new WaitUntilCommand(m_cmd.isAtPos()),
       new WaitCommand(0.1),
         m_cmd.moveBoth(HeightLevels.Middle_PRE),
@@ -193,7 +193,7 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
    */
   public static SequentialCommandGroup l4CommandFlip() {
     return new SequentialCommandGroup(
-      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND),
+      m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_AROUND, false),
       new WaitUntilCommand(m_cmd.isAtPos()),
       new WaitCommand(0.1),
       m_cmd.moveBoth(HeightLevels.HIGH_PRE),
@@ -273,22 +273,29 @@ public class PlaceCoralCommand extends SequentialCommandGroup {
         new WaitUntilCommand(m_cmd.isAtPos()),
         m_cmd.moveBoth(HeightLevels.INTAKE_FLIP_TO_DOWN),
         new WaitUntilCommand(m_cmd.isAtPos()),
-        m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN),
+        m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN).withTimeout(2),
         new WaitUntilCommand(m_cmd.isAtPos())
         // m_cmd.moveBoth(HeightLevels.ZERO),
         // new WaitUntilCommand(m_cmd.isAtPos())
       );
   }
 
-  // i cant BELIEVE owen didnt finish this command... :(
-  // L programmer for sure
-  // public static SequentialCommandGroup algaeHitter() {
-  //   if (SmartDashboard.getString("level", "")) {
-  //     return new SequentialCommandGroup(
-  //       // todo :)
-  //     )
-  //   } else {
+  public static SequentialCommandGroup algaeHitter() {
 
-  //   }
-  // }
+    return new SequentialCommandGroup(
+      m_cmd.moveBoth(HeightLevels.INTAKE_UP),
+      new WaitUntilCommand(m_cmd.isAtPos()),
+      // m_cmd.moveBoth(HeightLevels.INTAKE_PRE_DOWN,true),
+      // new WaitUntilCommand(m_cmd.isAtPos()),
+      m_cmd.moveBoth(HeightLevels.INTAKE_WITH_ARN_DOWN, true),
+      new WaitUntilCommand(m_cmd.isAtPos())
+    );
+    // if (SmartDashboard.getString("level", "").equals(height1)) {
+    //   return new SequentialCommandGroup(
+    //     // todo :)
+    //   )
+    // } else {
+
+    // }
+  }
 }

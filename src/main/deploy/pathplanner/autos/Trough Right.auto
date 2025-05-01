@@ -39,11 +39,29 @@
           "data": {
             "name": "CoralL1"
           }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "movebackright"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralDrive"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "1coral",
   "choreoAuto": false
 }

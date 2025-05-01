@@ -58,18 +58,6 @@ public final class Constants
   // public static final int ALGAE_ARM_WHEEL_SPIN_ID = 8;
   // public static final int ALGAE_ARM_ANGLE_MOTOR_ID = 7; 
 
-  //CORAL
-  public static final int CORAL_ARM_WHEEL_SPIN_ID = 23;
-  public static final int CORAL_ARM_ANGLE_MOTOR_ID = 9; 
-  public static final int CORAL_ARM_RANGE_SENSOR = 13;
-
-  // ELEVATOR
-  public static final int ELEVATOR_PIN_ONE = 6;
-  public static final int ELEVATOR_ROTATE_ENCODER = 4;
-
-  //ENDEFECTOR
-  public static final int ENDEFECTOR_ANGLE_MOTOR_ID = 24;
-
   public static final double reefLength = Units.inchesToMeters(65.49);
   public static final double reefLevelDistance = Units.inchesToMeters(12.94);
 
@@ -77,7 +65,17 @@ public final class Constants
     public static final double intakePos = 0; // TODO FIX This will be the position of intaking!
   }
 
+  /**
+   * The coral arm is defined as the intake of the robot. this w
+   * 
+   */
   public static class CoralArmConstants{
+
+    // CANIDS
+    public static final int CORAL_ARM_WHEEL_SPIN_ID = 23;
+    public static final int CORAL_ARM_ANGLE_MOTOR_ID = 9; 
+    public static final int CORAL_ARM_RANGE_SENSOR = 13;
+
     public static final double CoralArm_kP = 1.5;
     public static final double CoralArm_kI = 0;
     public static final double CoralArm_kD = 0;
@@ -86,34 +84,32 @@ public final class Constants
     public static final double CoralArm_startPos = 0;
     public static final double CoralArm_startAngle = 0;
 
-    public static final double CoralArmWheelMaxVelocity = Meters.of(0).per(Second).in(MetersPerSecond);
-    public static final double CoralArmWheelDefaultSpeed = Meters.of(0).per(Second).in(MetersPerSecond);
-
-    //Imb - dont know if these are necessary
-    public static final double CoralArmWheelRadius = Units.inchesToMeters(0);
-
-
+    // limiters for movement
     public static final double MAXROTATE = .385;
     public static final double MINROTATE = 0.09;
 
-
-    public static final double ARM_OUTAKE_POS_ANGLE = 0.030;
-
+    // speed limiters
     public static final double MIN_SPEED = -.5f;
     public static final double MAX_SPEED = .5f;
+
+    // preset positions
+    public static final double ARM_OUTAKE_POS_ANGLE = 0.030;
     public static final double coral_floorintake_pos = 0.32;
     public static final double coral_armdriving_pos = 0.14;
     public static final double coral_humanstatione_pos = 0.10;
     public static final double coral_reef_l1 = 0.14;
 
+    // wheel rotation speeds
     public static final double coral_intake_floor_speed = 1f;
     public static final double coral_intake_floor_speed_limited = 0.7f;
     public static final double coral_intake_humanStation_speed = 0.7f;
     public static final double coral_outtake_reef_speed = -0.6f;
-
   }
 
   public static class EndefectorConstants{
+    // canIDS
+    public static final int ENDEFECTOR_ANGLE_MOTOR_ID = 24;
+
     public static final double Endefector_kP = 7; //10
     public static final double Endefector_kI = 0.1;
     public static final double Endefector_kD = 0.4;//0.75
@@ -131,7 +127,10 @@ public final class Constants
 
 public static class ElevatorConstants{
 
-   public static final double ElevatorkP = 0.2;
+    // CANIDS
+    public static final int ELEVATOR_PIN_ONE = 6;
+
+    public static final double ElevatorkP = 0.2;
     public static final double ElevatorkI = 0.000;
     public static final double ElevatorkD = 0.008;
     public static final double MaxVelocity = Meters.of(4).per(Second).in(MetersPerSecond);

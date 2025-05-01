@@ -52,8 +52,8 @@
 
 
 //     public AlgaeIntakeSubsystem() {
-//       TURNMOTOR = new SparkMax(Constants.ALGAE_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
-//       ANGLEMOTOR = new SparkMax(Constants.ALGAE_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
+//       TURNMOTOR = new SparkMax(AlgaeArmConstants.ALGAE_ARM_WHEEL_SPIN_ID, MotorType.kBrushless);
+//       ANGLEMOTOR = new SparkMax(AlgaeArmConstants.ALGAE_ARM_ANGLE_MOTOR_ID, MotorType.kBrushless);
 //       ArmAngleManager.enableContinuousInput(0,1);
 //       ANGLE_ENCODER = ANGLEMOTOR.getAbsoluteEncoder();
 //       intakeMode = IntakePosition.ALGAE; 

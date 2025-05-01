@@ -8,7 +8,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.EndefectorConstants;
@@ -39,14 +38,14 @@ public class EndEffectorSubsytem extends SubsystemBase {
   /** Creates a new EndEffectorSubsytem. */
   public EndEffectorSubsytem() {
     // defines hardware
-    ENDEFFECTOR_ROTATE_MOTOR = new SparkMax(Constants.ENDEFECTOR_ANGLE_MOTOR_ID, MotorType.kBrushless); 
+    ENDEFFECTOR_ROTATE_MOTOR = new SparkMax(EndefectorConstants.ENDEFECTOR_ANGLE_MOTOR_ID, MotorType.kBrushless); 
     ENDEFFECTOR_ENCODER = ENDEFFECTOR_ROTATE_MOTOR.getAbsoluteEncoder();
 
     // sets the PID settings, and inital setpoint, so the arm always points up on init
     setPoint = 0;
     EndEffectorPIDController.setSetpoint(setPoint);
     EndEffectorPIDController.enableContinuousInput(0,1);
-    EndEffectorPIDController.setTolerance(.025);
+    EndEffectorPIDController.setTolerance(.01);
     heightLevels = HeightLevels.ZERO;
     moveDirection = null;
   }
@@ -125,7 +124,7 @@ public class EndEffectorSubsytem extends SubsystemBase {
   @Override
   public void periodic() {
     double output = MathUtil.clamp(EndEffectorPIDController.calculate(doubleMeasurement(), moveDirection),EndefectorConstants.MIN_SPEED, EndefectorConstants.MAX_SPEED);
-    System.out.println("endeff output: " + output);
+    //System.out.println("endeff output: " + output);
     setRotation(output);
   }
 }
