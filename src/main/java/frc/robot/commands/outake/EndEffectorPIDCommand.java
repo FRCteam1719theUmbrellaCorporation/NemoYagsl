@@ -13,6 +13,7 @@ import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
 import frc.robot.subsystems.Elevator.ElevatorSubsytem.HeightLevels;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+
 public class EndEffectorPIDCommand extends Command {
   private EndEffectorSubsytem m_EndEffector;
   private boolean setElevator;

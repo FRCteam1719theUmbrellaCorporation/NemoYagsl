@@ -46,8 +46,8 @@ import frc.robot.subsystems.Elevator.ElevatorSubsytem;
 import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem.IntakePosition;
-import frc.robot.commands.Controls.SelectReef;
-import frc.robot.commands.Controls.SelectReef;
+//import frc.robot.commands.Controls.SelectReef;
+//import frc.robot.commands.Controls.SelectReef;
 import frc.robot.commands.Intake.CoralIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralPivotPIDCommand;
 import frc.robot.commands.outake.EndEffectorPIDCommand;
@@ -74,7 +74,7 @@ public class RobotContainer
   public final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/nemo"));
 
-  public static SelectReef reefSelector;
+  //public static SelectReef reefSelector;
                                                                             
   
   private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
@@ -225,7 +225,7 @@ public class RobotContainer
   public static volatile Command drivetotag;
   public static volatile Command driveback;
 
-    void levelUpCommand() {
+    /*void levelUpCommand() {
       switch (Robot.reefLevel) {
         case L2:
           Robot.reefLevel = Level.L3;
@@ -270,7 +270,8 @@ public class RobotContainer
           break;
         }
       }
-
+      */
+      /* 
       Command placeAtSpot() {
         // System.out.println(SmartDashboard.getString("level", "L3"));
         switch (SmartDashboard.getString("level", "")) {
@@ -280,7 +281,8 @@ public class RobotContainer
           default: return Commands.none();
         }
       }
-
+        */
+        /*
       public static volatile Location loc = Location.A;
 
       
@@ -375,7 +377,7 @@ public class RobotContainer
     new LimeLightExtra(drivebase);
 
     epilogue = new NTEpilogueBackend(NetworkTableInstance.getDefault());
-    reefSelector = new SelectReef(driverXbox2::getRightX, () -> -driverXbox2.getRightY());
+    //reefSelector = new SelectReef(driverXbox2::getRightX, () -> -driverXbox2.getRightY());
 
     LimelightHelpers.SetRobotOrientation(null, drivebase.getHeading().getDegrees(), 0, 0, 0, 0, 0);
     LimelightHelpers.SetIMUMode(null, 0);
@@ -454,7 +456,7 @@ public class RobotContainer
       driverXbox.a().onFalse(new InstantCommand(()-> {
         Constants.MAX_SPEED = Units.feetToMeters(14.5*Constants.SPEED_LIMITER);
       }));
-
+      /*
       driverXbox.x().onTrue(
         new SequentialCommandGroup(
           new InstantCommand(()->{
@@ -527,7 +529,8 @@ public class RobotContainer
       //     )
       // )
       );
-
+*/
+/* 
       driverXbox.x().onFalse(
         new InstantCommand(()->{
           if (Objects.nonNull(drivetotag) || drivetotag.isScheduled()) drivetotag.cancel();
@@ -537,7 +540,7 @@ public class RobotContainer
       );
 
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-
+*/
       //Coral move to reef l1
       driverXbox2.b().whileTrue(
         L1
@@ -570,7 +573,7 @@ public class RobotContainer
         CoralDrive
       );
       
-
+/* 
       driverXbox2.povUp().onTrue(
         new InstantCommand(()->levelUpCommand())
       );
@@ -611,6 +614,7 @@ public class RobotContainer
         driverXbox2.rightTrigger().onTrue( 
           PlaceCoralCommand.algaeHitter()
         ); 
+        */
     }
 
   }
@@ -629,7 +633,7 @@ public class RobotContainer
     drivebase.setMotorBrake(brake);
   }
 
-  public void publishVisuals() {
+ /* public void publishVisuals() {
     // Needs elevator distance constant
     double elevatorBaseHeight = m_ElevatorSubsytem.doubleMeasurement() * 0.0096;
 
@@ -649,5 +653,5 @@ public class RobotContainer
         new Pose3d(0, 0, elevatorBaseHeight * 3, new Rotation3d(0, 0, 0)),
         new Pose3d(0.038092, 0, 0.273050 + elevatorBaseHeight * 3, new Rotation3d(endEffectorAngle, 0, 0))
     }, Pose3d.struct);
-  }
+  }*/
 }

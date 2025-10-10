@@ -107,12 +107,12 @@ public class Robot extends TimedRobot
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    SmartDashboard.putString("level", reefLevel.toString());
-    SmartDashboard.putString("location", RobotContainer.loc.toString());
+    //SmartDashboard.putString("level", reefLevel.toString());
+    //SmartDashboard.putString("location", RobotContainer.loc.toString());
     //System.out.println(SmartDashboard.getString("level", "L3"));
 
     // Send visual data to Networktables for AdvantageScope
-    m_robotContainer.publishVisuals();
+    //m_robotContainer.publishVisuals();
     
     if (m_robotContainer.drivebase.isRedAlliance()) LimelightHelpers.SetRobotOrientation(null, 
       Units.radiansToDegrees(m_robotContainer.drivebase.getSwerveDrive().getGyro().getRotation3d().getZ()),
@@ -209,7 +209,7 @@ public class Robot extends TimedRobot
    */
   @Override
   public void teleopPeriodic() {
-    RobotContainer.reefSelector.execute();
+    //RobotContainer.reefSelector.execute();
   }
 
   @Override
