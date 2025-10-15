@@ -18,11 +18,11 @@ public class ElevatorSubsytem extends SubsystemBase {
     //Constant list of heights represented by english. YAY
     //Side note: this is gods ugliested enum.. :(
     public enum HeightLevels {
-        ZERO(5, 0.03), // Sets to the bottom
+        ZERO(5, 0.02), // Sets to the bottom
         INTAKE(21.f-0.1, .5), 
         INTAKE_WITH_ARN_DOWN(30, .5), // this sets the arm hovering above the coral
         INTAKE_PRE_DOWN(60, .5),
-        INTAKE_UP(60, 0.03),
+        INTAKE_UP(60, 0.05),
         INTAKE_FLIP_AROUND(ElevatorConstants.ARM_180_SPIN, 0, false), // goes from down to around negativly
         INTAKE_FLIP_BACK(ElevatorConstants.ARM_180_SPIN, 0), // opposite way of above?
         INTAKE_FLIP_TO_DOWN(ElevatorConstants.ARM_180_SPIN, 0.5, true),

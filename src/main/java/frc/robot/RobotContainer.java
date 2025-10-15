@@ -10,16 +10,16 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.epilogue.logging.NTEpilogueBackend;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
+// import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
+// import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.XboxController;
+// import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,17 +42,17 @@ import swervelib.SwerveInputStream;
 import utils.Reef.Level;
 import utils.Reef.Location;
 import frc.robot.subsystems.LimeLightExtra;
-import frc.robot.subsystems.Elevator.ElevatorSubsytem;
-import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
+// import frc.robot.subsystems.Elevator.ElevatorSubsytem;
+// import frc.robot.subsystems.Elevator.EndEffectorSubsytem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem;
 import frc.robot.subsystems.intake.CoralIntakeSubsystem.IntakePosition;
 import frc.robot.commands.Controls.SelectReef;
-import frc.robot.commands.Controls.SelectReef;
+// import frc.robot.commands.Controls.SelectReef;
 import frc.robot.commands.Intake.CoralIntakeWheelsCommand;
 import frc.robot.commands.Intake.CoralPivotPIDCommand;
-import frc.robot.commands.outake.EndEffectorPIDCommand;
-import frc.robot.commands.outake.IntakeCoralEndeffector;
-import frc.robot.commands.outake.PlaceCoralCommand;
+// import frc.robot.commands.outake.EndEffectorPIDCommand;
+// import frc.robot.commands.outake.IntakeCoralEndeffector;
+// import frc.robot.commands.outake.PlaceCoralCommand;
 import utils.*;
 
 /**
@@ -77,13 +77,15 @@ public class RobotContainer
   public static SelectReef reefSelector;
                                                                             
   
-  private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
+  // rest in peace ;(
+  // private final ElevatorSubsytem m_ElevatorSubsytem = new ElevatorSubsytem();
+  // private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
+
   private final CoralIntakeSubsystem m_CoralIntakeSubsystem = new CoralIntakeSubsystem();
   //private final AlgaeIntakeSubsystem m_AlgaeIntakeSubsystem = new AlgaeIntakeSubsystem();
-  private final EndEffectorSubsytem m_EndEffectorSubsytem = new EndEffectorSubsytem();
   private final reefposes reefpose = drivebase.calculatedposes;
   private final reefposes reefpose2 = new reefposes();
-  private NTEpilogueBackend epilogue;
+  // private NTEpilogueBackend epilogue;
 
   // Shuffle board stuff
   // private GenericEntry reefHeightTab;
@@ -174,11 +176,11 @@ public class RobotContainer
   // Command algaeAngleSetter = new AlgaePivotPIDCommand(m_AlgaeIntakeSubsystem);
   // Command algaeWheels = new AlgaeIntakeWheelsCommand(m_AlgaeIntakeSubsystem);
   Command coralAngleSetter = new CoralPivotPIDCommand(m_CoralIntakeSubsystem);
-  EndEffectorPIDCommand endEffDefaultCmd = new EndEffectorPIDCommand(m_EndEffectorSubsytem, m_ElevatorSubsytem);
+  // EndEffectorPIDCommand endEffDefaultCmd = new EndEffectorPIDCommand(m_EndEffectorSubsytem, m_ElevatorSubsytem);
   // Command intakeCoral = new IntakeCoralEndeffector(endEffDefaultCmd);
   
   // int pos = 3;
-  Command placer = new PlaceCoralCommand(endEffDefaultCmd, drivebase);
+  // Command placer = new PlaceCoralCommand(endEffDefaultCmd, drivebase);
 
   CoralIntakeWheelsCommand coralWheels = new CoralIntakeWheelsCommand(m_CoralIntakeSubsystem);
 
@@ -271,15 +273,15 @@ public class RobotContainer
         }
       }
 
-      Command placeAtSpot() {
-        // System.out.println(SmartDashboard.getString("level", "L3"));
-        switch (SmartDashboard.getString("level", "")) {
-          // case "L2": return PlaceCoralCommand.l2CommandFlip();
-          case "L3": return PlaceCoralCommand.l3CommandFlip();
-          case "L4": return PlaceCoralCommand.l4CommandFlip();
-          default: return Commands.none();
-        }
-      }
+      // Command placeAtSpot() {
+      //   // System.out.println(SmartDashboard.getString("level", "L3"));
+      //   switch (SmartDashboard.getString("level", "")) {
+      //     // case "L2": return PlaceCoralCommand.l2CommandFlip();
+      //     case "L3": return PlaceCoralCommand.l3CommandFlip();
+      //     case "L4": return PlaceCoralCommand.l4CommandFlip();
+      //     default: return Commands.none();
+      //   }
+      // }
 
       public static volatile Location loc = Location.A;
 
@@ -374,7 +376,7 @@ public class RobotContainer
   public RobotContainer() { 
     new LimeLightExtra(drivebase);
 
-    epilogue = new NTEpilogueBackend(NetworkTableInstance.getDefault());
+    // epilogue = new NTEpilogueBackend(NetworkTableInstance.getDefault());
     reefSelector = new SelectReef(driverXbox2::getRightX, () -> -driverXbox2.getRightY());
 
     LimelightHelpers.SetRobotOrientation(null, drivebase.getHeading().getDegrees(), 0, 0, 0, 0, 0);
@@ -388,11 +390,11 @@ public class RobotContainer
     NamedCommands.registerCommand("CoralFloor", CoralFloor);
     NamedCommands.registerCommand("HumanStation", CoralHumanPlayer);
     NamedCommands.registerCommand("CoralL1", L1);
-    NamedCommands.registerCommand("resetarm", PlaceCoralCommand.resetArm());
+    // NamedCommands.registerCommand("resetarm", PlaceCoralCommand.resetArm());
     NamedCommands.registerCommand("StopMotors",coralWheels.stopMotors());
     NamedCommands.registerCommand("HumanStationHalfIntake",HumanStationHalfIntake);
-    NamedCommands.registerCommand("scorel4", new SequentialCommandGroup(PlaceCoralCommand.l4CommandFlip(), PlaceCoralCommand.returnAfterPlacing()));
-    NamedCommands.registerCommand("cha-chink", IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd));
+    // NamedCommands.registerCommand("scorel4", new SequentialCommandGroup(PlaceCoralCommand.l4CommandFlip(), PlaceCoralCommand.returnAfterPlacing()));
+    // NamedCommands.registerCommand("cha-chink", IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd));
     
 
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -423,7 +425,7 @@ public class RobotContainer
    
     //m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
     m_CoralIntakeSubsystem.setDefaultCommand(coralAngleSetter);
-    m_EndEffectorSubsytem.setDefaultCommand(endEffDefaultCmd);
+    // m_EndEffectorSubsytem.setDefaultCommand(endEffDefaultCmd);
     
     if (Robot.isSimulation())
     {
@@ -472,10 +474,10 @@ public class RobotContainer
           
           new WaitUntilCommand(()->drivetotag.isFinished()),
 
-          new InstantCommand(()->drivebase.lock()),
-          new InstantCommand(()->placeAtSpot().schedule()),
-          new WaitCommand(3),
-          new InstantCommand(()->PlaceCoralCommand.returnAfterPlacing().schedule())
+          new InstantCommand(()->drivebase.lock())
+        //   new InstantCommand(()->placeAtSpot().schedule()),
+        //   new WaitCommand(3),
+        //   new InstantCommand(()->PlaceCoralCommand.returnAfterPlacing().schedule())
         )
           //new WaitUntilCommand(()->drivetotag.isFinished()), 
           //new WaitCommand(7),
@@ -554,12 +556,12 @@ public class RobotContainer
         CoralDrive
       );
 
-      driverXbox2.y().whileTrue(
-        CoralFloor
-      );
-      driverXbox2.y().onFalse(
-        CoralDrive
-      );
+     // driverXbox2.y().whileTrue(
+     //   CoralFloor
+      //);
+      //driverXbox2.y().onFalse(
+      //  CoralDrive
+      //);
 
       driverXbox2.getRightX();
 
@@ -572,46 +574,46 @@ public class RobotContainer
       );
       
 
-      driverXbox2.povUp().onTrue(
-        new InstantCommand(()->levelUpCommand())
-      );
+      // driverXbox2.povUp().onTrue(
+      //   new InstantCommand(()->levelUpCommand())
+      // );
 
-      driverXbox2.povDown().onTrue(
-        new InstantCommand(()->levelDownCommand())
-      );
+      // driverXbox2.povDown().onTrue(
+      //   new InstantCommand(()->levelDownCommand())
+      // );
 
-      driverXbox2.povRight().onTrue(
-        new InstantCommand(()->selectorClockwiseCommand())
-      );
+      // driverXbox2.povRight().onTrue(
+      //   new InstantCommand(()->selectorClockwiseCommand())
+      // );
 
-      driverXbox2.povLeft().onTrue(
-        new InstantCommand(()->selectorCounterClockwiseCommand())
-      );
+      // driverXbox2.povLeft().onTrue(
+      //   new InstantCommand(()->selectorCounterClockwiseCommand())
+      // );
 
-      driverXbox2.leftBumper().onTrue(
-        PlaceCoralCommand.resetArm()
-      );
+      // driverXbox2.leftBumper().onTrue(
+      //   PlaceCoralCommand.resetArm()
+      // );
 
-      // sets arm to 0 pos if needed
-      driverXbox2.start().onTrue(
-        IntakeCoralEndeffector.quickIntakeToUp(endEffDefaultCmd)
-      );
+      // // sets arm to 0 pos if needed
+      // driverXbox2.start().onTrue(
+      //   IntakeCoralEndeffector.quickIntakeToUp(endEffDefaultCmd)
+      // );
 
 
-        driverXbox2.rightBumper().onTrue(
-          new InstantCommand(() -> {
-            PlaceCoralCommand.manualPlacement().schedule();
-          })
-        );
+        // driverXbox2.rightBumper().onTrue(
+        //   new InstantCommand(() -> {
+        //     PlaceCoralCommand.manualPlacement().schedule();
+        //   })
+        // );
 
-        driverXbox2.leftTrigger().onTrue( 
-          IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
-        ); 
+        // driverXbox2.leftTrigger().onTrue( 
+        //   IntakeCoralEndeffector.quickIntakeFacingDown(endEffDefaultCmd)
+        // ); 
 
         // hits the highest algae 
-        driverXbox2.rightTrigger().onTrue( 
-          PlaceCoralCommand.algaeHitter()
-        ); 
+        // driverXbox2.rightTrigger().onTrue( 
+        //   PlaceCoralCommand.algaeHitter()
+        // ); 
     }
 
   }
@@ -632,23 +634,23 @@ public class RobotContainer
 
   public void publishVisuals() {
     // Needs elevator distance constant
-    double elevatorBaseHeight = m_ElevatorSubsytem.doubleMeasurement() * 0.0096;
+    // double elevatorBaseHeight = m_ElevatorSubsytem.doubleMeasurement() * 0.0096;
 
     // Needs intake angle offset constant
     double intakeAngle = (m_CoralIntakeSubsystem.doubleMeasurement()-0.113) * Math.PI*2;
 
     // May need offset constant
-    double endEffectorAngle = m_EndEffectorSubsytem.doubleMeasurement() * Math.PI*2;
+    // double endEffectorAngle = m_EndEffectorSubsytem.doubleMeasurement() * Math.PI*2;
 
     // Constants based on subsystem positioning and robot dimensions from CAD
       //epilogue.log("visuals/aprilstags", LimelightHelpers);
       
-      epilogue.log("visuals/internalpose", new Pose3d[] {
-        new Pose3d(0.184150, -0.295, 0.247650, new Rotation3d(0, intakeAngle, 0)),
-        new Pose3d(0, 0, elevatorBaseHeight, new Rotation3d(0, 0, 0)),
-        new Pose3d(0, 0, elevatorBaseHeight * 2, new Rotation3d(0, 0, 0)),
-        new Pose3d(0, 0, elevatorBaseHeight * 3, new Rotation3d(0, 0, 0)),
-        new Pose3d(0.038092, 0, 0.273050 + elevatorBaseHeight * 3, new Rotation3d(endEffectorAngle, 0, 0))
-    }, Pose3d.struct);
+    //   epilogue.log("visuals/internalpose", new Pose3d[] {
+    //     new Pose3d(0.184150, -0.295, 0.247650, new Rotation3d(0, intakeAngle, 0)),
+    //     new Pose3d(0, 0, elevatorBaseHeight, new Rotation3d(0, 0, 0)),
+    //     new Pose3d(0, 0, elevatorBaseHeight * 2, new Rotation3d(0, 0, 0)),
+    //     new Pose3d(0, 0, elevatorBaseHeight * 3, new Rotation3d(0, 0, 0)),
+    //     new Pose3d(0.038092, 0, 0.273050 + elevatorBaseHeight * 3, new Rotation3d(endEffectorAngle, 0, 0))
+    // }, Pose3d.struct);
   }
 }
