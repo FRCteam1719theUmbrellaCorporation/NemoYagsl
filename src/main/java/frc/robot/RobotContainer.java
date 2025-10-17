@@ -425,7 +425,7 @@ public class RobotContainer
    
     //m_AlgaeIntakeSubsystem.setDefaultCommand(algaeAngleSetter);
     m_CoralIntakeSubsystem.setDefaultCommand(coralAngleSetter);
-    m_EndEffectorSubsytem.setDefaultCommand(endEffDefaultCmd);
+    //m_EndEffectorSubsytem.setDefaultCommand(endEffDefaultCmd);
     
     if (Robot.isSimulation())
     {
