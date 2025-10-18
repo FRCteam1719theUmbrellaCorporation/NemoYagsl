@@ -555,15 +555,15 @@ public class RobotContainer
       driverXbox2.a().onFalse(
         CoralDrive
       );
-
+      //There was a change to make the Y keybind switch from full intake to half intake so as to not swallow the coral
       driverXbox2.y().whileTrue(
-        CoralFloor
+        HalfCoralFloor
       );
       driverXbox2.y().onFalse(
         CoralDrive
       );
 
-      driverXbox2.getRightX();
+      //driverXbox2.getRightX();
 
       driverXbox2.x().whileTrue(
         HumanStationHalfIntake

@@ -3,14 +3,14 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
+    "Elevator code-Bad",
     "2corall1",
-    "EmergencyPaths",
-    "1L4, 1L1"
+    "EmergencyPaths"
   ],
   "autoFolders": [
     "1coral",
+    "Elevator code-Bad",
     "2coral",
-    "1l41coral",
     "emergency autos"
   ],
   "defaultMaxVel": 4.0,
